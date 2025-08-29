@@ -1,0 +1,73 @@
+<div
+  class="flex justify-content-between align-items-center bg-gray-800 px-5 shadow-2 relative lg:static border-bottom-1 surface-border"
+  style="height: 80px"
+>
+  <div class="flex">
+    <a
+      pRipple
+      class="cursor-pointer inline-flex align-items-center justify-content-center lg:hidden text-700 mr-3"
+      pStyleClass="#app-sidebar-6"
+      enterClass="hidden"
+      enterActiveClass="fadeinleft"
+      leaveToClass="hidden"
+      leaveActiveClass="fadeoutleft"
+      [hideOnOutsideClick]="true"
+    >
+      <i class="pi pi-bars text-4xl"></i>
+    </a>
+  </div>
+  <a
+    pRipple
+    class="cursor-pointer block lg:hidden text-700"
+    pStyleClass="@next"
+    enterClass="hidden"
+    enterActiveClass="fadein"
+    leaveToClass="hidden"
+    leaveActiveClass="fadeout"
+    [hideOnOutsideClick]="true"
+  >
+    <i class="pi pi-ellipsis-v text-2xl"></i>
+  </a>
+  <ul
+    class="list-none p-0 m-0 hidden lg:flex lg:align-items-center select-none lg:flex-row bg-gray-800 border-1 lg:border-none surface-border right-0 top-100 z-1 shadow-2 lg:shadow-none absolute lg:static"
+  >
+    <li>
+      <a
+        pRipple
+        class="flex p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors"
+      >
+        <i class="pi pi-inbox text-base lg:text-2xl mr-2 lg:mr-0"></i>
+        <span class="block lg:hidden font-medium">Inbox</span>
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        class="flex p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors"
+      >
+        <i
+          class="pi pi-bell text-base lg:text-2xl mr-2 lg:mr-0"
+          pBadge
+          severity="danger"
+        ></i>
+        <span class="block lg:hidden font-medium">Notifications</span>
+      </a>
+    </li>
+    <li class="border-top-1 surface-border lg:border-top-none">
+      <a
+        pRipple
+        class="flex p-3 lg:px-3 lg:py-2 align-items-center hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors"
+      >
+        <img
+          src="https://b2472105.smushcdn.com/2472105/wp-content/uploads/2023/09/Poses-Perfil-Profesional-Mujeres-ago.-10-2023-1-819x1024.jpg?lossy=1&strip=1&webp=1"
+          class="mr-3 lg:mr-0"
+          style="width: 32px; height: 32px"
+        />
+        <div class="block lg:hidden">
+          <div class="text-900 font-medium">Josephine Lillard</div>
+          <span class="text-600 font-medium text-sm">Marketing Specialist</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>
