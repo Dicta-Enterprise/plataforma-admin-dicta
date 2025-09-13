@@ -1,40 +1,33 @@
-<p-table [value]="products" [tableStyle]="{ 'min-width': '60rem'}">
-  <ng-template #header>
-    <tr>
-      <th>Name</th>
-      <th>Image</th>
-      <th>Price</th>
-      <th>Category</th>
-      <th>Reviews</th>
-      <th>Status</th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-product>
-    <tr>
-      <td>{{ product.name }}</td>
-      <td>
-        <img
-          [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image"
-          [alt]="product.name"
-          class="w-24 rounded"
-        />
-      </td>
-      <td>{{ product.price | currency: 'USD' }}</td>
-      <td>{{ product.category }}</td>
-      <td><p-rating [(ngModel)]="product.rating" [readonly]="true" /></td>
-      <td>
-        <p-tag
-          [value]="product.inventoryStatus"
-          [severity]="getSeverity(product.inventoryStatus)"
-        />
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template #footer>
-    <tr>
-      <td colspan="6">
-        En total hay {{ products ? products.length : 0 }} productos.
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+<header
+  class="flex w-full justify-content-between align-items-center border-bottom-1 surface-border pb-5"
+>
+  <div>
+    <h2 class="mt-0 mb-3 font-medium text-2xl text-900">CATEGORIAS</h2>
+    <p class="mt-0 mb-0 font-normal text-base text-500">
+      Nota: Solo debe existir 3 categorias
+    </p>
+  </div>
+  <button
+    pButton
+    pRipple
+    class="p-button-outlined border-gray-800 bg-gray-800 text-white-alpha-90"
+  >
+    Nueva Categoria
+  </button>
+</header>
+
+<div class="grid xl:px-6 pt-6 mt-6">
+  @for (categoria of (categorias$ | async); track categoria.id) {
+  <div class="col">
+    <app-card-categorias
+      [categoria]="categoria"
+      (eliminarEmit)="eliminar($event)"
+      (editarEmit)="editar($event)"
+    ></app-card-categorias>
+  </div>
+  } @empty {
+  <div class="col-12 text-center text-gray-500">
+    No hay categorías disponibles
+  </div>
+  }
+</div>

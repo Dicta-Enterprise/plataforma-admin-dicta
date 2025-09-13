@@ -1,3 +1,4 @@
+import { ICategoriaDto } from '@interfaces/interfaces';
 
 export class Categoria {
   id: string;
@@ -15,31 +16,31 @@ export class Categoria {
     this.imagenUrl = categoria.imagenUrl ?? 'assets/loaders/bottle-loader.gif';
     this.estado = categoria.estado ?? true;
     this.fechaCreacion = categoria.fechaCreacion ?? new Date();
-    this.fechaActualizacion =
-      categoria.fechaActualizacion ?? new Date();
+    this.fechaActualizacion = categoria.fechaActualizacion ?? new Date();
   }
 
-  static fromJson(categoria: any): Categoria {    
+  static fromJson(categoria: unknown): Categoria {
+    const casted = categoria as Record<string, unknown>;
     return new Categoria({
-      id: categoria.id,
-      nombre: categoria.nombre,
-      descripcion: categoria.descripcion,
-      imagenUrl: categoria.imagenUrl,
-      estado: categoria.estado ,
-      fechaCreacion: categoria.fechaCreacion,
-      fechaActualizacion: categoria.fechaActualizacion,
+      id: casted['id'] as string,
+      nombre: casted['nombre'] as string,
+      descripcion: casted['descripcion'] as string,
+      imagenUrl: casted['url'] as string,
+      estado: casted['estado'] as boolean,
+      fechaCreacion: casted['fechaCreacion'] as Date,
+      fechaActualizacion: casted['fechaActualizacion'] as Date,
     });
   }
 
-  static toJson(categoria: Categoria): any {
+  static toJson(categoria: Categoria): ICategoriaDto {
     return {
-      //id: categoria.id,
+      id: categoria.id,
       nombre: categoria.nombre,
       descripcion: categoria.descripcion,
       estado: categoria.estado,
       fechaCreacion: categoria.fechaCreacion,
       fechaActualizacion: categoria.fechaActualizacion,
+      url: categoria.imagenUrl,
     };
   }
-
 }

@@ -36,8 +36,7 @@ module.exports = tseslint.config(
       "@typescript-eslint/no-empty-function": "error",
       "quotes": ["error", "single"],
       "semi": ["error", "always"],
-      "indent": ["error", 2],
-      "no-console": "error"
+      "indent": ["error", 2]
     },
   },
   {

@@ -3,12 +3,15 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNG } from 'primeng/config';
 import { StyleClassModule } from 'primeng/styleclass';
+import { CUSTOM_PROVIDERS } from './core/providers/providers';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
   imports: [ButtonModule, RouterOutlet, StyleClassModule],
+  providers: [...CUSTOM_PROVIDERS],
 })
 export class App implements OnInit {
   protected title = 'plataforma-admin-dicta';

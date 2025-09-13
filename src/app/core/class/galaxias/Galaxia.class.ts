@@ -1,4 +1,5 @@
 import { Categoria } from '@class/categoria/Categoria.class';
+import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
 export class Galaxia {
   id: string;
@@ -19,7 +20,7 @@ export class Galaxia {
     this.categorias = galaxia.categorias ?? [];
   }
 
-  static fromJson(galaxia: any): Galaxia {
+  static fromJson(galaxia: IGalaxiaDto): Galaxia {
     return new Galaxia({
       id: galaxia.id,
       nombre: galaxia.nombre,
@@ -27,18 +28,17 @@ export class Galaxia {
       estado: galaxia.estado,
       fechaCreacion: galaxia.fechaCreacion,
       fechaActualizacion: galaxia.fechaActualizacion,
-      categorias: galaxia.categorias.map((item: any) => Galaxia.fromJson(item)),
     });
   }
 
-  static toJson(galaxia: Galaxia): any {
+  static toJson(galaxia: Galaxia): IGalaxiaDto {
     return {
       nombre: galaxia.nombre,
       descripcion: galaxia.descripcion,
       estado: galaxia.estado,
       fechaCreacion: galaxia.fechaCreacion,
       fechaActualizacion: galaxia.fechaActualizacion,
-      categorias: galaxia.categorias.map((item) => Categoria.toJson(item)),
+      id: galaxia.id,
     };
   }
 }

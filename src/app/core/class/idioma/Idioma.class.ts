@@ -15,18 +15,20 @@ export class Idioma {
     this.fechaActualizacion = idioma.fechaActualizacion ?? new Date();
   }
 
-  static fromJson(idioma: any): Idioma {
+  static fromJson(idioma: unknown): Idioma {
+    const casted = idioma as Record<string, unknown>;
+
     return new Idioma({
-      id: idioma.id,
-      nombre: idioma.nombre,
-      descripcion: idioma.descripcion,
-      estado: idioma.estado,
-      fechaCreacion: idioma.fechaCreacion,
-      fechaActualizacion: idioma.fechaActualizacion,
+      id: casted['id'] as string,
+      nombre: casted['nombre'] as string,
+      descripcion: casted['descripcion'] as string,
+      estado: casted['estado'] as boolean,
+      fechaCreacion: casted['fechaCreacion'] as Date,
+      fechaActualizacion: casted['fechaActualizacion'] as Date,
     });
   }
 
-  static toJson(idioma: Idioma): any {
+  static toJson(idioma: Idioma): unknown {
     return {
       nombre: idioma.nombre,
       descripcion: idioma.descripcion,

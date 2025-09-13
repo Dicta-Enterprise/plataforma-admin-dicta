@@ -1,3 +1,4 @@
+import { IProfesorDto } from '@interfaces/interfaces';
 
 export class Profesor {
   id: string;
@@ -26,7 +27,7 @@ export class Profesor {
     this.fechaNacimiento = profesor.fechaNacimiento || new Date();
   }
 
-  static fromJson(profesor: any): Profesor {
+  static fromJson(profesor: IProfesorDto): Profesor {
     return new Profesor({
       id: profesor.id,
       nombre: profesor.nombre,
@@ -42,8 +43,9 @@ export class Profesor {
     });
   }
 
-  static toJson(profesor: Profesor): any {
+  static toJson(profesor: Profesor): IProfesorDto {
     return {
+      id: profesor.id,
       nombre: profesor.nombre,
       apellido: profesor.apellido,
       email: profesor.email,
@@ -52,6 +54,8 @@ export class Profesor {
       estado: profesor.estado,
       imagen: profesor.imagen,
       fechaNacimiento: profesor.fechaNacimiento,
+      fechaActualizacion: profesor.fechaActualizacion,
+      fechaCreacion: profesor.fechaCreacion,
     };
   }
 }
