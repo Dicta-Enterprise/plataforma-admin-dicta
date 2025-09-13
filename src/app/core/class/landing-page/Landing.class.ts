@@ -19,20 +19,22 @@ export class LandingPage {
     this.color = landingPage.color?.trim() || '';
   }
 
-  static fromJson(landingPage: any): LandingPage {
+  static fromJson(landingPage: unknown): LandingPage {
+    const casted = landingPage as Record<string, unknown>;
+
     return new LandingPage({
-      id: landingPage.id,
-      titulo: landingPage.titulo,
-      descripcion: landingPage.descripcion,
-      contenido: landingPage.contenido,
-      estado: landingPage.estado,
-      planetaId: landingPage.planetaId,
-      imagenUrl: landingPage.imagenUrl,
-      color: landingPage.color,
+      id: casted['id'] as string,
+      titulo: casted['titulo'] as string,
+      descripcion: casted['descripcion'] as string,
+      contenido: casted['contenido'] as [],
+      estado: casted['estado'] as boolean,
+      planetaId: casted['planetaId'] as string,
+      imagenUrl: casted['imagenUrl'] as string,
+      color: casted['color'] as string,
     });
   }
 
-  static toJson(landingPage: LandingPage): any {
+  static toJson(landingPage: LandingPage): unknown {
     return {
       titulo: landingPage.titulo,
       descripcion: landingPage.descripcion,

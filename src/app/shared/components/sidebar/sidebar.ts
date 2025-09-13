@@ -14,7 +14,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 export class Sidebar {
   @Input() menus: IMenu[] = [];
 
-  active: boolean = false;
+  active = false;
 
   toggleTheme() {
     this.active = !this.active;

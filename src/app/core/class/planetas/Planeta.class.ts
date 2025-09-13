@@ -1,4 +1,3 @@
-
 export class Planeta {
   id: string;
   nombre: string;
@@ -20,20 +19,22 @@ export class Planeta {
     this.galaxiaId = planeta.galaxiaId ?? '';
   }
 
-  static fromJson(planeta: any): Planeta {
+  static fromJson(planeta: unknown): Planeta {
+    const casted = planeta as Record<string, unknown>;
+
     return new Planeta({
-      id: planeta.id,
-      nombre: planeta.nombre,
-      descripcion: planeta.descripcion,
-      imagen: planeta.imagen,
-      estado: planeta.estado,
-      fechaCreacion: planeta.fechaCreacion,
-      fechaActualizacion: planeta.fechaActualizacion,
-      galaxiaId: planeta.galaxiaId,
+      id: casted['id'] as string,
+      nombre: casted['nombre'] as string,
+      descripcion: casted['descripcion'] as string,
+      imagen: casted['imagen'] as string,
+      estado: casted['estado'] as boolean,
+      fechaCreacion: casted['fechaCreacion'] as Date,
+      fechaActualizacion: casted['fechaActualizacion'] as Date,
+      galaxiaId: casted['galaxiaId'] as string,
     });
   }
 
-  static toJson(planeta: Planeta): any {
+  static toJson(planeta: Planeta): unknown {
     return {
       nombre: planeta.nombre,
       descripcion: planeta.descripcion,
