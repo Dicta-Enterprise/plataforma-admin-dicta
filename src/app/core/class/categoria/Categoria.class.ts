@@ -1,5 +1,3 @@
-import { ICategoriaDto } from '@interfaces/interfaces';
-
 export class Categoria {
   id: string;
   nombre: string;
@@ -32,15 +30,14 @@ export class Categoria {
     });
   }
 
-  static toJson(categoria: Categoria): ICategoriaDto {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static toJson(categoria: Categoria): any {
     return {
       id: categoria.id,
       nombre: categoria.nombre,
       descripcion: categoria.descripcion,
+      imagenUrl: categoria.imagenUrl,
       estado: categoria.estado,
-      fechaCreacion: categoria.fechaCreacion,
-      fechaActualizacion: categoria.fechaActualizacion,
-      url: categoria.imagenUrl,
     };
   }
 }

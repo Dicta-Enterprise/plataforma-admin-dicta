@@ -6,19 +6,33 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { CUSTOM_PROVIDERS } from './core/providers/providers';
 import { ModalHostComponent } from './containers/host/app-modal-host.component';
 import { ModalService } from './containers/host/app-modal.service';
+import { AlertService } from './containers/alerts/app-alert.service';
+import { AlertHostComponent } from './containers/alerts/app-alert-host.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [ButtonModule, RouterOutlet, StyleClassModule, ModalHostComponent],
-  providers: [...CUSTOM_PROVIDERS],
+  imports: [
+    ButtonModule,
+    RouterOutlet,
+    StyleClassModule,
+    ModalHostComponent,
+    AlertHostComponent,
+  ],
+  providers: [...CUSTOM_PROVIDERS, MessageService],
 })
 export class App implements OnInit, AfterViewInit {
   protected title = 'plataforma-admin-dicta';
   @ViewChild(ModalHostComponent) host!: ModalHostComponent;
+  @ViewChild(AlertHostComponent) hostAlert!: AlertHostComponent;
 
-  constructor(private primeng: PrimeNG, private modalService: ModalService) {}
+  constructor(
+    private primeng: PrimeNG,
+    private modalService: ModalService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.primeng.setTranslation({
@@ -50,5 +64,6 @@ export class App implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.modalService.registerHost(this.host);
+    this.alertService.registerHost(this.hostAlert);
   }
 }
