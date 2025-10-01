@@ -17,12 +17,18 @@
     </div>
   </ng-template>
 
-  <form class="flex flex-column gap-4 mt-4">
+  <form class="flex flex-column gap-4 mt-4" [formGroup]="nuevaCategoriaForm">
     <div class="grid formgrid p-fluid">
       <!-- Nombre -->
       <div class="field mb-3 col-12 md:col-6">
         <p-floatLabel>
-          <input pInputText id="nombre" autocomplete="off" class="w-full" />
+          <input
+            pInputText
+            id="nombre"
+            autocomplete="off"
+            class="w-full"
+            formControlName="nombre"
+          />
           <label for="nombre">Nombre</label>
         </p-floatLabel>
       </div>
@@ -34,6 +40,7 @@
             pInputText
             id="descripcion"
             autocomplete="off"
+            formControlName="descripcion"
             class="w-full"
           />
           <label for="descripcion">Descripción</label>
@@ -43,7 +50,13 @@
       <!-- Longitud -->
       <div class="field mb-3 col-12 md:col-12 mt-3">
         <p-floatLabel>
-          <input pInputText id="imagen" autocomplete="off" class="w-full" />
+          <input
+            pInputText
+            id="imagen"
+            autocomplete="off"
+            class="w-full"
+            formControlName="imagenUrl"
+          />
           <label for="imagen">Imagen Url</label>
         </p-floatLabel>
       </div>
@@ -56,12 +69,15 @@
         label="Cancelar"
         icon="pi pi-times"
         iconPos="right"
-        severity="danger"
+        variant="outlined"
+        class="text-gray-600"
       />
       <p-button
         label="Guardar"
+        type="button"
         icon="pi pi-check"
         iconPos="right"
+        (onClick)="guardarCategoria()"
         severity="success"
       />
     </div>

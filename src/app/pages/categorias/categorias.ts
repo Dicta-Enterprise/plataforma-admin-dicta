@@ -11,8 +11,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { AlertService } from 'src/app/containers/alerts/app-alert.service';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
-import { MODEL_ENUM } from 'src/app/core/enums/models.enum';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 
@@ -42,7 +43,8 @@ export class Categorias implements OnInit, OnDestroy {
 
   constructor(
     private readonly categoriaFacade: CategoriaFacade,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private alertService: AlertService
   ) {
     this.categorias$ = this.categoriaFacade.categorias$;
   }
@@ -58,10 +60,14 @@ export class Categorias implements OnInit, OnDestroy {
   }
 
   nuevaCategoria() {
-    this.modalService.openByName(MODEL_ENUM.NUEVA_CATEGORIA, {
+    this.modalService.openByName(MODELS_ENUM.NUEVA_CATEGORIA, {
       title: 'Centralizado',
       message: 'Vino desde el registry',
     });
+    // this.alertService.openByName(ALERTS_ENUM.SUCCESS, {
+    //   title: 'Centralizado',
+    //   message: 'Vino desde el registry',
+    // });
   }
 
   eliminar(id: string) {

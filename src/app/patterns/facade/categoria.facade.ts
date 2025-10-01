@@ -18,6 +18,21 @@ export class CategoriaFacade {
       .subscribe((categorias) => this.categorias$.next(categorias));
   }
 
+  guardarCategoria(categoria: Categoria) {
+    this.categoriaService
+      .guardarCategoria(categoria)
+      .subscribe((categoria) => this.categoria$.next(categoria));
+  }
 
+  obtenerCategoria(id: string) {
+    this.categoriaService
+      .obtenerCategoria(id)
+      .subscribe((categoria) => this.categoria$.next(categoria));
+  }
 
+  actualizarCategoria(categoria: Categoria) {
+    this.categoriaService
+      .actualizarCategoria(categoria)
+      .subscribe((categoria) => this.categoria$.next(categoria));
+  }
 }

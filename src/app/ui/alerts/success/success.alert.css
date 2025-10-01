@@ -1,0 +1,38 @@
+    .alert-item {
+      background: white;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.5rem;
+    }
+
+    .animate-in {
+      animation: slideInRight 0.3s ease-out forwards;
+    }
+
+    .animate-out {
+      animation: slideOutRight 0.3s ease-in forwards;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }

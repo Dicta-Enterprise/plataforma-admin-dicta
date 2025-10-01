@@ -1,0 +1,16 @@
+    <div class="alert-item success-alert animate-in">
+      <div class="flex align-items-start gap-3">
+        <i class="pi pi-check-circle text-2xl text-green-500 mt-1"></i>
+        <div class="flex-1">
+          <h4 class="font-semibold text-lg mb-1">{{ title }}</h4>
+          <p class="text-sm text-gray-600 m-0">{{ message }}</p>
+        </div>
+        <button 
+          pButton 
+          pRipple
+          icon="pi pi-times" 
+          class="p-button-text p-button-sm"
+          (click)="onClose()">
+        </button>
+      </div>
+    </div>

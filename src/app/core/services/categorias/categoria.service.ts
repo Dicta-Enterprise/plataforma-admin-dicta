@@ -16,4 +16,20 @@ export class CategoriaService {
   listarCategorias(): Observable<Categoria[]> {
     return this.categoriaREpository.listarCategoriasService();
   }
+
+  obtenerCategoria(id: string): Observable<Categoria> {
+    return this.categoriaREpository.obtenerCategoriaService(id);
+  }
+
+  guardarCategoria(categoria: Categoria): Observable<Categoria> {
+    return this.categoriaREpository.crearCategoriaService(categoria);
+  }
+
+  actualizarCategoria(categoria: Categoria): Observable<Categoria> {
+    return this.categoriaREpository.editarCategoriaService(categoria);
+  }
+
+  eliminarCategoria(id: string): Observable<Categoria> {
+    return this.categoriaREpository.eliminarCategoriaService(id);
+  }
 }
