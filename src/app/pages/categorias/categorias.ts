@@ -11,6 +11,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 
@@ -38,7 +39,10 @@ export class Categorias implements OnInit, OnDestroy {
 
   categorias$ = new BehaviorSubject<Categoria[]>([]);
 
-  constructor(private readonly categoriaFacade: CategoriaFacade) {
+  constructor(
+    private readonly categoriaFacade: CategoriaFacade,
+    private modalService: ModalService
+  ) {
     this.categorias$ = this.categoriaFacade.categorias$;
   }
 
@@ -50,6 +54,13 @@ export class Categorias implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  nuevaCategoria() {
+    this.modalService.openByName('nuevaCategoria', {
+      title: 'Centralizado',
+      message: 'Vino desde el registry',
+    });
   }
 
   eliminar(id: string) {

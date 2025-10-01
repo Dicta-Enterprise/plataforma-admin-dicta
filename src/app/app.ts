@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNG } from 'primeng/config';
 import { StyleClassModule } from 'primeng/styleclass';
 import { CUSTOM_PROVIDERS } from './core/providers/providers';
-
+import { ModalHostComponent } from './containers/host/app-modal-host.component';
+import { ModalService } from './containers/host/app-modal.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [ButtonModule, RouterOutlet, StyleClassModule],
+  imports: [ButtonModule, RouterOutlet, StyleClassModule, ModalHostComponent],
   providers: [...CUSTOM_PROVIDERS],
 })
-export class App implements OnInit {
+export class App implements OnInit, AfterViewInit {
   protected title = 'plataforma-admin-dicta';
+  @ViewChild(ModalHostComponent) host!: ModalHostComponent;
 
-  constructor(private primeng: PrimeNG) {}
+  constructor(private primeng: PrimeNG, private modalService: ModalService) {}
 
   ngOnInit() {
     this.primeng.setTranslation({
@@ -44,5 +46,9 @@ export class App implements OnInit {
       accept: 'Aceptar',
       reject: 'Cancelar',
     });
+  }
+
+  ngAfterViewInit() {
+    this.modalService.registerHost(this.host);
   }
 }
