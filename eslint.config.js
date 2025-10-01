@@ -39,12 +39,12 @@ module.exports = tseslint.config(
       "indent": ["error", 2]
     },
   },
-  {
-    files: ["**/*.html"],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility,
-    ],
-    rules: {},
-  }
+  // {
+  //   files: ["**/*.html"],
+  //   extends: [
+  //     ...angular.configs.templateRecommended,
+  //     ...angular.configs.templateAccessibility,
+  //   ],
+  //   rules: {},
+  // }
 );

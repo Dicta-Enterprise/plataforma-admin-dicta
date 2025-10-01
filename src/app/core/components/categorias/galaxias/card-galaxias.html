@@ -1,14 +1,17 @@
 <div class="surface-card shadow-2 border-round p-4">
   <div class="flex flex-column align-items-center mb-3">
     <img
-      [src]="categoria.imagenUrl ? categoria.imagenUrl : loader"
+      [src]="galaxia.imagenUrl ? galaxia.imagenUrl : loader"
       style="width: 70px; height: 70px"
       class="mb-3"
-      alt="imagen"
+      alt="name"
     />
-    <span class="font-medium text-900 text-xl mb-2">{{categoria.nombre}}</span>
+    <span class="font-medium text-900 text-xl mb-2">{{galaxia.nombre}}</span>
     <span class="text-600 font-light text-400 mb-2"
-      >{{categoria.descripcion}}</span
+      >{{galaxia.descripcion}}</span
+    >
+    <span class="text-600 surface-200 p-2 border-round" 
+      >{{galaxia.categoria.nombre}}</span
     >
   </div>
   <div class="pt-3 border-top-1 surface-border flex">

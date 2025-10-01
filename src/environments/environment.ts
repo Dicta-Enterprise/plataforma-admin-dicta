@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
 
-  URL_NEST_BACKEND: 'http://localhost:3000/api',
-  URL_NETCORE_AUTH: 'https://localhost:7262/api',
+  URL_NEST_BACKEND: 'http://localhost:4000/api',
+  URL_NEST_AUTH: 'https://localhost:7262/api',
 };
 
 /*
