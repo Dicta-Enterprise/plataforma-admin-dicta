@@ -8,7 +8,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-
+import { TextareaModule } from 'primeng/textarea';
+import { FloatLabelModule } from 'primeng/floatlabel';
 @Component({
   selector: 'app-nueva-categoria',
   standalone: true,
@@ -20,7 +21,9 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     InputTextModule,
     CheckboxModule,
     ButtonModule,
-    ToggleSwitchModule
+    ToggleSwitchModule,
+    TextareaModule,
+    FloatLabelModule
   ],
   templateUrl: './nueva-categoria.modal.html',
 })
