@@ -1,33 +1,41 @@
-<header
-  class="flex w-full justify-content-between align-items-center border-bottom-1 surface-border pb-5"
->
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">CATEGORIAS</div>
+    <p-badge
+      [value]="3"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
   <div>
-    <h2 class="mt-0 mb-3 font-medium text-2xl text-900">CATEGORIAS</h2>
-    <p class="mt-0 mb-0 font-normal text-base text-500">
-      Nota: Solo debe existir 3 categorias
-    </p>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-sort-alt"
+      class="p-button-outlined p-button-secondary w-7rem p-2"
+      label="Sort By"
+    ></button>
   </div>
-  <button
-    pButton
-    pRipple
-    class="p-button-outlined border-gray-800 bg-gray-800 text-white-alpha-90"
-  >
-    Nueva Categoria
-  </button>
-</header>
-
-<div class="grid xl:px-6 pt-6 mt-6">
-  @for (categoria of (categorias$ | async); track categoria.id) {
-  <div class="col">
-    <app-card-categorias
-      [categoria]="categoria"
-      (eliminarEmit)="eliminar($event)"
-      (editarEmit)="editar($event)"
-    ></app-card-categorias>
+</div>
+<p class="text-600 text-xl">El maximo son 3 Categorias</p>
+<p-divider class="w-full"></p-divider>
+<div class="grid grid-nogutter align-items-center">
+  <div class="col-12 border-2 border-round h-30rem mt-2">
+    <div class="surface-ground">
+      <div class="grid">
+        @for (categoria of (categorias$ | async); track categoria.id) {
+        <div class="col-12 md:col-6 xl:col-3 p-3">
+          <app-card-categorias
+            [categoria]="categoria"
+            (eliminarEmit)="eliminar($event)"
+            (editarEmit)="editar($event)"
+          ></app-card-categorias>
+        </div>
+        } @empty {
+        <div class="col-12 text-center text-gray-500">
+          No hay categorías disponibles
+        </div>
+        }
+      </div>
+    </div>
   </div>
-  } @empty {
-  <div class="col-12 text-center text-gray-500">
-    No hay categorías disponibles
-  </div>
-  }
 </div>

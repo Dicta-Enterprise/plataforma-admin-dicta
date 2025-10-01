@@ -1,1 +1,95 @@
-<p>galaxias works!</p>
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">GALAXIAS</div>
+    <p-badge
+      [value]="76"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+  <div>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      class="p-button-outlined p-button-secondary w-7rem p-2"
+      iconPos="right"
+      label="Nueva Galaxia"
+    ></button>
+  </div>
+</div>
+<p class="text-600 text-xl">
+  Por cada galaxia creada se vincula a una categoria, asi que no te asustes si
+  ves la misma galaxia en los diferentes filtros
+</p>
+<p-divider class="w-full"></p-divider>
+<div class="grid grid-nogutter align-items-center">
+  <p-multiSelect
+    [options]="categorias"
+    [(ngModel)]="categoriaSelected"
+    placeholder="Categoria"
+    optionLabel="nombre"
+    class="w-full"
+    [maxSelectedLabels]="2"
+    selectedItemsLabel="{0} categorias seleccionados"
+    class="flex-auto lg:flex-1 mb-3 lg:mt-0 w-full mr-0 lg:mr-4 text-900"
+  ></p-multiSelect>
+  <p-multiSelect
+    [options]="colors"
+    [(ngModel)]="colorSelected"
+    placeholder="Color"
+    optionLabel="nombre"
+    class="w-full"
+    [maxSelectedLabels]="2"
+    selectedItemsLabel="{0} Colores Seleccionados"
+    class="flex-auto lg:flex-1 mb-3 lg:mt-0 w-full mr-0 lg:mr-4 text-900"
+  >
+    <ng-template let-color pTemplate="item">
+      <div class="flex align-items-center">
+        <div
+          class="w-2rem h-2rem border-circle {{color.class}} cursor-pointer border-none"
+        ></div>
+        <div class="text-900 ml-2">{{color.name}}</div>
+      </div>
+    </ng-template>
+  </p-multiSelect>
+  <p-toggleButton
+    [(ngModel)]="activos"
+    onLabel="Activos"
+    offLabel="Activos"
+    onIcon="pi pi-check"
+    offIcon="pi pi-times"
+    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-12rem"
+  ></p-toggleButton>
+  <p-toggleButton
+    [(ngModel)]="inactivos"
+    onLabel="Inactivos"
+    offLabel="Inactivos"
+    onIcon="pi pi-check"
+    offIcon="pi pi-times"
+    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"
+  ></p-toggleButton>
+  <a
+    pRipple
+    tabindex="0"
+    class="cursor-pointer flex align-items-center mb-3 lg:mt-0 text-900"
+    >Limpiar Todo</a
+  >
+
+  <div class="surface-ground">
+    <div class="grid">
+      @for (galaxia of (galaxias$ | async); track galaxia.id) {
+      <div class="col-12 md:col-6 xl:col-3 p-3">
+        <app-card-galaxias
+          [galaxia]="galaxia"
+          (eliminarEmit)="eliminar($event)"
+          (editarEmit)="editar($event)"
+        ></app-card-galaxias>
+      </div>
+      } @empty {
+      <div class="col-12 text-center text-gray-500">
+        No hay categorías disponibles
+      </div>
+      }
+    </div>
+  </div>
+</div>

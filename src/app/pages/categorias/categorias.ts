@@ -3,11 +3,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { CardCategorias } from '@components//categorias/card-categorias/card-categorias';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
-import { RatingModule } from 'primeng/rating';
+import { DividerModule } from 'primeng/divider';
+import { MenuModule } from 'primeng/menu';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { StyleClassModule } from 'primeng/styleclass';
-import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
@@ -15,13 +17,15 @@ import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 @Component({
   selector: 'app-categorias',
   imports: [
-    TableModule,
-    TagModule,
-    RatingModule,
-    ButtonModule,
     CommonModule,
-    FormsModule,
+    BadgeModule,
+    ButtonModule,
+    DividerModule,
+    MultiSelectModule,
     StyleClassModule,
+    ToggleButtonModule,
+    FormsModule,
+    MenuModule,
     CardCategorias,
   ],
   providers: [CategoriaFacade, CategoriaService],
