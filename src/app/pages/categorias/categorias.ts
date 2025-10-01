@@ -12,6 +12,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { MODEL_ENUM } from 'src/app/core/enums/models.enum';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 
@@ -57,7 +58,7 @@ export class Categorias implements OnInit, OnDestroy {
   }
 
   nuevaCategoria() {
-    this.modalService.openByName('nuevaCategoria', {
+    this.modalService.openByName(MODEL_ENUM.NUEVA_CATEGORIA, {
       title: 'Centralizado',
       message: 'Vino desde el registry',
     });
