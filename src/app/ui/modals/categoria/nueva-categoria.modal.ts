@@ -1,13 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { CheckboxModule } from 'primeng/checkbox';
@@ -19,6 +13,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CategoriaMapper } from 'src/app/core/mappers/categoria.mapper';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
+import { CategoriasFormPresenter } from '@pages/categorias/categorias-form.presenter';
 @Component({
   selector: 'app-nueva-categoria',
   standalone: true,
@@ -34,38 +29,32 @@ import { CategoriaService } from 'src/app/core/services/categorias/categoria.ser
     TextareaModule,
     FloatLabelModule,
   ],
-  providers: [CategoriaService, CategoriaFacade],
+  providers: [CategoriaService, CategoriaFacade, CategoriasFormPresenter],
   templateUrl: './nueva-categoria.modal.html',
 })
 export class NuevaCategoria {
   @Input() title = 'Nueva Categoría';
   visible = true;
 
-  nuevaCategoriaForm!: FormGroup;
-
   constructor(
     private modalService: ModalService,
     private readonly fb: FormBuilder,
-    private readonly categoriaFacade: CategoriaFacade
-  ) {
-    this.nuevaCategoriaForm = this.fb.group({
-      nombre: ['', [Validators.required]],
-      descripcion: ['', [Validators.required]],
-      imagenUrl: ['', [Validators.required]],
-    });
-  }
+    private readonly categoriaFacade: CategoriaFacade,
+    public readonly categoriasFormPresenter: CategoriasFormPresenter
+  ) {}
 
   guardarCategoria() {
     const nuevaCategoria = CategoriaMapper.categoriaToJson(
-      this.nuevaCategoriaForm
+      this.categoriasFormPresenter.Form
     );
 
+    console.log(nuevaCategoria);
     this.categoriaFacade.guardarCategoria(nuevaCategoria);
   }
 
   actualizarCategoria() {
     const nuevaCategoria = CategoriaMapper.categoriaToJson(
-      this.nuevaCategoriaForm
+      this.categoriasFormPresenter.Form
     );
 
     this.categoriaFacade.actualizarCategoria(nuevaCategoria);
