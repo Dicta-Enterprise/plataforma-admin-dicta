@@ -16,6 +16,8 @@ import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
+import { CategoriasFormPresenter } from './categorias-form.presenter';
+import { LocalStateService } from '@class/state/local-state.class';
 
 @Component({
   selector: 'app-categorias',
@@ -31,7 +33,12 @@ import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
     MenuModule,
     CardCategorias,
   ],
-  providers: [CategoriaFacade, CategoriaService],
+  providers: [
+    CategoriaFacade,
+    CategoriaService,
+    CategoriasFormPresenter,
+    LocalStateService,
+  ],
   templateUrl: './categorias.html',
   styleUrl: './categorias.css',
 })
@@ -44,7 +51,8 @@ export class Categorias implements OnInit, OnDestroy {
   constructor(
     private readonly categoriaFacade: CategoriaFacade,
     private modalService: ModalService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private readonly categoriasFormPresenter: CategoriasFormPresenter
   ) {
     this.categorias$ = this.categoriaFacade.categorias$;
   }

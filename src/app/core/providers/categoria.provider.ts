@@ -7,4 +7,8 @@ export const CUSTOM_CATEGORIAS_PROVIDER: Provider[] = [
     provide: CATEGORIA_REPOSITORY,
     useClass: CategoriaRepositoryImpl,
   },
+  {
+    provide: 'STATE_CONFIG',
+    useValue: { i18nLang: 'es', secretKey: 'abc123' },
+  },
 ];
