@@ -17,44 +17,49 @@
     </div>
   </ng-template>
 
-  <form class="flex flex-column gap-4 mt-4" [formGroup]="categoriasFormPresenter.Form">
+  <form
+    class="flex flex-column gap-4 mt-4"
+    [formGroup]="categoriasFormPresenter.Form"
+  >
     <div class="grid formgrid p-fluid">
       <!-- Nombre -->
-      <div class="field mb-3 col-12 md:col-6">
+      <div class="field mb-6 col-12 md:col-6">
         <p-floatLabel>
           <input
             pInputText
             id="nombre"
-            autocomplete="off"
-            class="w-full"
             formControlName="nombre"
+            dictaReactiveForm
+            class="w-full"
           />
-          <label for="nombre">Nombre</label>
+          <label for="nombre">Nombres</label>
         </p-floatLabel>
       </div>
 
-      <!-- Dirección -->
-      <div class="field mb-3 col-12 md:col-6">
+      <!-- Descripción -->
+      <div class="field mb-6 col-12 md:col-6">
         <p-floatLabel>
           <input
             pInputText
             id="descripcion"
             autocomplete="off"
             formControlName="descripcion"
+            dictaReactiveForm
             class="w-full"
           />
           <label for="descripcion">Descripción</label>
         </p-floatLabel>
       </div>
 
-      <!-- Longitud -->
-      <div class="field mb-3 col-12 md:col-12 mt-3">
+      <!-- Imagen URL -->
+      <div class="field mb-6 col-12 md:col-12 mt-3">
         <p-floatLabel>
           <input
             pInputText
             id="imagen"
             autocomplete="off"
             class="w-full"
+            dictaReactiveForm
             formControlName="imagenUrl"
           />
           <label for="imagen">Imagen Url</label>
@@ -71,6 +76,7 @@
         iconPos="right"
         variant="outlined"
         class="text-gray-600"
+        (onClick)="visible = false"
       />
       <p-button
         label="Guardar"
@@ -79,6 +85,7 @@
         iconPos="right"
         (onClick)="guardarCategoria()"
         severity="success"
+        [disabled]="!categoriasFormPresenter.Form.valid"
       />
     </div>
   </ng-template>
