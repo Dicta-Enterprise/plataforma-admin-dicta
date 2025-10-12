@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,8 @@ import { CategoriaMapper } from 'src/app/core/mappers/categoria.mapper';
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { CategoriasFormPresenter } from '@pages/categorias/categorias-form.presenter';
+import { ReactiveFormDirective } from '@shared/directives/reactive-form.directive';
+
 @Component({
   selector: 'app-nueva-categoria',
   standalone: true,
@@ -28,11 +30,12 @@ import { CategoriasFormPresenter } from '@pages/categorias/categorias-form.prese
     ToggleSwitchModule,
     TextareaModule,
     FloatLabelModule,
+    ReactiveFormDirective
   ],
   providers: [CategoriaService, CategoriaFacade, CategoriasFormPresenter],
   templateUrl: './nueva-categoria.modal.html',
 })
-export class NuevaCategoria {
+export class NuevaCategoria implements OnInit {
   @Input() title = 'Nueva Categoría';
   visible = true;
 
@@ -43,13 +46,27 @@ export class NuevaCategoria {
     public readonly categoriasFormPresenter: CategoriasFormPresenter
   ) {}
 
-  guardarCategoria() {
-    const nuevaCategoria = CategoriaMapper.categoriaToJson(
-      this.categoriasFormPresenter.Form
-    );
+  ngOnInit(): void {
+    this.createControls();
+  }
 
-    console.log(nuevaCategoria);
-    this.categoriaFacade.guardarCategoria(nuevaCategoria);
+  private createControls() {
+    this.categoriasFormPresenter.createForm();
+  }
+
+  guardarCategoria() {
+
+    console.log(this.categoriasFormPresenter.Valid);
+    console.log(this.categoriasFormPresenter.Form.valid);
+
+
+    this.categoriasFormPresenter.MarkAllAsTouched();
+    // const nuevaCategoria = CategoriaMapper.categoriaToJson(
+    //   this.categoriasFormPresenter.Form
+    // );
+
+    // console.log(nuevaCategoria);
+    // this.categoriaFacade.guardarCategoria(nuevaCategoria);
   }
 
   actualizarCategoria() {
