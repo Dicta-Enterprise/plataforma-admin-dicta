@@ -1,1 +1,157 @@
-<p>cursos works!</p>
+<section class="cursos-page surface-card border-round shadow-1 p-4">
+  <header class="cursos-header mb-4">
+    <div>
+      <h2 class="m-0 text-900 text-3xl font-bold">Cursos</h2>
+      <p class="m-0 text-600">Listado general de cursos registrados en la plataforma.</p>
+    </div>
+    <button
+      type="button"
+      pButton
+      class="p-button-outlined p-button-secondary cursos-header__button"
+      label="Actualizar"
+      (click)="refrescar()"
+    ></button>
+  </header>
+
+  <section class="cursos-filtros">
+    <label class="cursos-filtros__field">
+      <span class="cursos-filtros__label">Categoria</span>
+      <select
+        class="cursos-filtros__select"
+        [value]="selectedCategoria"
+        (change)="onCategoriaFilterChange($any($event.target).value)"
+      >
+        @for (option of (categoriasOptions$ | async) || []; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+    </label>
+
+    <ng-container *ngIf="precioRango$ | async as precioRango">
+      <div class="cursos-filtros__range" *ngIf="precioRango.min !== null && precioRango.max !== null">
+        <span class="cursos-filtros__label">Rango de precios (COP)</span>
+        <div class="cursos-filtros__range-inputs">
+          <input
+            #precioMinInput
+            type="number"
+            class="cursos-filtros__range-input"
+            [placeholder]="precioRango.min | number : '1.0-0'"
+            [attr.min]="precioRango.min"
+            [attr.max]="precioRango.max"
+            [value]="selectedPrecioMin"
+            (input)="onPrecioRangoChange(precioMinInput.value, precioMaxInput.value)"
+          />
+          <span class="cursos-filtros__range-separator">-</span>
+          <input
+            #precioMaxInput
+            type="number"
+            class="cursos-filtros__range-input"
+            [placeholder]="precioRango.max | number : '1.0-0'"
+            [attr.min]="precioRango.min"
+            [attr.max]="precioRango.max"
+            [value]="selectedPrecioMax"
+            (input)="onPrecioRangoChange(precioMinInput.value, precioMaxInput.value)"
+          />
+        </div>
+      </div>
+    </ng-container>
+  </section>
+
+  <div class="cursos-grid">
+    @for (curso of (cursosFiltrados$ | async) || []; track curso.id) {
+      <div class="curso-card-wrapper">
+        <article class="curso-card">
+          <figure class="curso-card__media">
+            <span class="curso-card__categoria-badge">
+              {{ curso.categoriaNombre || 'Sin categoria' }}
+            </span>
+            <img src="assets/cursos_img/1.jpg" alt="Poster del curso" />
+          </figure>
+
+          <div class="curso-card__body">
+            <header class="curso-card__header">
+              <h3 class="curso-card__title" [title]="curso.nombre">
+                {{ curso.nombre || 'Sin titulo' }}
+              </h3>
+            </header>
+
+            <p class="curso-card__descripcion">
+              {{ curso.descripcion || 'Sin descripcion disponible' }}
+            </p>
+
+            <div class="curso-card__beneficios" *ngIf="curso.beneficios.length; else sinBeneficios">
+              <h4 class="curso-card__beneficios-title">Beneficios</h4>
+              <ul class="curso-card__beneficios-list">
+                @for (beneficio of curso.beneficios; track beneficio.titulo) {
+                  <li class="curso-card__beneficio-item">
+                    <strong>{{ beneficio.titulo }}</strong>
+                    <span>{{ beneficio.descripcion }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+            <ng-template #sinBeneficios>
+              <p class="curso-card__beneficios-empty">Sin beneficios registrados</p>
+            </ng-template>
+
+            <dl class="curso-card__details">
+              <div>
+                <dt>Inicio</dt>
+                <dd>
+                  {{ curso.fechaInicio ? (curso.fechaInicio | date : 'dd/MM/yyyy') : 'Sin definir' }}
+                </dd>
+              </div>
+              <div>
+                <dt>Duracion</dt>
+                <dd>
+                  {{ curso.duracionSemanas !== null ? curso.duracionSemanas + ' sem' : '-' }}
+                </dd>
+              </div>
+              <div>
+                <dt>Precio</dt>
+                <dd>
+                  {{ curso.precio !== null ? (curso.precio | currency : 'COP' : 'symbol' : '1.0-0') : 'N/D' }}
+                </dd>
+              </div>
+            </dl>
+
+            <footer class="curso-card__footer">
+              <span class="curso-card__profesor">
+                <i class="pi pi-user mr-2"></i>
+                {{ curso.profesorNombre || 'Sin profesor' }}
+              </span>
+              <button
+                type="button"
+                pButton
+                class="curso-card__editar-btn p-button-rounded p-button-text p-button-plain"
+                icon="pi pi-pencil"
+                (click)="editarCurso(curso)"
+                [attr.aria-label]="'Editar curso ' + (curso.nombre || curso.id)"
+              ></button>
+              <div class="curso-card__estado">
+                <label class="curso-card__estado-toggle">
+                  <input
+                    type="checkbox"
+                    class="curso-card__estado-toggle-input"
+                    [checked]="curso.estado"
+                    #estadoToggle
+                    role="switch"
+                    [attr.aria-checked]="estadoToggle.checked"
+                    (change)="cambiarEstado(curso, estadoToggle.checked)"
+                    [attr.aria-label]="'Cambiar estado del curso ' + (curso.nombre || curso.id)"
+                  />
+                  <span class="curso-card__estado-toggle-slider" aria-hidden="true"></span>
+                </label>
+              </div>
+            </footer>
+          </div>
+        </article>
+      </div>
+    } @empty {
+      <div class="col-12 text-center text-600 py-5">
+        No hay cursos para los filtros seleccionados.
+      </div>
+    }
+  </div>
+</section>
+
