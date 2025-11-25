@@ -1,0 +1,109 @@
+.curso-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.curso-form__row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.curso-form__field {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.curso-form__field--tight-top {
+  margin-top: -0.7rem;
+}
+
+.curso-form__field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.curso-form__field input,
+.curso-form__field select,
+.curso-form__field textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+.curso-form__duration {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.curso-form__duration input,
+.curso-form__duration select {
+  flex: 1;
+}
+
+.curso-form__image-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.curso-form__file-input {
+  display: none;
+}
+
+.curso-form__file-button {
+  border: 1px dashed #6c63ff;
+  background-color: #f5f3ff;
+  color: #4338ca;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.curso-form__file-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.curso-form__image-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.curso-form__image-remove {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.curso-form__image-preview {
+  margin-top: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.curso-form__image-preview img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.curso-form__error {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
