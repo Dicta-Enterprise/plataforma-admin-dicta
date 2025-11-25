@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import Aura from '@primeuix/themes/aura';
 import { provideHttpClient } from '@angular/common/http';
+import { CUSTOM_PROVIDERS } from './core/providers/providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideAnimationsAsync(),
+    ...CUSTOM_PROVIDERS,
     providePrimeNG({
       theme: {
         preset: Aura,

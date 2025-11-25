@@ -4,13 +4,25 @@
       <h2 class="m-0 text-900 text-3xl font-bold">Cursos</h2>
       <p class="m-0 text-600">Listado general de cursos registrados en la plataforma.</p>
     </div>
-    <button
-      type="button"
-      pButton
-      class="p-button-outlined p-button-secondary cursos-header__button"
-      label="Actualizar"
-      (click)="refrescar()"
-    ></button>
+    <div class="cursos-header__actions">
+      <button
+        type="button"
+        pButton
+        severity="primary"
+        size="small"
+        class="cursos-header__button"
+        label="Nuevo Curso +"
+        (click)="abrirModalNuevoCurso()"
+      ></button>
+      <button
+        type="button"
+        pButton
+        class="p-button-outlined p-button-secondary cursos-header__button"
+        size="small"
+        label="Actualizar"
+        (click)="refrescar()"
+      ></button>
+    </div>
   </header>
 
   <section class="cursos-filtros">
@@ -82,7 +94,7 @@
             <div class="curso-card__beneficios" *ngIf="curso.beneficios.length; else sinBeneficios">
               <h4 class="curso-card__beneficios-title">Beneficios</h4>
               <ul class="curso-card__beneficios-list">
-                @for (beneficio of curso.beneficios; track beneficio.titulo) {
+                @for (beneficio of curso.beneficios; track $index) {
                   <li class="curso-card__beneficio-item">
                     <strong>{{ beneficio.titulo }}</strong>
                     <span>{{ beneficio.descripcion }}</span>

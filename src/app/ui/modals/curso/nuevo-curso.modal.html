@@ -1,0 +1,166 @@
+<p-dialog
+  header="Crear Nuevo Curso"
+  [(visible)]="visible"
+  [modal]="true"
+  appendTo="body"
+  [style]="{ width: '50vw', maxWidth: '640px' }"
+  [breakpoints]="{ '960px': '80vw', '640px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="cerrarModal()"
+>
+  <form [formGroup]="cursosFormPresenter.Form" class="curso-form">
+    <div class="curso-form__row">
+      <div class="curso-form__field">
+        <label for="nombre">Nombre del curso</label>
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre"
+          placeholder="Ingresa el nombre"
+        />
+      </div>
+
+      <div class="curso-form__field">
+        <label for="categoria">Categoría</label>
+        <select id="categoria" formControlName="categoriaId">
+          <option value="" disabled>Selecciona una categoría</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria.id">
+            {{ categoria.nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="curso-form__field">
+      <label for="descripcion">Descripción</label>
+      <textarea
+        id="descripcion"
+        rows="3"
+        formControlName="descripcion"
+        placeholder="Describe brevemente el curso"
+      ></textarea>
+    </div>
+
+    <div class="curso-form__field curso-form__field--tight-top">
+      <label for="beneficios">Beneficios (separados por coma)</label>
+      <textarea
+        id="beneficios"
+        rows="2"
+        formControlName="beneficios"
+        placeholder="Incluye los beneficios principales"
+      ></textarea>
+    </div>
+
+    <div class="curso-form__field">
+      <label for="imagen">Imagen del curso</label>
+      <div class="curso-form__image-controls">
+        <input
+          id="imagen"
+          type="url"
+          formControlName="imagen"
+          placeholder="URL (opcional)"
+          (input)="onImageUrlInput()"
+        />
+        <input
+          #imagenFileInput
+          type="file"
+          accept="image/*"
+          class="curso-form__file-input"
+          (change)="onImageSelected($event)"
+        />
+        <button
+          type="button"
+          class="curso-form__file-button"
+          (click)="abrirSelectorImagen()"
+          [disabled]="isUploadingImage"
+        >
+          {{ isUploadingImage ? 'Subiendo...' : 'Elegir imagen' }}
+        </button>
+      </div>
+
+      <div class="curso-form__image-meta">
+        <span *ngIf="selectedImageName">{{ selectedImageName }}</span>
+        <button
+          type="button"
+          class="curso-form__image-remove"
+          *ngIf="imagePreviewUrl && !isUploadingImage"
+          (click)="quitarImagen()"
+        >
+          Quitar imagen
+        </button>
+      </div>
+
+      <div
+        class="curso-form__image-preview"
+        *ngIf="imagePreviewUrl && isImageFromUpload"
+      >
+        <img [src]="imagePreviewUrl" alt="Vista previa imagen del curso" />
+      </div>
+
+      <small class="curso-form__error" *ngIf="uploadError">
+        {{ uploadError }}
+      </small>
+    </div>
+
+    <div class="curso-form__row">
+      <div class="curso-form__field">
+        <label for="fechaInicio">Inicio</label>
+        <input id="fechaInicio" type="date" formControlName="fechaInicio" />
+      </div>
+
+      <div class="curso-form__field">
+        <label for="profesor">Profesor</label>
+        <select id="profesor" formControlName="profesorId">
+          <option value="" disabled>Selecciona un profesor</option>
+          <option *ngFor="let profesor of profesores" [value]="profesor.id">
+            {{ profesor.nombre }} {{ profesor.apellido }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="curso-form__row">
+      <div class="curso-form__field">
+        <label for="precio">Precio</label>
+        <input
+          id="precio"
+          type="number"
+          formControlName="precio"
+          min="0"
+          placeholder="0"
+        />
+      </div>
+
+      <div class="curso-form__field" formGroupName="duracion">
+        <label>Duración</label>
+        <div class="curso-form__duration">
+          <input type="number" formControlName="cantidad" min="1" />
+          <select formControlName="unidad">
+            <option *ngFor="let unidad of unidadesDuracion" [value]="unidad">
+              {{ unidad }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      iconPos="right"
+      styleClass="p-button-text"
+      (onClick)="cerrarModal()"
+    ></p-button>
+    <p-button
+      label="Guardar Curso"
+      icon="pi pi-check"
+      iconPos="right"
+      (onClick)="guardarCurso()"
+      [disabled]="cursosFormPresenter.Invalid || isSaving || isUploadingImage"
+      [loading]="isSaving"
+    ></p-button>
+  </ng-template>
+</p-dialog>

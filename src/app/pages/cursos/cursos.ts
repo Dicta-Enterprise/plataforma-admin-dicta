@@ -1,6 +1,6 @@
 import { map, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnDestroy, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -8,6 +8,9 @@ import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { Curso } from '@class/cursos/Curso.class';
 import { CursoFacade } from 'src/app/patterns/facade/curso.facade';
 import { CursoService } from 'src/app/core/services/cursos/curso.service';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
+import { NuevoCursoModal } from 'src/app/ui/modals/curso/nuevo-curso.modal';
 
 interface FilterOption {
   label: string;
@@ -45,7 +48,10 @@ export class Cursos implements OnInit, OnDestroy {
     maximumFractionDigits: 0,
   });
 
-  constructor(private readonly cursoFacade: CursoFacade) {
+  constructor(
+    private readonly cursoFacade: CursoFacade,
+    private readonly modalService: ModalService
+  ) {
     this.cursos$ = this.cursoFacade.cursos$;
 
     this.categoriasOptions$ = this.cursos$.pipe(
@@ -129,6 +135,28 @@ export class Cursos implements OnInit, OnDestroy {
 
   refrescar(): void {
     this.cursoFacade.listarCursos();
+  }
+
+  abrirModalNuevoCurso(): void {
+    const modalRef = this.modalService.openByName(MODELS_ENUM.NUEVO_CURSO) as
+      | ComponentRef<NuevoCursoModal>
+      | undefined;
+
+    if (!modalRef) {
+      return;
+    }
+
+    const savedSub = modalRef.instance.saved.subscribe(() => {
+      this.refrescar();
+    });
+
+    const closedSub = modalRef.instance.closed.subscribe(() => {
+      savedSub.unsubscribe();
+      closedSub.unsubscribe();
+    });
+
+    this.subscription.add(savedSub);
+    this.subscription.add(closedSub);
   }
 
   cambiarEstado(curso: Curso, estado: boolean): void {

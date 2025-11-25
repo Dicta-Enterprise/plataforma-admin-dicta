@@ -32,6 +32,8 @@ export class ModalHostComponent {
       Object.assign(cmpRef.instance, data);
     }
 
+    cmpRef.changeDetectorRef.detectChanges();
+
     return cmpRef;
   }
 }
