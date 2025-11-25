@@ -1,6 +1,6 @@
 import { map, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnDestroy, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
@@ -8,6 +8,9 @@ import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { Curso } from '@class/cursos/Curso.class';
 import { CursoFacade } from 'src/app/patterns/facade/curso.facade';
 import { CursoService } from 'src/app/core/services/cursos/curso.service';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
+import { EditarCursoModal } from 'src/app/ui/modals/curso/editar-curso.modal';
 
 interface FilterOption {
   label: string;
@@ -45,7 +48,10 @@ export class Cursos implements OnInit, OnDestroy {
     maximumFractionDigits: 0,
   });
 
-  constructor(private readonly cursoFacade: CursoFacade) {
+  constructor(
+    private readonly cursoFacade: CursoFacade,
+    private readonly modalService: ModalService
+  ) {
     this.cursos$ = this.cursoFacade.cursos$;
 
     this.categoriasOptions$ = this.cursos$.pipe(
@@ -141,7 +147,25 @@ export class Cursos implements OnInit, OnDestroy {
   }
 
   editarCurso(curso: Curso): void {
-    console.log('Editar curso', curso);
+    const modalRef = this.modalService.openByName(MODELS_ENUM.EDITAR_CURSO, {
+      curso,
+    }) as ComponentRef<EditarCursoModal> | undefined;
+
+    if (!modalRef) {
+      return;
+    }
+
+    const savedSub = modalRef.instance.saved.subscribe(() => {
+      this.refrescar();
+    });
+
+    const closedSub = modalRef.instance.closed.subscribe(() => {
+      savedSub.unsubscribe();
+      closedSub.unsubscribe();
+    });
+
+    this.subscription.add(savedSub);
+    this.subscription.add(closedSub);
   }
 
   onCategoriaFilterChange(value: string): void {
@@ -163,5 +187,4 @@ export class Cursos implements OnInit, OnDestroy {
     this.precioMaxFiltro$.next(normalizedMax);
   }
 }
-
 

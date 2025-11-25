@@ -1,0 +1,99 @@
+<p-dialog
+  header="Editar Curso"
+  [(visible)]="visible"
+  [modal]="true"
+  appendTo="body"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onHide)="cerrarModal()"
+>
+  <form [formGroup]="form" class="curso-form">
+    <label class="curso-form__field">
+      <span>Nombre</span>
+      <input type="text" formControlName="nombre" placeholder="Nombre del curso" />
+    </label>
+
+    <label class="curso-form__field">
+      <span>Descripción</span>
+      <textarea
+        rows="3"
+        formControlName="descripcion"
+        placeholder="Describe brevemente el curso"
+      ></textarea>
+    </label>
+
+    <label class="curso-form__field">
+      <span>Beneficios (separados por coma)</span>
+      <textarea
+        rows="2"
+        formControlName="beneficios"
+        placeholder="Ej: Aprenderás X, Conocerás Y"
+      ></textarea>
+    </label>
+
+    <div class="curso-form__row">
+      <label class="curso-form__field">
+        <span>Categoría</span>
+        <select formControlName="categoriaId">
+          <option value="" disabled>Selecciona categoría</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria.id">
+            {{ categoria.nombre }}
+          </option>
+        </select>
+      </label>
+
+      <label class="curso-form__field">
+        <span>Profesor</span>
+        <select formControlName="profesorId">
+          <option value="" disabled>Selecciona profesor</option>
+          <option *ngFor="let profesor of profesores" [value]="profesor.id">
+            {{ profesor.nombre }} {{ profesor.apellido }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <div class="curso-form__row">
+      <label class="curso-form__field">
+        <span>Precio (COP)</span>
+        <input type="number" formControlName="precio" min="0" placeholder="0" />
+      </label>
+
+      <label class="curso-form__field">
+        <span>Duración (semanas)</span>
+        <input type="number" formControlName="duracionSemanas" min="1" placeholder="1" />
+      </label>
+    </div>
+
+    <div class="curso-form__row">
+      <label class="curso-form__field">
+        <span>Fecha de inicio</span>
+        <input type="date" formControlName="fechaInicio" />
+      </label>
+
+      <label class="curso-form__field">
+        <span>Imagen (URL)</span>
+        <input type="url" formControlName="imagen" placeholder="https://..." />
+      </label>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-text"
+      label="Cancelar"
+      (click)="cerrarModal()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Guardar cambios"
+      [disabled]="form.invalid || isSaving"
+      [loading]="isSaving"
+      (click)="guardarCambios()"
+    ></button>
+  </ng-template>
+</p-dialog>
