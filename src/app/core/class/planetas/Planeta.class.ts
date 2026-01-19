@@ -2,7 +2,8 @@ export class Planeta {
   id: string;
   nombre: string;
   descripcion: string;
-  imagen: string;
+  imagenResumen: string;
+  imagenBeneficios: string;
   estado: boolean;
   fechaCreacion: Date;
   fechaActualizacion: Date;
@@ -12,7 +13,8 @@ export class Planeta {
     this.id = planeta.id ?? '';
     this.nombre = planeta.nombre ?? '';
     this.descripcion = planeta.descripcion ?? '';
-    this.imagen = planeta.imagen ?? '';
+    this.imagenResumen = planeta.imagenResumen ?? '';
+    this.imagenBeneficios = planeta.imagenBeneficios ?? '';
     this.estado = planeta.estado ?? true;
     this.fechaCreacion = planeta.fechaCreacion ?? new Date();
     this.fechaActualizacion = planeta.fechaActualizacion ?? new Date();
@@ -26,7 +28,8 @@ export class Planeta {
       id: casted['id'] as string,
       nombre: casted['nombre'] as string,
       descripcion: casted['descripcion'] as string,
-      imagen: casted['imagen'] as string,
+      imagenResumen: casted['imagenResumen'] as string,
+      imagenBeneficios: casted['imagenBeneficios'] as string,
       estado: casted['estado'] as boolean,
       fechaCreacion: casted['fechaCreacion'] as Date,
       fechaActualizacion: casted['fechaActualizacion'] as Date,
@@ -38,11 +41,15 @@ export class Planeta {
     return {
       nombre: planeta.nombre,
       descripcion: planeta.descripcion,
-      imagen: planeta.imagen,
+      imagenResumen: planeta.imagenResumen,
+      imagenBeneficios: planeta.imagenBeneficios,
       estado: planeta.estado,
       fechaCreacion: planeta.fechaCreacion,
       fechaActualizacion: planeta.fechaActualizacion,
       galaxiaId: planeta.galaxiaId,
     };
   }
+  
 }
+
+
