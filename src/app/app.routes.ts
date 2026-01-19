@@ -55,6 +55,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'parametros',
+        loadChildren: () =>
+          import('./pages/parametros/parametros.route').then(
+            (m) => m.PARAMETROS_ROUTES
+          ),
+
+      },
+      {
         path: 'profesor',
         loadChildren: () =>
           import('./pages/profesor/profesor.route').then(
