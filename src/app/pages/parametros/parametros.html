@@ -1,44 +1,44 @@
-<h2>Parámetros Configurables</h2>
 
-<p-treetable [value]="files" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
-  <ng-template #header>
-    <tr>
-      <th>Nombre</th>
-      <th>ID</th>
-      <th>Code</th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-rowNode let-rowData="rowData">
-    <tr [ttRow]="rowNode">
-      <td>
-        <div class="flex items-center gap-2">
-          <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
-          <span>{{ rowData.name }}</span>
+<p-accordion [value]="['0']">
+  @for (parameter of parameters; track parameter.data.name) {
+  <p-accordion-panel [value]="parameter.data.type">
+    <p-accordion-header>{{ parameter.data.name }}</p-accordion-header>
+    <p-accordion-content>
+      <p-button label="Agregar" severity="danger" (click)="showDialog()" />
+      <p-table [value]="parameter.children" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Nombre</th>
+            <th>Tamaño</th>
+            <th>Tipo</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-child>
+          <tr>
+            <td>{{ child.data.name}}</td>
+            <td>{{ child.data.size }}</td>
+            <td>{{ child.data.type }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-accordion-content>
+  </p-accordion-panel>
+  }
+</p-accordion>
+<div>
+    <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+        <span class="p-text-secondary block mb-8">Agrega tu informacion</span>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="username" class="font-semibold w-24">value</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" />
         </div>
-      </td>
-      <td>{{ rowData.size }}</td>
-      <td>{{ rowData.type }}</td>
-      <td>
-        <button *ngIf="rowNode.children" pButton type="button" label="Agregar" icon="pi pi-plus" (click)="openNewValueModal(rowNode)"></button>
-      </td>
-    </tr>
-  </ng-template>
-</p-treetable>
-
-<p-dialog header="Agregar nuevo valor" [(visible)]="displayModal" [modal]="true" [closable]="false" [style]="{width: '350px'}">
-  <div class="p-fluid">
-    <div class="p-field">
-      <label for="value">Value</label>
-      <input id="value" type="text" pInputText [(ngModel)]="newValue" />
-    </div>
-    <div class="p-field">
-      <label for="code">Code</label>
-      <input id="code" type="text" pInputText [(ngModel)]="newCode" />
-    </div>
-  </div>
-  <p-footer>
-    <button pButton type="button" label="Cancelar" icon="pi pi-times" (click)="displayModal = false"></button>
-    <button pButton type="button" label="Guardar" icon="pi pi-check" (click)="saveNewValue()" [disabled]="!newValue || !newCode"></button>
-  </p-footer>
-</p-dialog>
+        <div class="flex items-center gap-4 mb-8">
+            <label for="email" class="font-semibold w-24">code</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" />
+        </div>
+        <div class="flex justify-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+            <p-button label="Save" (click)="visible = false" />
+        </div>
+    </p-dialog>
+</div>
