@@ -1,24 +1,32 @@
+import { IPlanetaDto } from '@interfaces/planeta/iPlaneta.interface';
+
 export class Planeta {
   id: string;
   nombre: string;
+  grupo: string;
   descripcion: string;
-  imagenResumen: string;
-  imagenBeneficios: string;
+  resumenCurso: string;
+  imagen: string;
   estado: boolean;
   fechaCreacion: Date;
   fechaActualizacion: Date;
   galaxiaId: string;
+  galaxia: string;
+  tema: string;
 
   constructor(planeta: Partial<Planeta> = {}) {
     this.id = planeta.id ?? '';
     this.nombre = planeta.nombre ?? '';
+    this.grupo = planeta.grupo ?? '';
     this.descripcion = planeta.descripcion ?? '';
-    this.imagenResumen = planeta.imagenResumen ?? '';
-    this.imagenBeneficios = planeta.imagenBeneficios ?? '';
+    this.resumenCurso = planeta.resumenCurso ?? '';
+    this.imagen = planeta.imagen ?? '';
     this.estado = planeta.estado ?? true;
     this.fechaCreacion = planeta.fechaCreacion ?? new Date();
     this.fechaActualizacion = planeta.fechaActualizacion ?? new Date();
     this.galaxiaId = planeta.galaxiaId ?? '';
+    this.galaxia = planeta.galaxia ?? '';
+    this.tema = planeta.tema ?? '';
   }
 
   static fromJson(planeta: unknown): Planeta {
@@ -27,26 +35,32 @@ export class Planeta {
     return new Planeta({
       id: casted['id'] as string,
       nombre: casted['nombre'] as string,
+      grupo: casted['grupo'] as string,
       descripcion: casted['descripcion'] as string,
-      imagenResumen: casted['imagenResumen'] as string,
-      imagenBeneficios: casted['imagenBeneficios'] as string,
+      resumenCurso: casted['resumenCurso'] as string,
+      imagen: casted['imagenResumen'] as string,
       estado: casted['estado'] as boolean,
       fechaCreacion: casted['fechaCreacion'] as Date,
       fechaActualizacion: casted['fechaActualizacion'] as Date,
       galaxiaId: casted['galaxiaId'] as string,
+      galaxia: casted['galaxia'] as string,
+      tema: casted['tema'] as string,
     });
   }
 
-  static toJson(planeta: Planeta): unknown {
+  static toJson(planeta: Planeta): IPlanetaDto {
     return {
+      id: planeta.id,
       nombre: planeta.nombre,
+      grupo: planeta.grupo,
       descripcion: planeta.descripcion,
-      imagenResumen: planeta.imagenResumen,
-      imagenBeneficios: planeta.imagenBeneficios,
+      resumenCurso: planeta.resumenCurso,
+      imagenResumen: planeta.imagen,
       estado: planeta.estado,
       fechaCreacion: planeta.fechaCreacion,
       fechaActualizacion: planeta.fechaActualizacion,
-      galaxiaId: planeta.galaxiaId,
+      galaxiaId: planeta.galaxiaId,      
+      tema: planeta.tema,
     };
   }
   

@@ -4,17 +4,19 @@
   [modal]="true"
   [style]="{ width: '420px' }"
   [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
   (onHide)="close()"
   header="{{ title }}"
 >
 <img
-  *ngIf="planeta.imagenResumen"
-  [src]="planeta.imagenResumen"
+  *ngIf="planeta.imagen"
+  [src]="planeta.imagen"
   alt="Imagen del planeta"
   style="width: 100%; border-radius: 8px"
 />
   <div 
-    *ngIf="!planeta.imagenResumen" 
+    *ngIf="!planeta.imagen"
     class="text-center">
     <p>No hay imagen disponible</p>
   </div>

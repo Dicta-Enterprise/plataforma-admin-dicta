@@ -6,6 +6,16 @@
       class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
     ></p-badge>
   </div>
+  <div>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      class="p-button-outlined p-button-secondary w-7rem p-2"
+      iconPos="right"
+      label="Nuevo planeta"
+    ></button>
+  </div>
 </div>
 <p class="text-600 text-xl">
   Descripción
@@ -20,41 +30,88 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
-    [globalFilterFields]="['indice', 'nombre', 'grupo', 'tema', 'estado']"
+    [globalFilterFields]="['nombre', 'grupo', 'tema', 'galaxia', 'estado']"
     [tableStyle]="{ 'min-width': '75rem' }"
+    showGridlines
 >    
+    <ng-template #caption>
+        <div class="flex">       
+            <input 
+                pInputText type="text" 
+                class="w-20rem p-inputtext-lg" 
+                (input)="dt2.filterGlobal($event.target.value, 'contains')" 
+                placeholder="Buscar planeta..." 
+            />            
+        </div>
+    </ng-template>
     <ng-template #header>
         <tr>
-            <th style="width:15%">Índice</th>
-            <th style="width:25%">Nombre</th>
-            <th style="width:20%">Grupo</th>
-            <th style="width:10%">Tema</th>
-            <th style="width:20%">Estado</th>
-            <th style="width:10%">Ver</th>
+            <th style="width:5%"></th>
+            <th style="width:5%"></th>
+            <th style="width:20%">Nombre</th>
+            <th style="width:15%">Grupo</th>
+            <th style="width:15%">Tema</th>
+            <th style="width:15%">Galaxia</th>
+            <th style="width:15%">Estado</th>
+            <th style="width:10%">Ver Imagen</th>
 
         </tr>
         <tr>
+            <th></th>
+            <th></th>
             <th>
-                <p-columnFilter type="text" field="indice" placeholder="Type to search" ariaLabel="Filter Indice" filterOn="input"></p-columnFilter>
+                <p-columnFilter 
+                    type="text" 
+                    field="nombre" 
+                    placeholder="Enter key to search" 
+                    ariaLabel="Filter Nombre"
+                ></p-columnFilter>
             </th>
             <th>
-                <p-columnFilter type="text" field="nombre" placeholder="Enter key to search" ariaLabel="Filter Nombre"></p-columnFilter>
+                <p-columnFilter 
+                    type="text" 
+                    field="grupo" 
+                    placeholder="Enter key to search" 
+                    ariaLabel="Filter Grupo"
+                ></p-columnFilter>
             </th>
             <th>
-                <p-columnFilter type="text" field="grupo" placeholder="Enter key to search" ariaLabel="Filter Grupo"></p-columnFilter>
+                <p-columnFilter 
+                    type="text" 
+                    field="tema" 
+                    placeholder="Enter key to search" 
+                    ariaLabel="Filter Tema"
+                ></p-columnFilter>
             </th>
             <th>
-                <p-columnFilter type="text" field="tema" placeholder="Enter key to search" ariaLabel="Filter Tema"></p-columnFilter>
-            </th>
+                <p-columnFilter 
+                    type="text" 
+                    field="galaxia" 
+                    placeholder="Enter key to search" 
+                    ariaLabel="Filter Galaxia"
+                ></p-columnFilter>
             <th>
-                <p-columnFilter type="text" field="estado" placeholder="Enter key to search" ariaLabel="Filter Estado"></p-columnFilter>
+                <p-columnFilter 
+                    type="text" 
+                    field="estado" 
+                    placeholder="Enter key to search" 
+                    ariaLabel="Filter Estado"
+                ></p-columnFilter>
             </th>            
-            <th>                
-            </th>
+            <th></th>
         </tr>
     </ng-template>
-    <ng-template #body let-planeta let-i="rowIndex">
+    <ng-template #body let-planeta let-i="rowIndex" let-expanded="expanded">
         <tr>
+            <td>
+                <button
+                    pButton
+                    type="button"
+                    [pRowToggler]="planeta"
+                    class="p-button-text p-button-sm"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                ></button>
+            </td>
             <td>
                 {{ i + 1 + (dt2.first ?? 0) }}                
             </td>
@@ -66,6 +123,9 @@
             </td>
             <td>
                 {{ planeta.tema }}
+            </td>
+            <td>
+                {{ planeta.galaxia }}
             </td>
             <td>
                 {{ planeta.estado }}
@@ -81,6 +141,18 @@
                     (click)="verImagen(planeta)"
                 ></button>
             </td>     
+        </tr>
+    </ng-template>
+    <ng-template #expandedrow let-planeta>
+        <tr>
+            <td colspan="7">
+                <div class="p-4">
+                    <strong>Resumen del Curso:</strong>
+                    <p class="mt-2">
+                        {{ planeta.resumenCurso }}
+                    </p>
+                </div>
+            </td>
         </tr>
     </ng-template>
     <ng-template #emptymessage>

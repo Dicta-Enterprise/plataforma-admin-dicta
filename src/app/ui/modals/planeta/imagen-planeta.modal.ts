@@ -16,7 +16,7 @@ import { Planeta } from '@class/planetas/Planeta.class';
   templateUrl: './imagen-planeta.modal.html',
   styleUrl: './imagen-planeta.modal.css',
 })
-export class ModalPlaneta {
+export class ImagenPlaneta {
 
   @Input() title = 'Detalle del Planeta';
   @Input() planeta!: Planeta;

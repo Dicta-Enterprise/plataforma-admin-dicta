@@ -61,7 +61,7 @@ export class Planetas implements OnInit, OnDestroy {
   }
 
   verImagen(planeta: Planeta): void {
-    this.modalService.openByName(MODELS_ENUM.MODAL_PLANETA, {
+    this.modalService.openByName(MODELS_ENUM.IMAGEN_PLANETA, {
       title: planeta.nombre,
       planeta: planeta,
     });
