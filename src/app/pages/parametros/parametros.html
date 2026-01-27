@@ -1,3 +1,7 @@
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">PARAMETROS</div>
+  </div>
 <p-accordion [value]="['0']">
   <ng-container *ngFor="let parameter of (parametros$ | async); trackBy: trackByName">
     <p-accordion-panel [value]="parameter.name">
@@ -7,14 +11,12 @@
         <p-table [value]="parameter.parametrosData" [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template pTemplate="header">
             <tr>
-              <th>Id</th>
               <th>Valor</th>
               <th>Código</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-child>
             <tr>
-              <td>{{ child.id }}</td>
               <td>{{ child.value }}</td>
               <td>{{ child.code }}</td>
             </tr>
@@ -25,5 +27,3 @@
   </ng-container>
 </p-accordion>
 
-
-<app-editar-parametro [(visible)]="visible"></app-editar-parametro>

@@ -26,19 +26,16 @@ export class ParametroRepositoryImpl implements ParametroRepository {
       .get<IGenericArrays<unknown>>(direccion)
       .pipe(
         map((response: IGenericArrays<unknown>) => {
-          console.log('Response data:',response);
+          console.log('Response data:', response);
           const llaves = Object.keys(response.data);
 
           return llaves.map(llave => {
-            return Parametro.fromJson(llave, response.data[llave as keyof IValueWrapper<unknown[]>] as unknown);
+            const cleanKey = llave.startsWith('DP_') ? llave.slice(3) : llave;
+            return Parametro.fromJson(cleanKey, response.data[llave as keyof IValueWrapper<unknown[]>] as unknown);
           });
-        }
-
-        )
+        })
       );
   }
-
-
 
   crearParametroService(parametro: Parametro): Observable<Parametro> {
 

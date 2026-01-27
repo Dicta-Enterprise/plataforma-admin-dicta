@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
 
 @Component({
   selector: 'app-editar-parametro',
@@ -10,11 +11,10 @@ import { DialogModule } from 'primeng/dialog';
   styleUrls: ['./editar-parametro.css']
 })
 export class EditarParametro {
-  @Input() visible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
+
+  constructor(private modalService: ModalService) {}
 
   onHide() {
-    this.visible = false;
-    this.visibleChange.emit(this.visible);
+    this.modalService.close();
   }
 }

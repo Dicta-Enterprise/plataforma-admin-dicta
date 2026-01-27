@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
@@ -7,14 +7,13 @@ import { DialogModule } from 'primeng/dialog';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Parametro } from '@class/parametros/Parametro.class';
 import { ParametroFacade } from 'src/app/patterns/parametro.facade';
-import { OnInit, OnDestroy } from '@angular/core';
 import { ParametroService } from 'src/app/core/services/parametros/parametro.service';
-import { EditarParametro } from 'src/app/ui/modals/editar-parametro/editar-parametro';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
 
 @Component({
   selector: 'app-parametros',
   standalone: true,
-  imports: [CommonModule, ButtonModule, AccordionModule, TableModule, DialogModule, EditarParametro],
+  imports: [CommonModule, ButtonModule, AccordionModule, TableModule, DialogModule], // ELIMINAMOS EditarParametro aquí
   providers: [
     ParametroFacade,
     ParametroService,
@@ -27,11 +26,12 @@ export class Parametros implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   parametros$ = new BehaviorSubject<Parametro[]>([]);
-  
+
   constructor(
     private readonly parametroFacade: ParametroFacade,
-
-  ) { console.log('Parametros component initialized');
+    private readonly modalService: ModalService,
+  ) {
+    console.log('Parametros component initialized');
     this.parametros$ = this.parametroFacade.parametros$;
   }
 
@@ -49,15 +49,11 @@ export class Parametros implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  visible = false;
-
   showDialog() {
-    this.visible = true;
-
-    
+    this.modalService.openByName('editarParametro');
   }
+
   trackByName(index: number, item: unknown): string {
     return (item as { name: string }).name;
   }
-
 }
