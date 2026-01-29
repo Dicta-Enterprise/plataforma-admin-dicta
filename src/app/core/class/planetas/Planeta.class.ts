@@ -1,22 +1,24 @@
+import { IPlanetaDto } from '@interfaces/planeta/iPlaneta.interface';
+
 export class Planeta {
   id: string;
   nombre: string;
-  descripcion: string;
+  categoria: string;
+  resumenCurso: string;
   imagen: string;
   estado: boolean;
-  fechaCreacion: Date;
-  fechaActualizacion: Date;
   galaxiaId: string;
+  galaxia: string;  
 
   constructor(planeta: Partial<Planeta> = {}) {
     this.id = planeta.id ?? '';
     this.nombre = planeta.nombre ?? '';
-    this.descripcion = planeta.descripcion ?? '';
+    this.categoria = planeta.categoria ?? '';
+    this.resumenCurso = planeta.resumenCurso ?? '';
     this.imagen = planeta.imagen ?? '';
     this.estado = planeta.estado ?? true;
-    this.fechaCreacion = planeta.fechaCreacion ?? new Date();
-    this.fechaActualizacion = planeta.fechaActualizacion ?? new Date();
     this.galaxiaId = planeta.galaxiaId ?? '';
+    this.galaxia = planeta.galaxia ?? '';    
   }
 
   static fromJson(planeta: unknown): Planeta {
@@ -25,24 +27,29 @@ export class Planeta {
     return new Planeta({
       id: casted['id'] as string,
       nombre: casted['nombre'] as string,
-      descripcion: casted['descripcion'] as string,
-      imagen: casted['imagen'] as string,
+      categoria: casted['grupo'] as string,
+      resumenCurso: casted['resumenCurso'] as string,
+      imagen: casted['imagenResumen'] as string,
       estado: casted['estado'] as boolean,
-      fechaCreacion: casted['fechaCreacion'] as Date,
-      fechaActualizacion: casted['fechaActualizacion'] as Date,
       galaxiaId: casted['galaxiaId'] as string,
+      galaxia: casted['tema'] as string,
+      
     });
   }
 
-  static toJson(planeta: Planeta): unknown {
+  static toJson(planeta: Planeta): IPlanetaDto {
     return {
+      id: planeta.id,
       nombre: planeta.nombre,
-      descripcion: planeta.descripcion,
-      imagen: planeta.imagen,
+      grupo: planeta.categoria,
+      resumenCurso: planeta.resumenCurso,
+      imagenResumen: planeta.imagen,
       estado: planeta.estado,
-      fechaCreacion: planeta.fechaCreacion,
-      fechaActualizacion: planeta.fechaActualizacion,
-      galaxiaId: planeta.galaxiaId,
+      galaxiaId: planeta.galaxiaId,      
+      tema: planeta.galaxia,
     };
   }
+  
 }
+
+
