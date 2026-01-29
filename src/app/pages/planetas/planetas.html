@@ -30,31 +30,29 @@
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
     [paginator]="true"
-    [globalFilterFields]="['nombre', 'grupo', 'tema', 'galaxia', 'estado']"
+    [globalFilterFields]="['nombre', 'categoria', 'galaxia', 'estado']"
     [tableStyle]="{ 'min-width': '75rem' }"
     showGridlines
 >    
     <ng-template #caption>
-        <div class="flex">       
+        <div class="flex">                
             <input 
-                pInputText type="text" 
-                class="w-20rem p-inputtext-lg" 
-                (input)="dt2.filterGlobal($event.target.value, 'contains')" 
+                pInputText type="text"
+                class="w-20rem p-inputtext-lg border-round-lg border-1 border-gray-300" 
                 placeholder="Buscar planeta..." 
-            />            
+                (input)="dt2.filterGlobal($event.target.value, 'contains')"                 
+            />        
         </div>
     </ng-template>
     <ng-template #header>
         <tr>
-            <th style="width:5%"></th>
-            <th style="width:5%"></th>
-            <th style="width:20%">Nombre</th>
-            <th style="width:15%">Grupo</th>
-            <th style="width:15%">Tema</th>
-            <th style="width:15%">Galaxia</th>
-            <th style="width:15%">Estado</th>
-            <th style="width:10%">Ver Imagen</th>
-
+            <th class="w-3rem"></th>
+            <th class="w-3rem">Índice</th>
+            <th class="w-12rem">Nombre</th>
+            <th class="w-9rem">Categoría</th>
+            <th class="w-9rem">Galaxia</th>
+            <th class="w-9rem">Estado</th>
+            <th class="w-6rem">Ver Imagen</th>
         </tr>
         <tr>
             <th></th>
@@ -63,39 +61,32 @@
                 <p-columnFilter 
                     type="text" 
                     field="nombre" 
-                    placeholder="Enter key to search" 
-                    ariaLabel="Filter Nombre"
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Nombre"
                 ></p-columnFilter>
             </th>
             <th>
                 <p-columnFilter 
                     type="text" 
-                    field="grupo" 
-                    placeholder="Enter key to search" 
-                    ariaLabel="Filter Grupo"
+                    field="categoria" 
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Categoría"
                 ></p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter 
-                    type="text" 
-                    field="tema" 
-                    placeholder="Enter key to search" 
-                    ariaLabel="Filter Tema"
-                ></p-columnFilter>
-            </th>
+            </th>            
             <th>
                 <p-columnFilter 
                     type="text" 
                     field="galaxia" 
-                    placeholder="Enter key to search" 
-                    ariaLabel="Filter Galaxia"
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Galaxia"
                 ></p-columnFilter>
+            </th>
             <th>
                 <p-columnFilter 
                     type="text" 
                     field="estado" 
-                    placeholder="Enter key to search" 
-                    ariaLabel="Filter Estado"
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Estado"
                 ></p-columnFilter>
             </th>            
             <th></th>
@@ -119,16 +110,31 @@
                 {{ planeta.nombre }}
             </td>
             <td>
-                {{ planeta.grupo }}
+                {{ planeta.categoria }}
+            </td>            
+            <td>
+                {{ planeta.galaxia | formatoTexto }}
             </td>
             <td>
-                {{ planeta.tema }}
-            </td>
-            <td>
-                {{ planeta.galaxia }}
-            </td>
-            <td>
-                {{ planeta.estado }}
+                <ng-container [ngSwitch]="planeta.estado">
+                    <p-tag
+                    *ngSwitchCase="'ACTIVO'"
+                    value="ACTIVO"
+                    severity="success">
+                    </p-tag>
+
+                    <p-tag
+                    *ngSwitchCase="'INACTIVO'"
+                    value="INACTIVO"
+                    severity="danger">
+                    </p-tag>
+
+                    <p-tag
+                    *ngSwitchDefault
+                    value="DESCONOCIDO"
+                    severity="contrast">
+                    </p-tag>
+                </ng-container>
             </td>
             <td class="text-center">
                 <button

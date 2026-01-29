@@ -14,6 +14,8 @@ import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DividerModule } from 'primeng/divider';
+import { FormatoTexto } from 'src/app/shared/pipes/formato-texto.pipe';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-planetas',
@@ -27,6 +29,8 @@ import { DividerModule } from 'primeng/divider';
     IconFieldModule,
     InputIconModule,
     DividerModule,
+    FormatoTexto,
+    TagModule,
   ],
   providers: [
     PlanetaFacade,

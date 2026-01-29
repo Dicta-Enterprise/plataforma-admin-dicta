@@ -16,7 +16,6 @@ export class PlanetaService {
 
   listarPlanetas():Observable<Planeta[]>{
     return this.planetaRepository.listarPlanetasService();
-  }
-
+  } 
 
 }
