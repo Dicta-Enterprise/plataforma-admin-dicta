@@ -9,11 +9,16 @@ import { Parametro } from '@class/parametros/Parametro.class';
 import { ParametroFacade } from 'src/app/patterns/parametro.facade';
 import { ParametroService } from 'src/app/core/services/parametros/parametro.service';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ToggleSwitchChangeEvent } from 'primeng/toggleswitch';
+import { FormsModule } from '@angular/forms';
+import { ParametroData } from '@class/parametros/ParametroData.class';
+
 
 @Component({
   selector: 'app-parametros',
   standalone: true,
-  imports: [CommonModule, ButtonModule, AccordionModule, TableModule, DialogModule], // ELIMINAMOS EditarParametro aquí
+  imports: [CommonModule, FormsModule, ButtonModule, AccordionModule, TableModule, DialogModule,ToggleSwitchModule], 
   providers: [
     ParametroFacade,
     ParametroService,
@@ -47,6 +52,11 @@ export class Parametros implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onToggleChange(event: ToggleSwitchChangeEvent, child: ParametroData): void {
+    console.log('Código del parámetro:', child.code);
+    console.log('Nuevo estado:', event.checked);
   }
 
   showDialog() {

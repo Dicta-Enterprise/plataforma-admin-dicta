@@ -1,10 +1,12 @@
 export class ParametroData {
   value: string;
   code: string;
+  checked?: boolean;
 
   constructor(parametro: Partial<ParametroData> = {}) {
     this.value = parametro.value ?? '';
     this.code = parametro.code ?? '';
+    this.checked = parametro.checked ?? true;
     
   }
 
