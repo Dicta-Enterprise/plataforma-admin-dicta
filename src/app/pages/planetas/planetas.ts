@@ -73,6 +73,13 @@ export class Planetas implements OnInit, OnDestroy {
 
   editar(id: string): void {
     console.log('Editar:', id);
+  }  
+
+  nuevoPlaneta() {
+    this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
+      title: 'Nuevo Planeta',
+      message: 'Vino desde el registry',
+    });
   }
 
   eliminar(id: string): void {

@@ -8,6 +8,7 @@ import {
   IGeneric,
   IGenericArrays,
 } from '@interfaces/genericas/IGeneric.interface';
+import { IPlanetaDto } from '@interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +22,10 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
 
     return this.http
-      .get<IGenericArrays<Planeta[]>>(direccion)
+      .get<IGenericArrays<IPlanetaDto>>(direccion)
       .pipe(
-        map((response: IGenericArrays<Planeta[]>) =>
-          response.data._value.map((planeta) => Planeta.fromJson(planeta))
+        map((response: IGenericArrays<IPlanetaDto>) =>
+          response.data._value.map((dto: IPlanetaDto) => Planeta.fromJson(dto))
         )
       );
   }
