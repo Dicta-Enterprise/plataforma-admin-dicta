@@ -1,6 +1,5 @@
 import { FormGroup } from '@angular/forms';
 import { Planeta } from '@class/planetas/Planeta.class';
-import { IPlanetaDto } from '@interfaces/interfaces';
 
 export class PlanetaMapper {
   static planetaToJson(

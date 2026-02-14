@@ -19,19 +19,19 @@ export class PlanetaService {
   }
 
   obtenerPlaneta(id: string): Observable<Planeta> {
-      return this.planetaRepository.obtenerPlanetaService(id);
-    }
+    return this.planetaRepository.obtenerPlanetaService(id);
+  }
   
-    guardarPlaneta(planeta: Planeta): Observable<Planeta> {
-      return this.planetaRepository.crearPlanetaService(planeta);
-    }
+  guardarPlaneta(planeta: Planeta): Observable<Planeta> {
+    return this.planetaRepository.crearPlanetaService(planeta);
+  }
   
-    actualizarPlaneta(planeta: Planeta): Observable<Planeta> {
-      return this.planetaRepository.editarPlanetaService(planeta);
-    }
+  actualizarPlaneta(planeta: Planeta): Observable<Planeta> {
+    return this.planetaRepository.editarPlanetaService(planeta);
+  }
   
-    eliminarPlaneta(id: string): Observable<Planeta> {
-      return this.planetaRepository.eliminarPlanetaService(id);
-    }
+  eliminarPlaneta(id: string): Observable<Planeta> {
+    return this.planetaRepository.eliminarPlanetaService(id);
+  }
 
 }

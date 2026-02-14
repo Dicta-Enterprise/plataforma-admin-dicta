@@ -19,20 +19,20 @@ export class PlanetaFacade {
   }
 
   guardarPlaneta(planeta: Planeta) {
-      this.planetaService
-        .guardarPlaneta(planeta)
-        .subscribe((planeta) => this.planeta$.next(planeta));
-    }
+    this.planetaService
+      .guardarPlaneta(planeta)
+      .subscribe((planeta) => this.planeta$.next(planeta));
+  }
   
-    obtenerPlaneta(id: string) {
-      this.planetaService
-        .obtenerPlaneta(id)
-        .subscribe((planeta) => this.planeta$.next(planeta));
-    }
+  obtenerPlaneta(id: string) {
+    this.planetaService
+      .obtenerPlaneta(id)
+      .subscribe((planeta) => this.planeta$.next(planeta));
+  }
   
-    actualizarPlaneta(planeta: Planeta) {
-      this.planetaService
-        .actualizarPlaneta(planeta)
-        .subscribe((planeta) => this.planeta$.next(planeta));
-    }
+  actualizarPlaneta(planeta: Planeta) {
+    this.planetaService
+      .actualizarPlaneta(planeta)
+      .subscribe((planeta) => this.planeta$.next(planeta));
+  }
 }

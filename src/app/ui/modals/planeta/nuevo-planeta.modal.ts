@@ -13,6 +13,8 @@ import { PlanetaMapper } from 'src/app/core/mappers/planeta.mapper';
 import { PlanetaFacade } from 'src/app/patterns/facade/planetas.facade';
 import { PlanetaService } from 'src/app/core/services/planetas/planeta.service';
 import { PlanetaFormPresenter } from '@pages/planetas/planetas-form.presenter';
+import { TabsModule } from 'primeng/tabs';
+import { FieldsetModule } from 'primeng/fieldset';
 
 @Component({
   selector: 'app-nuevo-planeta',
@@ -28,7 +30,8 @@ import { PlanetaFormPresenter } from '@pages/planetas/planetas-form.presenter';
     ToggleSwitchModule,
     TextareaModule,
     FloatLabelModule,
-    
+    TabsModule,
+    FieldsetModule
   ],
   providers: [PlanetaService, PlanetaFacade, PlanetaFormPresenter],
   templateUrl: './nuevo-planeta.modal.html',
@@ -45,27 +48,33 @@ export class NuevoPlaneta implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.createControls();
-  }
-
-  private createControls() {
     this.planetaFormPresenter.createForm();
   }
 
-  guardarPlaneta() {
+  get form() {
+    return this.planetaFormPresenter.Form;
+  }
+  
+  get planetas() {
+    return this.planetaFormPresenter.planetas;
+  }
 
+  getPlaneta(index: number) {
+    return this.planetaFormPresenter.getPlaneta(index);
+  }
 
-    console.log(this.planetaFormPresenter.Valid);
+  getPeligros(index: number) {
+    return this.planetaFormPresenter.getPeligros(index);
+  }
+
+  getBeneficios(index: number) {
+    return this.planetaFormPresenter.getBeneficios(index);
+  }
+
+  guardarPlaneta() {    
+    console.log(this.planetaFormPresenter.Form.value); //los valores
     console.log(this.planetaFormPresenter.Form.valid);
-
-
-    this.planetaFormPresenter.MarkAllAsTouched();
-    // const nuevoPlaneta = PlanetaMapper.planetaToJson(
-    //   this.planetaFormPresenter.Form
-    // );
-
-    // console.log(nuevoPlaneta);
-    // this.planetaFacade.guardarPlaneta(nuevoPlaneta);
+    this.close();
   }
 
   actualizarPlaneta() {
@@ -80,4 +89,17 @@ export class NuevoPlaneta implements OnInit {
     this.visible = false;
     this.modalService.close();
   }
+
+  grupos = [
+    { title: 'Niños', value: 'NIÑOS' },
+    { title: 'Jóvenes', value: 'JOVENES' },
+    { title: 'Adultos', value: 'ADULTOS' }
+  ];
+
+  subTabs = [
+    { title: 'Datos del planeta', value: 'datos' },
+    { title: 'Información del planeta', value: 'info' },
+    { title: 'Peligros', value: 'peligros' },
+    { title: 'Beneficios', value: 'beneficios' }
+  ];
 }

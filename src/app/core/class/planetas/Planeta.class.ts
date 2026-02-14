@@ -1,4 +1,5 @@
 import { IPlanetaDto } from '@interfaces/planeta/iPlaneta.interface';
+import { InfoPlaneta, Peligro, Beneficio } from '@interfaces/planeta/iPlaneta.interface';
 
 export class Planeta {
   id: string;
@@ -9,6 +10,11 @@ export class Planeta {
   estado: boolean;
   galaxiaId: string;
   galaxia: string;  
+  textura: string;
+  url: string;
+  info?: InfoPlaneta;
+  peligros: Peligro[]=[];
+  beneficios: Beneficio[]=[];
 
   constructor(planeta: Partial<Planeta> = {}) {
     this.id = planeta.id ?? '';
@@ -18,7 +24,12 @@ export class Planeta {
     this.imagen = planeta.imagen ?? '';
     this.estado = planeta.estado ?? true;
     this.galaxiaId = planeta.galaxiaId ?? '';
-    this.galaxia = planeta.galaxia ?? '';    
+    this.galaxia = planeta.galaxia ?? '';  
+    this.textura = planeta.textura ?? '';
+    this.url = planeta.url ?? '';
+    this.info = planeta.info;
+    this.peligros = planeta.peligros ?? [];
+    this.beneficios = planeta.beneficios ?? [];  
   }
 
   static fromJson(planeta: unknown): Planeta {
@@ -33,7 +44,11 @@ export class Planeta {
       estado: casted['estado'] as boolean,
       galaxiaId: casted['galaxiaId'] as string,
       galaxia: casted['tema'] as string,
-      
+      textura: casted['textura'] as string,
+      url: casted['url'] as string,
+      info: casted['info'] as InfoPlaneta,
+      peligros: casted['peligros'] as Peligro[],
+      beneficios: casted['beneficios'] as Beneficio[],
     });
   }
 
@@ -47,6 +62,11 @@ export class Planeta {
       estado: planeta.estado,
       galaxiaId: planeta.galaxiaId,      
       tema: planeta.galaxia,
+      textura: planeta.textura,
+      url: planeta.url,
+      info: planeta.info,
+      peligros: planeta.peligros,
+      beneficios: planeta.beneficios,
     };
   }
   

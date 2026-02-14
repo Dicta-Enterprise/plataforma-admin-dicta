@@ -12,7 +12,7 @@
     <div class="flex flex-column gap-1">
       <h1 class="m-0 text-900 font-semibold text-xl">NUEVO PLANETA</h1>
       <span class="text-600 text-sm">
-        Nota: 
+        Ingrese los datos del nuevo planeta.
       </span>
     </div>
   </ng-template>
@@ -21,74 +21,240 @@
     class="flex flex-column gap-4 mt-4"
     [formGroup]="planetaFormPresenter.Form"
   >
+    
     <div class="grid formgrid p-fluid">      
-      <div class="field mb-6 col-12 md:col-6">
+      <div class="field col-12 md:col-6">
         <p-floatLabel>
-          <input
-            pInputText
-            id="nombre"
-            formControlName="nombre"
-            dictaReactiveForm
-            class="w-full"
-          />
-          <label for="nombre">Nombre</label>
-        </p-floatLabel>
-      </div>  
-      
-      <div class="field mb-6 col-12 md:col-6">
-        <p-floatLabel>
-          <input
-            pInputText
-            id="categoria"
-            autocomplete="off"
-            formControlName="categoria"
-            dictaReactiveForm
-            class="w-full"
-          />
-          <label for="categoria">Categoría</label>
-        </p-floatLabel>
-      </div>    
-
-      <div class="field mb-6 col-12 md:col-6">
-        <p-floatLabel>
-          <input
-            pInputText
-            id="galaxia"
-            formControlName="galaxia"
-            dictaReactiveForm
-            class="w-full"
-          />
-          <label for="galaxia">Galaxia</label>
-        </p-floatLabel>
-      </div>  
-      
-      <div class="field mb-6 col-12 md:col-6">
-        <p-floatLabel>
-          <input
-            pInputText
-            id="estado"
-            autocomplete="off"
-            formControlName="estado"
-            dictaReactiveForm
-            class="w-full"
-          />
-          <label for="estado">Estado</label>
-        </p-floatLabel>
-      </div> 
-
-      <div class="field mb-6 col-12 md:col-12 mt-3">
-        <p-floatLabel>
-          <input
-            pInputText
-            id="imagen"
-            autocomplete="off"
-            class="w-full"
-            dictaReactiveForm
-            formControlName="imagen"
-          />
-          <label for="imagen">URL de la imagen</label>
+          <input pInputText formControlName="nombre" class="w-full" />
+          <label>Nombre del planeta</label>
         </p-floatLabel>
       </div>
+      <div class="col-12">
+        <p-tabs value="0">  
+          <p-tablist>
+            <div class="flex align-items-center justify-content-between w-full">
+              <div class="flex align-items-center gap-3">
+                @for (grupo of grupos; track grupo.value; let i = $index) {
+                  <p-tab [value]="i.toString()">
+                    {{ grupo.title }}
+                  </p-tab>
+                }
+              </div> 
+                      
+            </div>
+          </p-tablist>
+
+          <p-tabpanels>
+            @for (grupo of grupos; track grupo.value; let i = $index) {
+              <p-tabpanel [value]="i.toString()">
+                
+                <div formArrayName="planetas">
+                  <div [formGroupName]="i">  
+                    <div formGroupName="datos" class="flex justify-content-end align-items-center gap-2 mb-3">
+                      <label>Estado:</label>
+                      <p-toggleswitch formControlName="estado"></p-toggleswitch>
+                    </div>                 
+                    
+                    <p-tabs value="datos">
+                      <p-tablist>
+                        @for (sub of subTabs; track sub.value) {
+                          <p-tab [value]="sub.value">
+                            {{ sub.title }}
+                          </p-tab>
+                        }
+                      </p-tablist>
+
+                      <p-tabpanels>
+                          
+                        <p-tabpanel value="datos">
+                          <div formGroupName="datos" class="grid formgrid p-fluid row-gap-2 pt-3">                                                 
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="galaxia" class="w-full" />
+                                <label>Galaxia</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="textura" class="w-full"/>
+                                <label>Textura</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="url" class="w-full"/>
+                                <label>URL</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="imagen" class="w-full"/>
+                                <label>URL de la Imagen</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12">
+                              <p-floatLabel>
+                                <textarea pTextarea formControlName="resumenCurso" rows="5" class="w-full"></textarea>
+                                <label>Descripción del Curso</label>
+                              </p-floatLabel>
+                            </div>
+                          </div>
+                        </p-tabpanel>
+
+                        <p-tabpanel value="info">
+                          <div formGroupName="info" class="grid formgrid p-fluid row-gap-2 pt-3">
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="tipoRiesgo" class="w-full"/>
+                                <label>Tipo de riesgo</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="tamano" class="w-full"/>
+                                <label>Tamaño</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="composicion" class="w-full"/>
+                                <label>Composición</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="riesgo" class="w-full"/>
+                                <label>Riesgo</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="nivel" class="w-full"/>
+                                <label>Nivel</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="ambiente" class="w-full"/>
+                                <label>Ambiente</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="temperatura" class="w-full"/>
+                                <label>Temperatura</label>
+                              </p-floatLabel>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                              <p-floatLabel>
+                                <input pInputText formControlName="villano" class="w-full"/>
+                                <label>Villano</label>
+                              </p-floatLabel>
+                            </div>
+                          </div>
+                        </p-tabpanel> 
+                        <p-tabpanel value="peligros">
+                          <button
+                            pButton
+                            type="button"
+                            label="Agregar peligro"
+                            class="mb-3"
+                            (click)="planetaFormPresenter.addPeligro(i)"
+                          ></button>         
+                                                  
+                          <div formArrayName="peligros">                        
+                            @for (peligro of getPeligros(i).controls; track peligro; let j = $index) {
+                              <p-fieldset legend="Peligro {{j+1}}" class="mb-3">                 
+                                <div [formGroupName]="j" class="grid formgrid p-fluid mb-3 row-gap-2 pt-3">                              
+                                  <div class="field col-12 md:col-6">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="nombre" class="w-full"/>
+                                      <label>Nombre</label>
+                                    </p-floatLabel>
+                                  </div>                                
+
+                                  <div class="field col-12 md:col-6">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="nivelRiesgo" class="w-full"/>
+                                      <label>Nivel de Riesgo</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                  <div class="field col-12 md:col-6">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="temperatura" class="w-full"/>
+                                      <label>Temperatura</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                  <div class="field col-12 md:col-6">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="villano" class="w-full"/>
+                                      <label>Villano</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                  <div class="field col-12">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="cta" class="w-full"/>
+                                      <label>Call to Action</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                  <div class="field col-12">
+                                    <p-floatLabel>
+                                      <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"></textarea>
+                                      <label>Descripción</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                </div>
+                              </p-fieldset>
+                            }
+                          </div>                        
+                        </p-tabpanel>
+
+                        <p-tabpanel value="beneficios" >
+                          <button
+                            pButton
+                            type="button"
+                            label="Agregar beneficio"
+                            class="mb-3"
+                            (click)="planetaFormPresenter.addBeneficio(i)"
+                          ></button>  
+
+                          <div formArrayName="beneficios">                        
+                            @for (beneficio of getBeneficios(i).controls; track beneficio; let j = $index) {
+                              <p-fieldset legend="Beneficio {{j+1}}" class="mb-3 w-full">                 
+                                <div [formGroupName]="j" class="grid formgrid p-fluid mb-3 row-gap-2 pt-3">                              
+                                  <div class="field col-12">
+                                    <p-floatLabel>
+                                      <input pInputText formControlName="titulo" class="w-full"/>
+                                      <label>Título</label>
+                                    </p-floatLabel>
+                                  </div>
+
+                                  <div class="field col-12">
+                                    <p-floatLabel>
+                                      <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"></textarea>
+                                      <label>Descripción</label>
+                                    </p-floatLabel>
+                                  </div>
+                                </div>
+                              </p-fieldset>
+                            }
+                          </div>
+                        </p-tabpanel>
+
+                      </p-tabpanels>
+                    </p-tabs>
+                  </div>
+                </div>
+              </p-tabpanel>
+            }
+          </p-tabpanels>
+        </p-tabs>  
+      </div>    
     </div>    
   </form>
 
@@ -108,9 +274,11 @@
         icon="pi pi-check"
         iconPos="right"
         (onClick)="guardarPlaneta()"
-        severity="success"
-        [disabled]="!planetaFormPresenter.Form.valid"
+        severity="success"       
+
       />
     </div>
   </ng-template>
 </p-dialog>
+
+<!-- [disabled]="!planetaFormPresenter.Form.valid" -->
