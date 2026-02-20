@@ -1,0 +1,83 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '42rem' }"
+  [header]="title"
+  (onHide)="close()"
+>
+  <div class="flex flex-column gap-3">
+    <div class="flex flex-column gap-2">
+      <label for="titulo">Titulo</label>
+      <input id="titulo" pInputText [(ngModel)]="model.titulo" />
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="descripcion">Descripcion</label>
+      <textarea id="descripcion" pInputTextarea rows="3" [(ngModel)]="model.descripcion"></textarea>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 md:col-6 flex flex-column gap-2">
+        <label for="slug">Slug</label>
+        <input id="slug" pInputText [(ngModel)]="model.slug" />
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column gap-2">
+        <label for="landingUrl">Landing URL</label>
+        <input id="landingUrl" pInputText [(ngModel)]="model.landingUrl" />
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 md:col-6 flex flex-column gap-2">
+        <label for="imagenPrincipal">Imagen principal (URL)</label>
+        <input id="imagenPrincipal" pInputText [(ngModel)]="model.imagenPrincipal" />
+      </div>
+
+      <div class="col-12 md:col-6 flex flex-column gap-2">
+        <label for="metaKeywords">Meta keywords</label>
+        <input id="metaKeywords" pInputText [(ngModel)]="model.metaKeywords" />
+      </div>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="contenidoTexto">Contenido (una linea por item)</label>
+      <textarea id="contenidoTexto" pInputTextarea rows="4" [(ngModel)]="contenidoTexto"></textarea>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="imagenesTexto">Imagenes landing (una URL por linea)</label>
+      <textarea id="imagenesTexto" pInputTextarea rows="4" [(ngModel)]="imagenesTexto"></textarea>
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="coloresTexto">Colores (uno por linea, ej: #2563eb)</label>
+      <textarea id="coloresTexto" pInputTextarea rows="3" [(ngModel)]="coloresTexto"></textarea>
+    </div>
+
+    <div class="flex align-items-center gap-2">
+      <label for="estado">Estado</label>
+      <p-toggleswitch [(ngModel)]="model.estado" inputId="estado"></p-toggleswitch>
+
+    </div>
+
+    <small class="text-red-500" *ngIf="errorMsg">{{ errorMsg }}</small>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      class="p-button-text"
+      (click)="close()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      [label]="isEdit ? 'Actualizar' : 'Guardar'"
+      (click)="guardarLanding()"
+    ></button>
+  </ng-template>
+</p-dialog>

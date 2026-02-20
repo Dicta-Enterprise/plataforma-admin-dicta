@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
-import { Landing } from './landing';
+import { LandingPage } from './landing';
+
 
 export const LANDING_ROUTES: Routes = [
   {
     path: '',
-    component: Landing,
+    component: LandingPage,
+
   },
 ];
