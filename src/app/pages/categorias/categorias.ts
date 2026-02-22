@@ -72,10 +72,6 @@ export class Categorias implements OnInit, OnDestroy {
       title: 'Centralizado',
       message: 'Vino desde el registry',
     });
-    // this.alertService.openByName(ALERTS_ENUM.SUCCESS, {
-    //   title: 'Centralizado',
-    //   message: 'Vino desde el registry',
-    // });
   }
 
   eliminar(id: string) {
