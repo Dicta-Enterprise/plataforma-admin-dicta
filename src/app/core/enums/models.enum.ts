@@ -3,3 +3,5 @@ export enum MODELS_ENUM {
   NUEVA_LANDING = 'nuevaLanding',
   IMAGEN_PLANETA = 'imagenPlaneta',
 }
+  IMAGEN_PLANETA = 'imagenPlaneta',
+}

@@ -1,1 +1,171 @@
-<p>planetas works!</p>
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">PLANETAS</div>
+    <p-badge
+      [value]="(planetas$ | async)?.length || 0"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+  <div>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-plus"
+      class="p-button-outlined p-button-secondary w-7rem p-2"
+      iconPos="right"
+      label="Nuevo planeta"
+    ></button>
+  </div>
+</div>
+<p class="text-600 text-xl">
+  Descripción
+</p>
+<p-divider class="w-full"></p-divider>
+
+<p-table
+    #dt2
+    [value]="(planetas$ | async) ?? []"
+    dataKey="id"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading"
+    [paginator]="true"
+    [globalFilterFields]="['nombre', 'categoria', 'galaxia', 'estado']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    showGridlines
+>    
+    <ng-template #caption>
+        <div class="flex">                
+            <input 
+                pInputText type="text"
+                class="w-20rem p-inputtext-lg border-round-lg border-1 border-gray-300" 
+                placeholder="Buscar planeta..." 
+                (input)="dt2.filterGlobal($event.target.value, 'contains')"                 
+            />        
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th class="w-3rem"></th>
+            <th class="w-3rem">Índice</th>
+            <th class="w-12rem">Nombre</th>
+            <th class="w-9rem">Categoría</th>
+            <th class="w-9rem">Galaxia</th>
+            <th class="w-9rem">Estado</th>
+            <th class="w-6rem">Ver Imagen</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>
+                <p-columnFilter 
+                    type="text" 
+                    field="nombre" 
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Nombre"
+                ></p-columnFilter>
+            </th>
+            <th>
+                <p-columnFilter 
+                    type="text" 
+                    field="categoria" 
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Categoría"
+                ></p-columnFilter>
+            </th>            
+            <th>
+                <p-columnFilter 
+                    type="text" 
+                    field="galaxia" 
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Galaxia"
+                ></p-columnFilter>
+            </th>
+            <th>
+                <p-columnFilter 
+                    type="text" 
+                    field="estado" 
+                    placeholder="Ingresar busqueda..." 
+                    ariaLabel="Filtrar Estado"
+                ></p-columnFilter>
+            </th>            
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-planeta let-i="rowIndex" let-expanded="expanded">
+        <tr>
+            <td>
+                <button
+                    pButton
+                    type="button"
+                    [pRowToggler]="planeta"
+                    class="p-button-text p-button-sm"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                ></button>
+            </td>
+            <td>
+                {{ i + 1 + (dt2.first ?? 0) }}                
+            </td>
+            <td>
+                {{ planeta.nombre }}
+            </td>
+            <td>
+                {{ planeta.categoria }}
+            </td>            
+            <td>
+                {{ planeta.galaxia | formatoTexto }}
+            </td>
+            <td>
+                <ng-container [ngSwitch]="planeta.estado">
+                    <p-tag
+                    *ngSwitchCase="'ACTIVO'"
+                    value="ACTIVO"
+                    severity="success">
+                    </p-tag>
+
+                    <p-tag
+                    *ngSwitchCase="'INACTIVO'"
+                    value="INACTIVO"
+                    severity="danger">
+                    </p-tag>
+
+                    <p-tag
+                    *ngSwitchDefault
+                    value="DESCONOCIDO"
+                    severity="contrast">
+                    </p-tag>
+                </ng-container>
+            </td>
+            <td class="text-center">
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-eye"
+                    class="p-button-rounded p-button-text"
+                    pTooltip="Ver imagen"
+                    tooltipPosition="top"
+                    (click)="verImagen(planeta)"
+                ></button>
+            </td>     
+        </tr>
+    </ng-template>
+    <ng-template #expandedrow let-planeta>
+        <tr>
+            <td colspan="7">
+                <div class="p-4">
+                    <strong>Resumen del Curso:</strong>
+                    <p class="mt-2">
+                        {{ planeta.resumenCurso }}
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+        <tr>
+            <td colspan="6" class="text-center">No hay planetas disponibles.</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+

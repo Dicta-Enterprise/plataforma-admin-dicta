@@ -10,5 +10,11 @@ export const MODAL_REGISTRY: Record<string, Type<object>> = {
   nuevaCategoria: NuevaCategoria,
   editarParametro: EditarParametro,
   nuevaLanding: NuevaLanding,
+import { ImagenPlaneta } from 'src/app/ui/modals/planeta/imagen-planeta.modal';
+
+
+export const MODAL_REGISTRY: Record<string, Type<object>> = {
+  user: UserModalComponent,
+  nuevaCategoria:NuevaCategoria,
   imagenPlaneta: ImagenPlaneta,
 };
