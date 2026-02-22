@@ -7,7 +7,7 @@ export class Planeta {
   categoria: string;
   resumenCurso: string;
   imagen: string;
-  estado: boolean;
+  estado: string;
   galaxiaId: string;
   galaxia: string;  
   textura: string;
@@ -22,7 +22,7 @@ export class Planeta {
     this.categoria = planeta.categoria ?? '';
     this.resumenCurso = planeta.resumenCurso ?? '';
     this.imagen = planeta.imagen ?? '';
-    this.estado = planeta.estado ?? true;
+    this.estado = planeta.estado ?? 'ACTIVO';
     this.galaxiaId = planeta.galaxiaId ?? '';
     this.galaxia = planeta.galaxia ?? '';  
     this.textura = planeta.textura ?? '';
@@ -41,7 +41,7 @@ export class Planeta {
       categoria: casted['grupo'] as string,
       resumenCurso: casted['resumenCurso'] as string,
       imagen: casted['imagenResumen'] as string,
-      estado: casted['estado'] as boolean,
+      estado: casted['estado'] as string,
       galaxiaId: casted['galaxiaId'] as string,
       galaxia: casted['tema'] as string,
       textura: casted['textura'] as string,

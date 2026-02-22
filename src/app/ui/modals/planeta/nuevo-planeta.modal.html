@@ -70,7 +70,20 @@
                           <div formGroupName="datos" class="grid formgrid p-fluid row-gap-2 pt-3">                                                 
                             <div class="field col-12 md:col-6">
                               <p-floatLabel>
-                                <input pInputText formControlName="galaxia" class="w-full" />
+                                <p-autocomplete
+                                  formControlName="galaxia"
+                                  [suggestions]="galaxiasFiltradas"
+                                  (completeMethod)="buscarGalaxia($event)"
+                                  optionLabel="nombre"
+                                  class="w-full"
+                                  inputStyleClass="w-full">
+                                  
+                                  <ng-template let-galaxia pTemplate="item">
+                                    <div class="flex items-center gap-2">
+                                      <div>{{ galaxia.nombre }}</div>                                      
+                                    </div>
+                                  </ng-template>
+                                </p-autocomplete>
                                 <label>Galaxia</label>
                               </p-floatLabel>
                             </div>

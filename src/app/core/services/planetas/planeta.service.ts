@@ -3,6 +3,7 @@ import { PLANETA_REPOSITORY } from '../../tokens/planeta.token';
 import { PlanetaRepository } from 'src/app/repositories/planeta.repository';
 import { Observable } from 'rxjs';
 import { Planeta } from '@class/planetas/Planeta.class';
+import { CreatePlanetaDto } from '@interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +23,8 @@ export class PlanetaService {
     return this.planetaRepository.obtenerPlanetaService(id);
   }
   
-  guardarPlaneta(planeta: Planeta): Observable<Planeta> {
-    return this.planetaRepository.crearPlanetaService(planeta);
+  guardarPlaneta(dto: CreatePlanetaDto): Observable<Planeta> {
+    return this.planetaRepository.crearPlanetaService(dto);
   }
   
   actualizarPlaneta(planeta: Planeta): Observable<Planeta> {

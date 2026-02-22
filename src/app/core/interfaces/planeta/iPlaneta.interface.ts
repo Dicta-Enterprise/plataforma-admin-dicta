@@ -1,10 +1,9 @@
-export interface IPlanetaDto {
-  id: string;
+export interface CreatePlanetaDto {
   nombre: string;
   grupo: string;
   resumenCurso: string;
   imagenResumen: string;
-  estado: boolean;
+  estado: string;
   galaxiaId: string;
   tema: string;  
   textura: string;
@@ -12,6 +11,10 @@ export interface IPlanetaDto {
   info?: InfoPlaneta;
   peligros: Peligro[];
   beneficios: Beneficio[];
+}
+
+export interface IPlanetaDto extends CreatePlanetaDto {
+  id: string;
 }
 
 export interface InfoPlaneta {

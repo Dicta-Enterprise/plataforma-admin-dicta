@@ -13,8 +13,13 @@ import { PlanetaMapper } from 'src/app/core/mappers/planeta.mapper';
 import { PlanetaFacade } from 'src/app/patterns/facade/planetas.facade';
 import { PlanetaService } from 'src/app/core/services/planetas/planeta.service';
 import { PlanetaFormPresenter } from '@pages/planetas/planetas-form.presenter';
+import { Planeta } from '@class/planetas/Planeta.class';
+import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { TabsModule } from 'primeng/tabs';
 import { FieldsetModule } from 'primeng/fieldset';
+import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { CUSTOM_PLANETA_PROVIDER } from 'src/app/core/providers/planeta.provider';
 
 @Component({
   selector: 'app-nuevo-planeta',
@@ -31,24 +36,34 @@ import { FieldsetModule } from 'primeng/fieldset';
     TextareaModule,
     FloatLabelModule,
     TabsModule,
-    FieldsetModule
+    FieldsetModule,
+    AutoComplete,
   ],
-  providers: [PlanetaService, PlanetaFacade, PlanetaFormPresenter],
+  providers: [CUSTOM_PLANETA_PROVIDER,PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService],
+  
   templateUrl: './nuevo-planeta.modal.html',
 })
 export class NuevoPlaneta implements OnInit {
   @Input() title = 'Nuevo Planeta';
   visible = true;
+  galaxias: Galaxia[] = [];
+  galaxiasFiltradas: Galaxia[] = [];
 
   constructor(
     private modalService: ModalService,
     private readonly fb: FormBuilder,
     private readonly planetaFacade: PlanetaFacade,
-    public readonly planetaFormPresenter: PlanetaFormPresenter
+    public readonly planetaFormPresenter: PlanetaFormPresenter,
+    private galaxiaService: GalaxiaService,
+    private planetaService: PlanetaService,
   ) {}
 
   ngOnInit(): void {
     this.planetaFormPresenter.createForm();
+
+    this.galaxiaService.listarGalaxias().subscribe(res=>{
+      this.galaxias = res;
+    });
   }
 
   get form() {
@@ -72,17 +87,41 @@ export class NuevoPlaneta implements OnInit {
   }
 
   guardarPlaneta() {    
-    console.log(this.planetaFormPresenter.Form.value); //los valores
-    console.log(this.planetaFormPresenter.Form.valid);
-    this.close();
+    const dtos = PlanetaMapper.formToCreateDtos(this.form);
+
+    console.log('json del mapper:', dtos);
+    console.log('form válido:', this.form.valid);
+    console.log('DTO enviado:', JSON.stringify(dtos, null, 2));
+
+    //dtos.forEach(dto => {
+    //  this.planetaService.guardarPlaneta(dto).subscribe({
+    //    next: resp => console.log('Planeta guardado:', resp),
+    //    error: err => {
+    //      console.error('Error completo:', err);
+    //      console.error('Mensaje backend:', err.error?.message);
+    //    }
+    //  });
+    //});
+      
   }
 
   actualizarPlaneta() {
-    const nuevoPlaneta = PlanetaMapper.planetaToJson(
-      this.planetaFormPresenter.Form
-    );
+    const dtos = PlanetaMapper.formToCreateDtos(this.form);
+    const nuevoPlaneta = dtos.length ? dtos[0] : null;
 
-    this.planetaFacade.actualizarPlaneta(nuevoPlaneta);
+    if (!nuevoPlaneta) return;
+    const planetaInst = Planeta.fromJson(nuevoPlaneta as unknown);
+    this.planetaFacade.actualizarPlaneta(planetaInst);
+
+  }
+
+  buscarGalaxia(event: AutoCompleteCompleteEvent): void {
+    const query = (event.query || '').toLowerCase();
+
+    this.galaxiasFiltradas = this.galaxias.filter((g: Galaxia) =>
+      g.nombre.toLowerCase().includes(query)
+    );  
+
   }
 
   close() {

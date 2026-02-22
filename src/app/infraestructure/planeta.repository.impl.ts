@@ -38,12 +38,9 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
       .pipe(map((response: IGeneric<Planeta>) => response.data._value));
   }
 
-  crearPlanetaService(planeta: Planeta): Observable<Planeta> {
+  crearPlanetaService(dto: IPlanetaDto): Observable<Planeta> {
     const direccion = `${this.apiUrl}/planetas`;
-
-    return this.http
-      .post<IGeneric<Planeta>>(direccion, planeta)
-      .pipe(map((response: IGeneric<Planeta>) => response.data._value));
+    return this.http.post<Planeta>(direccion, dto);
   }
 
   editarPlanetaService(planeta: Planeta): Observable<Planeta> {

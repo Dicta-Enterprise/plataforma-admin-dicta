@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Planeta } from '@class/planetas/Planeta.class';
 import { BehaviorSubject } from 'rxjs';
+import { PlanetaMapper } from 'src/app/core/mappers/planeta.mapper';
 import { PlanetaService } from 'src/app/core/services/planetas/planeta.service';
 
 @Injectable({
@@ -19,8 +20,10 @@ export class PlanetaFacade {
   }
 
   guardarPlaneta(planeta: Planeta) {
+    const dto = PlanetaMapper.domainToCreateDto(planeta);
+    
     this.planetaService
-      .guardarPlaneta(planeta)
+      .guardarPlaneta(dto)
       .subscribe((planeta) => this.planeta$.next(planeta));
   }
   

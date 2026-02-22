@@ -38,6 +38,7 @@ import { TagModule } from 'primeng/tag';
   ],
   templateUrl: './planetas.html',
   styleUrl: './planetas.css',
+    
 })
 export class Planetas implements OnInit, OnDestroy {
 
