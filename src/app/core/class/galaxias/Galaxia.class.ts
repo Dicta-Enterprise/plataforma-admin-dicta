@@ -1,50 +1,67 @@
-import { Categoria } from '@class/categoria/Categoria.class';
-import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
+import { IGalaxiaDto, CreateGalaxiaDto, Posicion, Rotacion } from '@interfaces/galaxias/Igalaxia.dto';
 
 export class Galaxia {
   id: string;
   nombre: string;
   descripcion: string;
+  color: string;
   estado: boolean;
+  categoria:string;
+  categoriaId: string;
+
+  tema: string;
+  imagen: string;
+  url: string;
+  textura: string;
+
+  posicion: Posicion;
+  rotacion: Rotacion;
+
   fechaCreacion: Date;
   fechaActualizacion: Date;
-  imagenUrl:string;
-  categoria: Categoria;
 
   constructor(galaxia: Partial<Galaxia> = {}) {
     this.id = galaxia.id ?? '';
     this.nombre = galaxia.nombre ?? '';
     this.descripcion = galaxia.descripcion ?? '';
+    this.color = galaxia.color ?? '';
     this.estado = galaxia.estado ?? true;
+    this.categoria = galaxia.categoria ?? '';
+    this.categoriaId = galaxia.categoriaId ?? '';
+    this.tema = galaxia.tema ?? '';
+    this.imagen = galaxia.imagen ?? '';
+    this.url = galaxia.url ?? '';
+    this.textura = galaxia.textura ?? '';
+
+    this.posicion = galaxia.posicion ?? { x: 0, y: 0, z: 0 };
+    this.rotacion = galaxia.rotacion ?? { x: 0, y: 0, z: 0 };
+
     this.fechaCreacion = galaxia.fechaCreacion ?? new Date();
     this.fechaActualizacion = galaxia.fechaActualizacion ?? new Date();
-    this.imagenUrl = galaxia.imagenUrl ?? '';
-    this.categoria = galaxia.categoria ?? new Categoria();
   }
 
-  static fromJson(galaxia: unknown): Galaxia {
-    const casted = galaxia as Record<string, unknown>;
-
+  static fromJson(dto: IGalaxiaDto): Galaxia {
     return new Galaxia({
-      id: casted['id'] as string,
-      nombre: casted['nombre'] as string,
-      descripcion: casted['descripcion'] as string,
-      estado: casted['estado'] as boolean,
-      fechaCreacion: casted['fechaCreacion'] as Date,
-      fechaActualizacion: casted['fechaActualizacion'] as Date,
-      imagenUrl: casted['imagen'] as string,
-      categoria: casted['categoria'] as Categoria
+      ...dto,      
+      fechaCreacion: new Date(dto.fechaCreacion),
+      fechaActualizacion: new Date(dto.fechaActualizacion),
     });
   }
 
-  static toJson(galaxia: Galaxia): IGalaxiaDto {
+  static toJson(galaxia: Galaxia): CreateGalaxiaDto {
     return {
       nombre: galaxia.nombre,
       descripcion: galaxia.descripcion,
+      color: galaxia.color,
       estado: galaxia.estado,
-      fechaCreacion: galaxia.fechaCreacion,
-      fechaActualizacion: galaxia.fechaActualizacion,
-      id: galaxia.id,
+      categoria:galaxia.categoria,
+      categoriaId: galaxia.categoriaId,
+      tema: galaxia.tema,
+      imagen: galaxia.imagen,
+      url: galaxia.url,
+      textura: galaxia.textura,
+      posicion: galaxia.posicion,
+      rotacion: galaxia.rotacion,
     };
   }
 }

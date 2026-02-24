@@ -1,7 +1,7 @@
 <div class="surface-card shadow-2 border-round p-4">
   <div class="flex flex-column align-items-center mb-3">
     <img
-      [src]="galaxia.imagenUrl ? galaxia.imagenUrl : loader"
+      [src]="galaxia.imagen ? galaxia.imagen : loader"
       style="width: 70px; height: 70px"
       class="mb-3"
       alt="name"
@@ -11,7 +11,7 @@
       >{{galaxia.descripcion}}</span
     >
     <span class="text-600 surface-200 p-2 border-round" 
-      >{{galaxia.categoria.nombre}}</span
+      >{{ getNombreCategoria(galaxia.categoriaId) }}</span
     >
   </div>
   <div class="pt-3 border-top-1 surface-border flex">

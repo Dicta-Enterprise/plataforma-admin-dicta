@@ -6,8 +6,8 @@ import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 import {
   IGeneric,
-  IGenericArrays,
 } from '@interfaces/genericas/IGeneric.interface';
+import { CreateGalaxiaDto, CreateMultipleGalaxiasDto, IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -18,16 +18,16 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
   constructor(private readonly http: HttpClient) {}
 
   listarGalaxiasService(): Observable<Galaxia[]> {
-    const direccion = `${this.apiUrl}/galaxias`;
+    const direccion = `${this.apiUrl}/galaxias`;   
 
     return this.http
-      .get<IGenericArrays<Galaxia[]>>(direccion)
+      .get<{data:IGalaxiaDto[]}>(direccion)
       .pipe(
-        map((response: IGenericArrays<Galaxia[]>) =>
-          response.data._value.map((galaxia) => Galaxia.fromJson(galaxia))
+        map((response) =>
+          response.data.map((dto: IGalaxiaDto) => Galaxia.fromJson(dto))
         )
       );
-  }
+  } 
 
   obtenerGalaxiaService(galaxiaId: string): Observable<Galaxia> {
     const direccion = `${this.apiUrl}/galaxias`;
@@ -37,12 +37,19 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
       .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
   }
 
-  crearGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {
+  crearGalaxiaService(galaxia: CreateGalaxiaDto): Observable<Galaxia> {
     const direccion = `${this.apiUrl}/galaxias`;
 
     return this.http
       .post<IGeneric<Galaxia>>(direccion, galaxia)
       .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
+  }
+
+  crearMultiplesGalaxiasService(dto: CreateMultipleGalaxiasDto): Observable<Galaxia[]> {
+
+    const direccion = `${this.apiUrl}/galaxias/multiple`;
+
+    return this.http.post<Galaxia[]>(direccion, dto);
   }
 
   editarGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {

@@ -1,0 +1,227 @@
+<p-dialog
+  [(visible)]="visible"
+  appendTo="body"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="nueva-agencia-dialog"
+>
+
+  <ng-template pTemplate="header">
+    <div class="flex flex-column gap-1">
+      <h1 class="m-0 text-900 font-semibold text-xl">NUEVA GALAXIA</h1>
+      <span class="text-600 text-sm">
+        Ingrese los datos de la galaxia
+      </span>
+    </div>
+  </ng-template>
+
+  <form class="flex flex-column gap-4 mt-4"
+    [formGroup]="galaxiaFormPresenter.Form">
+
+    <div class="flex flex-column gap-2">
+      <p-selectButton
+        formControlName="modo"
+        [options]="[
+          {label:'Una galaxia', value:'single'},
+          {label:'Grupo de galaxias', value:'multiple'}
+        ]"
+        optionLabel="label"
+        optionValue="value">
+      </p-selectButton>
+    </div>
+
+    <div *ngIf="galaxiaFormPresenter.Form.get('modo')?.value==='multiple'"
+        class="grid formgrid p-fluid">
+
+      <div class="field col-12">
+        <p-floatLabel>
+          <input pInputText formControlName="nombreGlobal" class="w-full"/>
+          <label>Nombre del grupo</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12">
+        <p-floatLabel>
+          <textarea pTextarea formControlName="descripcionGlobal"
+            rows="3"
+            class="w-full"></textarea>
+          <label>Descripción del grupo</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div formArrayName="galaxias">
+
+      <div *ngFor="let g of galaxiaFormPresenter.galaxias.controls; let i=index"
+        [formGroupName]="i"
+        class="border-1 surface-border border-round p-3 mb-4">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <h3 class="m-0 text-lg font-semibold">
+            Galaxia {{ i+1 }}
+          </h3>
+          <button
+            *ngIf="i>0"
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            severity="danger"
+            text
+            (click)="galaxiaFormPresenter.removeGalaxia(i)">
+          </button>
+        </div>
+
+        <div class="grid formgrid p-fluid">
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="nombre" 
+              class="w-full"/>
+              <label>Nombre</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <p-autocomplete
+                formControlName="categoria"
+                [suggestions]="categoriasFiltradas"
+                (completeMethod)="buscarCategoria($event)"
+                optionLabel="nombre"
+                class="w-full"
+                inputStyleClass="w-full">
+
+                <ng-template let-cat pTemplate="item">
+                  {{cat.nombre}}
+                </ng-template>
+              </p-autocomplete>
+
+              <label>Categoría</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12">
+            <p-floatLabel>
+              <textarea 
+              pTextarea formControlName="descripcion"
+              rows="3" 
+              class="w-full"></textarea>
+              <label>Descripción</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="url" 
+              class="w-full"/>
+              <label>URL</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="textura" 
+              class="w-full"/>
+              <label>Textura</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="color" 
+              class="w-full"/>
+              <label>Color</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="imagen" 
+              class="w-full"/>
+              <label>Imagen</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="field col-12">
+            <p-floatLabel>
+              <input 
+              pInputText formControlName="tema" 
+              class="w-full"/>
+              <label>Tema</label>
+            </p-floatLabel>
+          </div>
+
+          <div class="col-12 flex align-items-center gap-3">
+            <label>Estado</label>
+            <p-toggleswitch formControlName="estado"></p-toggleswitch>
+          </div>
+
+          <h4 class="col-12 mt-2 font-semibold">Posición</h4>
+          <div formGroupName="posicion" class="col-12 grid">
+            <div class="col-4">
+              <input type="number" pInputText formControlName="x" placeholder="X">
+            </div>
+            <div class="col-4">
+              <input type="number" pInputText formControlName="y" placeholder="Y">
+            </div>
+            <div class="col-4">
+              <input type="number" pInputText formControlName="z" placeholder="Z">
+            </div>
+          </div>
+
+          <h4 class="col-12 mt-2 font-semibold">Rotación</h4>
+          <div formGroupName="rotacion" class="col-12 grid">
+            <div class="col-4">
+              <input type="number" pInputText formControlName="x" placeholder="X">
+            </div>
+            <div class="col-4">
+              <input type="number" pInputText formControlName="y" placeholder="Y">
+            </div>
+            <div class="col-4">
+              <input type="number" pInputText formControlName="z" placeholder="Z">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p-button
+      *ngIf="galaxiaFormPresenter.Form.get('modo')?.value === 'multiple'"
+      type="button"
+      label="Agregar galaxia"
+      icon="pi pi-plus"
+      iconPos="right"
+      class="mb-3"
+      (click)="galaxiaFormPresenter.addGalaxia()">
+    </p-button>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        iconPos="right"
+        variant="outlined"
+        class="text-gray-600"
+        (onClick)="visible = false"
+      />
+      <p-button
+        label="Guardar"
+        type="button"
+        icon="pi pi-check"
+        iconPos="right"
+        (onClick)="guardarGalaxia()"
+        severity="success"
+        [disabled]="!galaxiaFormPresenter.Form.valid"
+      />
+    </div>
+  </ng-template>
+</p-dialog>
