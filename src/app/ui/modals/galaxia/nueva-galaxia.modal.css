@@ -1,0 +1,27 @@
+.nueva-agencia-dialog {
+  .p-dialog-header {
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  }
+
+  .p-dialog-content {
+    padding: 1rem 1.5rem;
+  }
+
+  .p-dialog-footer {
+    padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .p-inputtext {
+    padding: 0.75rem;
+    border-radius: 6px;
+    width: 100%;
+  }
+
+  .p-float-label {
+    display: block;
+  }
+}
+
+
+

@@ -14,6 +14,13 @@ import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { CommonModule } from '@angular/common';
 import { Estandar } from '@class/estandar/Estandar.class';
+import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
+import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
+import { Categoria } from '@class/categoria/Categoria.class';
+import { CATEGORIA_REPOSITORY } from 'src/app/core/tokens/categoria.token';
+import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repository.impl';
+
 
 @Component({
   selector: 'app-galaxias',
@@ -29,13 +36,21 @@ import { Estandar } from '@class/estandar/Estandar.class';
     MenuModule,
     CardGalaxias,
   ],
-  providers: [GalaxiaFacade, GalaxiaService],
+  providers: [
+    GalaxiaFacade, 
+    GalaxiaService,
+    CategoriaService,
+    {
+      provide: CATEGORIA_REPOSITORY,
+      useClass: CategoriaRepositoryImpl
+    }
+  ],
   templateUrl: './galaxias.html',
   styleUrl: './galaxias.css',
 })
 export class Galaxias implements OnInit, OnDestroy {
-  categorias: Estandar[] = [];
   colors: Estandar[] = [];
+  categorias: Categoria[]=[];
 
   categoriaSelected: Estandar = new Estandar();
   colorSelected: Estandar = new Estandar();
@@ -48,12 +63,19 @@ export class Galaxias implements OnInit, OnDestroy {
 
   galaxias$ = new BehaviorSubject<Galaxia[]>([]);
 
-  constructor(private readonly galaxiaFacade: GalaxiaFacade) {
-    this.galaxias$ = this.galaxiaFacade.galaxias$;
+  constructor(
+    private readonly galaxiaFacade: GalaxiaFacade,     
+    private modalService: ModalService,
+    private categoriaService: CategoriaService
+  ) {
+    this.galaxias$ = this.galaxiaFacade.galaxias$;   
   }
 
   ngOnInit(): void {
     this.galaxiaFacade.listarGalaxias();
+    this.categoriaService.listarCategorias().subscribe(res => {
+      this.categorias = res;
+    });
   }
 
   ngOnDestroy(): void {
@@ -61,6 +83,13 @@ export class Galaxias implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  nuevaGalaxia() {
+    this.modalService.openByName(MODELS_ENUM.NUEVA_GALAXIA, {
+      title: 'Centralizado',
+      message: 'Vino desde el registry',
+    });
+  }  
 
   eliminar(id: string) {
     console.log(id);
