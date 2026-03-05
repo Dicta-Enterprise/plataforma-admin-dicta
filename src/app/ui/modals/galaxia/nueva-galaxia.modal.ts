@@ -10,6 +10,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TextareaModule } from 'primeng/textarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { GalaxiaMapper } from 'src/app/core/mappers/galaxia.mapper';
+import { GalaxiaMultipleMapper } from 'src/app/core/mappers/galaxia-multiple.mapper';
 import { GalaxiaFacade } from 'src/app/patterns/facade/galaxia.facade';
 import { GalaxiasFormPresenter } from '@pages/galaxias/galaxias-form.presenter';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
@@ -18,10 +19,12 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { CUSTOM_GALAXIA_PROVIDER } from 'src/app/core/providers/galaxia.provider';
-import { SelectButton } from 'primeng/selectbutton';
 import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { Categoria } from '@class/categoria/Categoria.class';
+import { Divider } from 'primeng/divider';
+import { ColorPicker} from 'primeng/colorpicker';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-nueva-galaxia',
@@ -39,22 +42,18 @@ import { Categoria } from '@class/categoria/Categoria.class';
     FloatLabelModule,
     TabsModule,
     FieldsetModule,
-    SelectButton,
     AutoComplete,
+    Divider,
+    ColorPicker,
   ],
-  providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, GalaxiasFormPresenter, CategoriaService],  
+  providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, CategoriaService],  
   templateUrl: './nueva-galaxia.modal.html',
+  
 })
 export class NuevaGalaxia implements OnInit {
   @Input() title = 'Nueva Galaxia';
   visible = true;
-  
-  modoOptions = [
-    { label: 'Una galaxia', value: 'single', icon: 'pi pi-star' },
-    { label: 'Múltiples galaxias', value: 'multiple', icon: 'pi pi-clone' }
-  ];
-
-  modoSeleccionado: 'single' | 'multiple' = 'single';
+  activeTab = '';
 
   categorias: Categoria[] = [];
   categoriasFiltradas: Categoria[] = [];
@@ -73,15 +72,33 @@ export class NuevaGalaxia implements OnInit {
 
     this.categoriaService.listarCategorias().subscribe(res=>{
       this.categorias = res;
+      if (res.length) {
+        this.activeTab = res[0].id.toString();
+      }
+    });
+
+    this.galaxiaFormPresenter.Form.get('multiple')?.valueChanges.subscribe(m => {
+      this.onMultipleChange(m);
     });
   }
 
-  get form() {
-    return this.galaxiaFormPresenter.Form;
+  getIndexByCategoryId(catId: string): number {
+    return this.galaxiaFormPresenter.galaxias.controls.findIndex(g =>
+      g.get('categoriaId')?.value?.toString() === catId?.toString()
+    );
+  }
+
+  getGroupByCategoryId(catId: string) {
+    const idx = this.getIndexByCategoryId(catId);
+    return idx >= 0 ? (this.galaxiaFormPresenter.getGalaxia(idx)) : null;
   }
   
   get galaxias() {
     return this.galaxiaFormPresenter.galaxias;
+  }
+
+  get multiple(): boolean {
+    return this.galaxiaFormPresenter.Form.get('multiple')?.value;
   }
 
   getGalaxia(index: number) {
@@ -89,30 +106,36 @@ export class NuevaGalaxia implements OnInit {
   }
 
   guardarGalaxia() {    
-    if (!this.form.valid) {
-      console.error('Formulario inválido');
+    
+    this.galaxiaFormPresenter.Form.markAllAsTouched();
+
+    if (this.galaxiaFormPresenter.Form.invalid) {
+      console.warn('Formulario inválido');
       return;
-    } 
+    }    
 
-    const modo = this.form.get('modo')?.value;   
+    if (this.multiple) {
+      const dto = GalaxiaMultipleMapper.formToCreateMultiplesDto(this.galaxiaFormPresenter.Form);
 
-    if (modo === 'single') {
-      const dto = GalaxiaMapper.formToCreateDtos(this.form)[0];
-      this.galaxiaFacade.guardarGalaxia(dto);
+      this.galaxiaFacade.guardarMultiplesGalaxias(dto);
 
     } else {
-      const dto = GalaxiaMapper.formToMultipleDto(this.form);
-      this.galaxiaFacade.guardarMultiplesGalaxias(dto);
-    }     
+      const dto = GalaxiaMapper.formToCreateDto(this.galaxiaFormPresenter.Form);
+
+      this.galaxiaFacade.guardarGalaxia(dto);    
+        
+    }
+
+    this.close();
   }
 
   actualizarGalaxia() {   
-    const dtos = GalaxiaMapper.formToCreateDtos(this.form);
-    const nuevaGalaxia = dtos.length ? dtos[0] : null;
+    const dto = GalaxiaMapper.formToCreateDto(this.galaxiaFormPresenter.Form);
 
-    if (!nuevaGalaxia) return;
-    const galaxiaInst = Galaxia.fromJson(nuevaGalaxia as IGalaxiaDto);
-    this.galaxiaFacade.actualizarGalaxia(galaxiaInst);
+    if (!dto) return;
+
+    const galaxiaInst = Galaxia.fromJson(dto as IGalaxiaDto);
+    this.galaxiaFacade.actualizarGalaxia(galaxiaInst);  
   }
 
   buscarCategoria(event:AutoCompleteCompleteEvent){
@@ -135,5 +158,21 @@ export class NuevaGalaxia implements OnInit {
     this.modalService.close();
   }
 
+  onMultipleChange(value: boolean) {
+    if (value) {
+      this.galaxiaFormPresenter.activarMultiples(this.categorias);
+      this.activeTab = this.categorias[0]?.id?.toString() ?? '';
+    } else {
+      this.galaxiaFormPresenter.activarSimple();
+      this.activeTab = '';
+    }
+  }
 
+  onHexInput(event: Event, group: FormGroup) {
+    const value = (event.target as HTMLInputElement).value?.toUpperCase();
+
+    if (!value) return;
+
+    group.get('color')?.setValue(value);
+  }
 }

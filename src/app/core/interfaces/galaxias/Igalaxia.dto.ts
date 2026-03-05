@@ -3,7 +3,6 @@ export interface CreateGalaxiaDto {
   descripcion: string;
   color: string;
   estado: boolean;
-  categoria:string;
   categoriaId: string;
 
   tema: string;
@@ -34,7 +33,5 @@ export interface Rotacion {
 }
 
 export interface CreateMultipleGalaxiasDto {
-  nombreGlobal: string;
-  descripcionGlobal: string;
   galaxias: CreateGalaxiaDto[];
 }
