@@ -2,84 +2,40 @@
   [(visible)]="visible"
   appendTo="body"
   [modal]="true"
-  [style]="{ width: '50vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [style]="{ width: '35vw' }"
   [draggable]="false"
   [resizable]="false"
-  styleClass="nueva-agencia-dialog"
->
+  styleClass="nueva-agencia-dialog">
 
   <ng-template pTemplate="header">
     <div class="flex flex-column gap-1">
       <h1 class="m-0 text-900 font-semibold text-xl">NUEVA GALAXIA</h1>
       <span class="text-600 text-sm">
-        Ingrese los datos de la galaxia
+        Ingresar los datos de la nueva galaxia
       </span>
     </div>
   </ng-template>
 
-  <form class="flex flex-column gap-4 mt-4"
-    [formGroup]="galaxiaFormPresenter.Form">
-
-    <div class="flex flex-column gap-2">
-      <p-selectButton
-        formControlName="modo"
-        [options]="[
-          {label:'Una galaxia', value:'single'},
-          {label:'Grupo de galaxias', value:'multiple'}
-        ]"
-        optionLabel="label"
-        optionValue="value">
-      </p-selectButton>
+  <form
+    [formGroup]="galaxiaFormPresenter.Form"
+    class="flex flex-column gap-4 mt-4 px-4"
+  >      
+  
+    <div class="flex justify-content-start align-items-center gap-2">
+      <label class="text-base font-medium">Ingresar múltiples galaxias:</label>
+      <p-toggleswitch formControlName="multiple"></p-toggleswitch>
     </div>
 
-    <div *ngIf="galaxiaFormPresenter.Form.get('modo')?.value==='multiple'"
-        class="grid formgrid p-fluid">
+    
+      @if (!multiple) {
+        <div formArrayName="galaxias">
 
-      <div class="field col-12">
-        <p-floatLabel>
-          <input pInputText formControlName="nombreGlobal" class="w-full"/>
-          <label>Nombre del grupo</label>
-        </p-floatLabel>
-      </div>
-
-      <div class="field col-12">
-        <p-floatLabel>
-          <textarea pTextarea formControlName="descripcionGlobal"
-            rows="3"
-            class="w-full"></textarea>
-          <label>Descripción del grupo</label>
-        </p-floatLabel>
-      </div>
-    </div>
-
-    <div formArrayName="galaxias">
-
-      <div *ngFor="let g of galaxiaFormPresenter.galaxias.controls; let i=index"
-        [formGroupName]="i"
-        class="border-1 surface-border border-round p-3 mb-4">
-        <div class="flex justify-content-between align-items-center mb-3">
-          <h3 class="m-0 text-lg font-semibold">
-            Galaxia {{ i+1 }}
-          </h3>
-          <button
-            *ngIf="i>0"
-            pButton
-            type="button"
-            icon="pi pi-trash"
-            severity="danger"
-            text
-            (click)="galaxiaFormPresenter.removeGalaxia(i)">
-          </button>
-        </div>
-
-        <div class="grid formgrid p-fluid">
+        <div [formGroupName]="0" class="grid formgrid p-fluid">
 
           <div class="field col-12 md:col-6">
             <p-floatLabel>
-              <input 
-              pInputText formControlName="nombre" 
-              class="w-full"/>
+              <input pInputText formControlName="nombre" class="w-full" />
               <label>Nombre</label>
             </p-floatLabel>
           </div>
@@ -90,6 +46,7 @@
                 formControlName="categoria"
                 [suggestions]="categoriasFiltradas"
                 (completeMethod)="buscarCategoria($event)"
+                (onSelect)="setCategoria($event.value, 0)"
                 optionLabel="nombre"
                 class="w-full"
                 inputStyleClass="w-full">
@@ -98,109 +55,67 @@
                   {{cat.nombre}}
                 </ng-template>
               </p-autocomplete>
-
               <label>Categoría</label>
             </p-floatLabel>
           </div>
 
-          <div class="field col-12">
-            <p-floatLabel>
-              <textarea 
-              pTextarea formControlName="descripcion"
-              rows="3" 
-              class="w-full"></textarea>
-              <label>Descripción</label>
-            </p-floatLabel>
-          </div>
+          <p-divider class="col-12 my-3"></p-divider>
+
+          <ng-container
+            *ngTemplateOutlet="camposInternos; context: { group: galaxias.at(0) }">
+          </ng-container>
+        </div>
+        </div>
+
+      } @else {
+
+        <div class="grid formgrid p-fluid">
 
           <div class="field col-12 md:col-6">
             <p-floatLabel>
-              <input 
-              pInputText formControlName="url" 
-              class="w-full"/>
-              <label>URL</label>
+              <input pInputText formControlName="nombreComun" class="w-full" />
+              <label>Nombre</label>
             </p-floatLabel>
           </div>
 
-          <div class="field col-12 md:col-6">
-            <p-floatLabel>
-              <input 
-              pInputText formControlName="textura" 
-              class="w-full"/>
-              <label>Textura</label>
-            </p-floatLabel>
-          </div>
+          <div class="col-12">
 
-          <div class="field col-12 md:col-6">
-            <p-floatLabel>
-              <input 
-              pInputText formControlName="color" 
-              class="w-full"/>
-              <label>Color</label>
-            </p-floatLabel>
-          </div>
+            <div formArrayName="galaxias">
 
-          <div class="field col-12 md:col-6">
-            <p-floatLabel>
-              <input 
-              pInputText formControlName="imagen" 
-              class="w-full"/>
-              <label>Imagen</label>
-            </p-floatLabel>
-          </div>
+              <p-tabs value="0">
 
-          <div class="field col-12">
-            <p-floatLabel>
-              <input 
-              pInputText formControlName="tema" 
-              class="w-full"/>
-              <label>Tema</label>
-            </p-floatLabel>
-          </div>
+                <p-tablist>
+                  <div class="flex align-items-center gap-3">
+                    @for (categoria of categorias; track categoria.id; let i = $index) {
+                      <p-tab [value]="i.toString()">
+                        {{ categoria.nombre }}
+                      </p-tab>
+                    }
+                  </div>
+                </p-tablist>
 
-          <div class="col-12 flex align-items-center gap-3">
-            <label>Estado</label>
-            <p-toggleswitch formControlName="estado"></p-toggleswitch>
-          </div>
+                <p-tabpanels>
 
-          <h4 class="col-12 mt-2 font-semibold">Posición</h4>
-          <div formGroupName="posicion" class="col-12 grid">
-            <div class="col-4">
-              <input type="number" pInputText formControlName="x" placeholder="X">
-            </div>
-            <div class="col-4">
-              <input type="number" pInputText formControlName="y" placeholder="Y">
-            </div>
-            <div class="col-4">
-              <input type="number" pInputText formControlName="z" placeholder="Z">
-            </div>
-          </div>
+                  @for (categoria of categorias; track categoria.id; let i = $index) {
 
-          <h4 class="col-12 mt-2 font-semibold">Rotación</h4>
-          <div formGroupName="rotacion" class="col-12 grid">
-            <div class="col-4">
-              <input type="number" pInputText formControlName="x" placeholder="X">
-            </div>
-            <div class="col-4">
-              <input type="number" pInputText formControlName="y" placeholder="Y">
-            </div>
-            <div class="col-4">
-              <input type="number" pInputText formControlName="z" placeholder="Z">
+                    <p-tabpanel [value]="i.toString()">
+
+                      <div [formGroupName]="i" class="grid formgrid p-fluid">
+
+                        <ng-container
+                          *ngTemplateOutlet="camposInternos; context: { group: galaxias.at(i) }">
+                        </ng-container>
+
+                      </div>
+                    </p-tabpanel>
+                  }
+                </p-tabpanels>
+              </p-tabs>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <p-button
-      *ngIf="galaxiaFormPresenter.Form.get('modo')?.value === 'multiple'"
-      type="button"
-      label="Agregar galaxia"
-      icon="pi pi-plus"
-      iconPos="right"
-      class="mb-3"
-      (click)="galaxiaFormPresenter.addGalaxia()">
-    </p-button>
+      }
+    
   </form>
 
   <ng-template pTemplate="footer">
@@ -225,3 +140,124 @@
     </div>
   </ng-template>
 </p-dialog>
+
+<ng-template #camposInternos let-group="group">
+
+  <div [formGroup]="group" class="grid formgrid p-fluid mt-2 row-gap-3">
+
+    <div class="flex justify-content-start align-items-center gap-2 mb-3 col-12">
+      <label>Estado:</label>
+      <p-toggleswitch formControlName="estado"></p-toggleswitch>
+    </div>
+
+    <div class="field mb-3 col-12">
+      <p-floatLabel>
+        <textarea pInputTextarea formControlName="descripcion" class="w-full"></textarea>
+        <label>Descripción</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="field mb-3 col-12 md:col-6">
+      <p-floatLabel>
+        <input pInputText formControlName="url" class="w-full"/>
+        <label>URL</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="field mb-3 col-12 md:col-6">
+      <p-floatLabel>
+        <input pInputText formControlName="textura" class="w-full"/>
+        <label>Textura</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="field mb-3 col-12 md:col-6">
+      <p-floatLabel>
+        <div class="color-input-wrapper">
+          <input
+            pInputText            
+            [value]="group.get('color')?.value"
+            (input)="onHexInput($event, group)"
+            class="w-full pr-8"/>
+
+          <p-colorpicker
+            formControlName="color"
+            format="hex"
+            appendTo="body"        
+            [style]="{
+              position: 'absolute',
+              right: '0.5rem',
+              top: '50%',
+              transform: 'translateY(-50%)'
+            }">
+          </p-colorpicker>
+        </div>
+        <label>Color</label>
+      </p-floatLabel>      
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <p-floatLabel>
+        <input pInputText formControlName="imagen" class="w-full"/>
+        <label>Imagen</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="field col-12">
+      <p-floatLabel>
+        <input pInputText formControlName="tema" class="w-full"/>
+        <label>Tema</label>
+      </p-floatLabel>
+    </div>
+
+    <div formGroupName="posicion" class="grid col-12 row-gap-4">
+      <div class="col-12 mb-2 font-semibold">Posición</div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="x" class="w-full"/>
+          <label>X</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="y" class="w-full"/>
+          <label>Y</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="z" class="w-full"/>
+          <label>Z</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div formGroupName="rotacion" class="grid col-12 row-gap-4">
+      <div class="col-12 mb-2 font-semibold">Rotación</div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="x" class="w-full"/>
+          <label>X</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="y" class="w-full"/>
+          <label>Y</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-4">
+        <p-floatLabel>
+          <input pInputText type="number" formControlName="z" class="w-full"/>
+          <label>Z</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </div>
+</ng-template>

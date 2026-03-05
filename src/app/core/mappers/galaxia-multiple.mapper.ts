@@ -1,7 +1,7 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { CreateGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
-export class GalaxiaMapper {
+export class GalaxiaMultipleMapper {
 
   private static mapGalaxiaGroupToDto(galaxiaGroup: FormGroup): CreateGalaxiaDto {
     const value = galaxiaGroup.value;
@@ -9,13 +9,13 @@ export class GalaxiaMapper {
     return {
       nombre: value.nombre,
       descripcion: value.descripcion,
-      imagen: value.imagen,              
+      imagen: value.imagen,
       url: value.url,
-      textura: value.textura,      
-      estado: value.estado,  
-      tema: value.tema,    
-      categoriaId: value.categoriaId,   
-      
+      textura: value.textura,
+      estado: value.estado,
+      tema: value.tema,
+      categoriaId: value.categoriaId,
+
       color: value.color,
       posicion: {
         x: Number(value.posicion?.x ?? 0),
@@ -31,10 +31,31 @@ export class GalaxiaMapper {
     };
   }
 
-  static formToCreateDto(form: FormGroup): CreateGalaxiaDto {
+  static formToCreateDto(form: FormGroup): CreateGalaxiaDto | null {
     const galaxiasArray = form.get('galaxias') as FormArray;
+    if (!galaxiasArray || galaxiasArray.length === 0) return null;
 
     const group = galaxiasArray.at(0) as FormGroup;
     return this.mapGalaxiaGroupToDto(group);
+  }
+
+  static formToCreateMultiplesDto(form: FormGroup): { galaxias: CreateGalaxiaDto[] } {
+    const galaxiasArray = form.get('galaxias') as FormArray;
+    const rootNombre = form.get('nombreComun')?.value ?? '';
+
+    if (!galaxiasArray) {
+      return { galaxias: [] };
+    }
+
+    return {
+      galaxias: galaxiasArray.controls.map(control => {
+        const dto = this.mapGalaxiaGroupToDto(control as FormGroup);
+
+        return {
+          ...dto,
+          nombre: rootNombre
+        };
+      })
+    };
   }
 }
