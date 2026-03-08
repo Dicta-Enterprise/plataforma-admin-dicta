@@ -1,0 +1,33 @@
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">PARAMETROS</div>
+  </div>
+  <p-accordion [value]="['0']">
+    <ng-container *ngFor="let parameter of (parametros$ | async); trackBy: trackByName">
+      <p-accordion-panel [value]="parameter.name">
+        <p-accordion-header>{{ parameter.name }}</p-accordion-header>
+        <p-accordion-content>
+          <p-button label="Agregar" severity="danger" (click)="showDialog()" />
+          <p-table [value]="parameter.parametrosData" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Valor</th>
+                <th>Código</th>
+                <th>Acciones</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-child>
+              <tr>
+                <td>{{ child.value }}</td>
+                <td>{{ child.code }}</td>
+                <p-toggleswitch [(ngModel)]="child.checked" (onChange)="onToggleChange($event, child)">
+                </p-toggleswitch>
+
+
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-accordion-content>
+      </p-accordion-panel>
+    </ng-container>
+  </p-accordion>

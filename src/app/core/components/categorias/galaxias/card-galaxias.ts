@@ -3,20 +3,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
+import { Categoria } from '@class/categoria/Categoria.class';
 
 @Component({
   selector: 'app-card-galaxias',
   imports: [CommonModule, ButtonModule, StyleClassModule],
   templateUrl: './card-galaxias.html',
   styleUrl: './card-galaxias.css',
+  
 })
 export class CardGalaxias {
   loader = 'assets/loaders/bottle-loader.gif';
+  
 
   @Input() galaxia: Galaxia = new Galaxia();
+  @Input() categorias: Categoria[] = [];
+
   @Output() eliminarEmit: EventEmitter<string> = new EventEmitter<string>();
   @Output() editarEmit: EventEmitter<string> = new EventEmitter<string>();
-
 
   eliminar(id: string) {
     this.eliminarEmit.emit(id);
@@ -24,5 +28,9 @@ export class CardGalaxias {
 
   editar(id: string) {
     this.editarEmit.emit(id);
+  }
+
+  getNombreCategoria(id: string): string {
+    return this.categorias.find(c => c.id === id)?.nombre ?? '';
   }
 }

@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   IGeneric,
 } from '@interfaces/genericas/IGeneric.interface';
-import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
+import { CreateGalaxiaDto, CreateMultipleGalaxiasDto, IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -37,12 +37,19 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
       .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
   }
 
-  crearGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {
+  crearGalaxiaService(galaxia: CreateGalaxiaDto): Observable<Galaxia> {
     const direccion = `${this.apiUrl}/galaxias`;
 
     return this.http
       .post<IGeneric<Galaxia>>(direccion, galaxia)
       .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
+  }
+
+  crearMultiplesGalaxiasService(dto: CreateMultipleGalaxiasDto): Observable<Galaxia[]> {
+
+    const direccion = `${this.apiUrl}/galaxias/multiple`;
+
+    return this.http.post<Galaxia[]>(direccion, dto);
   }
 
   editarGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {
