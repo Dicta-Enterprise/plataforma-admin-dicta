@@ -6,7 +6,6 @@ export class Galaxia {
   descripcion: string;
   color: string;
   estado: boolean;
-  categoria:string;
   categoriaId: string;
 
   tema: string;
@@ -26,7 +25,7 @@ export class Galaxia {
     this.descripcion = galaxia.descripcion ?? '';
     this.color = galaxia.color ?? '';
     this.estado = galaxia.estado ?? true;
-    this.categoria = galaxia.categoria ?? '';
+    
     this.categoriaId = galaxia.categoriaId ?? '';
     this.tema = galaxia.tema ?? '';
     this.imagen = galaxia.imagen ?? '';
@@ -52,14 +51,13 @@ export class Galaxia {
     return {
       nombre: galaxia.nombre,
       descripcion: galaxia.descripcion,
-      color: galaxia.color,
-      estado: galaxia.estado,
-      categoria:galaxia.categoria,
-      categoriaId: galaxia.categoriaId,
-      tema: galaxia.tema,
       imagen: galaxia.imagen,
       url: galaxia.url,
       textura: galaxia.textura,
+      estado: galaxia.estado,
+      tema: galaxia.tema,
+      categoriaId: galaxia.categoriaId,
+      color: galaxia.color,           
       posicion: galaxia.posicion,
       rotacion: galaxia.rotacion,
     };

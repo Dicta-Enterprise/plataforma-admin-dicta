@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { LocalStateService } from '@class/state/local-state.class';
 import { StepPresenter } from 'src/app/core/helpers/step.presenter';
+import { Categoria } from '@class/categoria/Categoria.class';
 
 @Injectable({
   providedIn: 'root',
@@ -19,32 +20,24 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
 
   public createForm(): void {
     this.form = this.fb.group({
-
-      modo:['single'],
-      nombreGlobal:[''],
-      descripcionGlobal:[''],
+      
+      multiple: [false],
+      nombreComun: [''],
       galaxias:this.fb.array([])
 
     });
 
     this.galaxias = this.form.get('galaxias') as FormArray;
     this.addGalaxia();
-    this.form.get('modo')?.valueChanges.subscribe(modo=>{
-
-      this.galaxias.clear();
-      if(modo==='single'){
-        this.addGalaxia();
-      }
-    });
   }
 
   private createGalaxiaGroup(): FormGroup {
-    return this.fb.group({
+    const group = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
       imagen: ['', Validators.required],
       estado: [true],
-      color: ['', Validators.required],
+      color: ['#989898', Validators.required],
       categoria: ['', Validators.required],
       categoriaId: ['', Validators.required],
       tema: [''],
@@ -63,6 +56,22 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
         z: [0],
       }),
     });
+
+    const colorControl = group.get('color');
+
+    colorControl?.valueChanges.subscribe(value => {
+      if (!value) return;
+
+      const upper = value.toUpperCase();
+
+      if (value !== upper) {
+        colorControl.setValue(upper, { emitEvent: false });
+      }
+
+      colorControl.updateValueAndValidity({ emitEvent: false });
+    });
+
+    return group;
   }
 
   public addGalaxia(): void {
@@ -79,5 +88,28 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
 
   public getGalaxiasValue() {
     return this.form.value.galaxias;
+  }
+
+  public activarMultiples(categorias: Categoria[]): void {
+    this.galaxias.clear();
+
+    categorias.forEach(cat => {
+      const group = this.createGalaxiaGroup();
+      
+      group.patchValue({
+        categoriaId: String(cat.id),
+        categoria: cat.nombre ?? null,
+      });
+
+      group.get('nombre')?.clearValidators();
+      group.get('nombre')?.updateValueAndValidity();
+
+      this.galaxias.push(group);
+    });
+  }
+
+  public activarSimple(): void {
+    this.galaxias.clear();
+    this.addGalaxia();
   }
 }

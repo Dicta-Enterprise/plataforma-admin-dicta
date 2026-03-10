@@ -16,11 +16,44 @@
     padding: 0.75rem;
     border-radius: 6px;
     width: 100%;
+    box-sizing: border-box;
+  }
+
+  .p-autocomplete,
+  .p-autocomplete-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .p-autocomplete-input {
+    padding: 0.75rem;
+    border-radius: 6px;
   }
 
   .p-float-label {
     display: block;
   }
+
+  .color-input-wrapper {
+    position: relative;
+  }
+
+  .color-input-wrapper input {
+    pointer-events: none;
+  }
+
+  .color-input-wrapper p-colorpicker {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+  }
+
+  .color-input-wrapper .p-colorpicker-preview {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 4px;
+  } 
 }
 
 
