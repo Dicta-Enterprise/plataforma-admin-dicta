@@ -30,10 +30,9 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
   private crearPlaneta(categoria: string): FormGroup {
     return this.fb.group({        
       datos: this.fb.group({
-        categoria: new FormControl(categoria, [Validators.required]),
-        galaxiaId: new FormControl('', Validators.required),
+        categoria: new FormControl(categoria, [Validators.required]),        
         resumenCurso: new FormControl('', [Validators.required]),
-        imagen: new FormControl('', [Validators.required]),
+        imagenResumen: new FormControl('', [Validators.required]),
         estado: new FormControl(true),
         textura: new FormControl('', [Validators.required]),
         url: new FormControl('', [Validators.required]),

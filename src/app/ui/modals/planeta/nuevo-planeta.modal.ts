@@ -39,7 +39,7 @@ import { CUSTOM_PLANETA_PROVIDER } from 'src/app/core/providers/planeta.provider
     FieldsetModule,
     AutoComplete,
   ],
-  providers: [CUSTOM_PLANETA_PROVIDER,PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService],
+  providers: [CUSTOM_PLANETA_PROVIDER, PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService],
   
   templateUrl: './nuevo-planeta.modal.html',
 })
@@ -55,7 +55,6 @@ export class NuevoPlaneta implements OnInit {
     private readonly planetaFacade: PlanetaFacade,
     public readonly planetaFormPresenter: PlanetaFormPresenter,
     private galaxiaService: GalaxiaService,
-    private planetaService: PlanetaService,
   ) {}
 
   ngOnInit(): void {
@@ -64,10 +63,6 @@ export class NuevoPlaneta implements OnInit {
     this.galaxiaService.listarGalaxias().subscribe(res=>{
       this.galaxias = res;
     });
-  }
-
-  get form() {
-    return this.planetaFormPresenter.Form;
   }
   
   get planetas() {
@@ -87,32 +82,28 @@ export class NuevoPlaneta implements OnInit {
   }
 
   guardarPlaneta() {    
-    const dtos = PlanetaMapper.formToCreateDtos(this.form);
+    this.planetaFormPresenter.Form.markAllAsTouched();
 
-    console.log('json del mapper:', dtos);
-    console.log('form válido:', this.form.valid);
-    console.log('DTO enviado:', JSON.stringify(dtos, null, 2));
+    if (this.planetaFormPresenter.Form.invalid) {
+      console.warn('Formulario inválido');
+      return;
+    }
+    
+    this.planetaFacade.guardarMultiplesPlanetas(
+      PlanetaMapper.guardarPlanetasMultiples(this.planetaFormPresenter.Form)
+    );
 
-    //dtos.forEach(dto => {
-    //  this.planetaService.guardarPlaneta(dto).subscribe({
-    //    next: resp => console.log('Planeta guardado:', resp),
-    //    error: err => {
-    //      console.error('Error completo:', err);
-    //      console.error('Mensaje backend:', err.error?.message);
-    //    }
-    //  });
-    //});
+    this.close();
       
   }
 
   actualizarPlaneta() {
-    const dtos = PlanetaMapper.formToCreateDtos(this.form);
+    const dtos = PlanetaMapper.formToCreateDtos(this.planetaFormPresenter.Form);
     const nuevoPlaneta = dtos.length ? dtos[0] : null;
 
     if (!nuevoPlaneta) return;
     const planetaInst = Planeta.fromJson(nuevoPlaneta as unknown);
     this.planetaFacade.actualizarPlaneta(planetaInst);
-
   }
 
   buscarGalaxia(event: AutoCompleteCompleteEvent): void {

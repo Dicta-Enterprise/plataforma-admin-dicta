@@ -6,7 +6,7 @@ export class Planeta {
   nombre: string;
   categoria: string;
   resumenCurso: string;
-  imagen: string;
+  imagenResumen: string;
   estado: string;
   galaxiaId: string;
   galaxia: string;  
@@ -21,7 +21,7 @@ export class Planeta {
     this.nombre = planeta.nombre ?? '';
     this.categoria = planeta.categoria ?? '';
     this.resumenCurso = planeta.resumenCurso ?? '';
-    this.imagen = planeta.imagen ?? '';
+    this.imagenResumen = planeta.imagenResumen ?? '';
     this.estado = planeta.estado ?? 'ACTIVO';
     this.galaxiaId = planeta.galaxiaId ?? '';
     this.galaxia = planeta.galaxia ?? '';  
@@ -38,12 +38,12 @@ export class Planeta {
     return new Planeta({
       id: casted['id'] as string,
       nombre: casted['nombre'] as string,
-      categoria: casted['grupo'] as string,
+      categoria: casted['categoria'] as string,
       resumenCurso: casted['resumenCurso'] as string,
-      imagen: casted['imagenResumen'] as string,
+      imagenResumen: casted['imagenResumen'] as string,
       estado: casted['estado'] as string,
       galaxiaId: casted['galaxiaId'] as string,
-      galaxia: casted['tema'] as string,
+      galaxia: casted['galaxia'] as string,
       textura: casted['textura'] as string,
       url: casted['url'] as string,
       info: casted['info'] as InfoPlaneta,
@@ -56,12 +56,12 @@ export class Planeta {
     return {
       id: planeta.id,
       nombre: planeta.nombre,
-      grupo: planeta.categoria,
+      categoria: planeta.categoria,
       resumenCurso: planeta.resumenCurso,
-      imagenResumen: planeta.imagen,
+      imagenResumen: planeta.imagenResumen,
       estado: planeta.estado,
       galaxiaId: planeta.galaxiaId,      
-      tema: planeta.galaxia,
+      galaxia: planeta.galaxia,
       textura: planeta.textura,
       url: planeta.url,
       info: planeta.info,

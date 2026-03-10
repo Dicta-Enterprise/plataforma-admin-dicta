@@ -1,11 +1,10 @@
 import { FormArray, FormGroup } from '@angular/forms';
-import { CreatePlanetaDto } from '@interfaces/interfaces';
+import { CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfaces';
 import { Planeta } from '@class/planetas/Planeta.class';
-import { Categoria } from '@class/categoria/Categoria.class';
 
 export class PlanetaMapper {
 
-  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null) {
+  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null): CreatePlanetaDto {
     const datos = planetaGroup.get('datos')?.value;
     const info = planetaGroup.get('info')?.value;
     const peligros = planetaGroup.get('peligros')?.value ?? [];
@@ -13,27 +12,44 @@ export class PlanetaMapper {
 
     return {      
       nombre: rootNombre ?? '',
-      categoria: datos.categoria ?? '', 
+      categoria: datos.categoria, 
       galaxia: typeof datos.galaxia === 'object'
         ? datos.galaxia.nombre
         : datos.galaxia,
-      textura: datos.textura ?? '',
-      url: datos.url ?? '',
-      imagenResumen: datos.imagen ?? '',
-      resumenCurso: datos.resumenCurso ?? '',
-      estado: datos.estado === false ? 'INACTIVO' : 'ACTIVO',
       galaxiaId: typeof datos.galaxia === 'object'
         ? datos.galaxia.id
-        : datos.galaxia,
+        : datos.galaxiaId,
+      textura: datos.textura ?? '',
+      url: datos.url ?? '',
+      imagenResumen: datos.imagenResumen ?? '',
+      resumenCurso: datos.resumenCurso ?? '',
+      estado: datos.estado === false ? 'INACTIVO' : 'ACTIVO',      
       info,
       peligros,
       beneficios
     };
   }
 
-  static formToCreateDtos(form: FormGroup): any[] {
+  static domainToCreateDto(planeta: Planeta): CreatePlanetaDto {
+    return {
+      nombre: planeta.nombre,
+      categoria: planeta.categoria,
+      galaxia: planeta.galaxia,
+      galaxiaId: planeta.galaxiaId,
+      textura: planeta.textura,
+      url: planeta.url,
+      imagenResumen: planeta.imagenResumen,
+      resumenCurso: planeta.resumenCurso,
+      estado: planeta.estado,
+      info: planeta.info,
+      peligros: planeta.peligros,
+      beneficios: planeta.beneficios
+    };
+  } 
+
+  static formToCreateDtos(form: FormGroup): CreatePlanetaDto[] {
     const rootNombre = form.get('nombre')?.value ?? '';
-    const planetasArray = form.get('planetas') as FormArray | null;
+    const planetasArray = form.get('planetas') as FormArray;
 
     if (!planetasArray) return [];
 
@@ -41,21 +57,10 @@ export class PlanetaMapper {
       PlanetaMapper.mapPlanetaGroupToDto(fg as FormGroup, rootNombre)
     );
   }
-
-  static domainToCreateDto(planeta: Planeta): any {
+  
+  static guardarPlanetasMultiples(form: FormGroup): CreateMultiplesPlanetaDto {
     return {
-      nombre: planeta.nombre,
-      categoria: planeta.categoria,
-      resumenCurso: planeta.resumenCurso,
-      imagenResumen: planeta.imagen,
-      estado: planeta.estado,
-      galaxiaId: planeta.galaxiaId,
-      galaxia: planeta.galaxia,
-      textura: planeta.textura,
-      url: planeta.url,
-      info: planeta.info,
-      peligros: planeta.peligros,
-      beneficios: planeta.beneficios
+      planetas: this.formToCreateDtos(form)
     };
   }
 }
