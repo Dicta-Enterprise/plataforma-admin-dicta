@@ -8,6 +8,7 @@ import {
   IGeneric,
   IGenericArrays,
 } from '@interfaces/genericas/IGeneric.interface';
+import { IPlanetaDto, CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +22,10 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
 
     return this.http
-      .get<IGenericArrays<Planeta[]>>(direccion)
+      .get<IGenericArrays<IPlanetaDto>>(direccion)
       .pipe(
-        map((response: IGenericArrays<Planeta[]>) =>
-          response.data._value.map((planeta) => Planeta.fromJson(planeta))
+        map((response: IGenericArrays<IPlanetaDto>) =>
+          response.data._value.map((dto: IPlanetaDto) => Planeta.fromJson(dto))
         )
       );
   }
@@ -34,15 +35,17 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
 
     return this.http
       .get<IGeneric<Planeta>>(direccion, { params: { planetaId } })
-      .pipe(map((response: IGeneric<Planeta>) => response.data._value));
+      .pipe(map((response: IGeneric<IPlanetaDto>) => Planeta.fromJson(response.data._value)));
   }
 
-  crearPlanetaService(planeta: Planeta): Observable<Planeta> {
+  crearPlanetaService(dto: CreatePlanetaDto): Observable<Planeta> {
     const direccion = `${this.apiUrl}/planetas`;
+    return this.http.post<Planeta>(direccion, dto);
+  }
 
-    return this.http
-      .post<IGeneric<Planeta>>(direccion, planeta)
-      .pipe(map((response: IGeneric<Planeta>) => response.data._value));
+  crearMultiplesPlanetasService(dto: CreateMultiplesPlanetaDto): Observable<Planeta[]> {
+    const url = `${this.apiUrl}/planetas/multiples`;
+    return this.http.post<Planeta[]>(url, dto);
   }
 
   editarPlanetaService(planeta: Planeta): Observable<Planeta> {

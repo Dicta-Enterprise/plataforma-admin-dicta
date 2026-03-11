@@ -3,11 +3,13 @@ import { NuevaCategoria } from 'src/app/ui/modals/categoria/nueva-categoria.moda
 import { UserModalComponent } from 'src/app/ui/modals/user.modal.component';
 import { ImagenPlaneta } from 'src/app/ui/modals/planeta/imagen-planeta.modal';
 import { NuevaGalaxia } from 'src/app/ui/modals/galaxia/nueva-galaxia.modal';
+import { NuevoPlaneta } from 'src/app/ui/modals/planeta/nuevo-planeta.modal';
 
 
 export const MODAL_REGISTRY: Record<string, Type<object>> = {
   user: UserModalComponent,
   nuevaCategoria:NuevaCategoria,
   imagenPlaneta: ImagenPlaneta,
+  nuevoPlaneta: NuevoPlaneta,
   nuevaGalaxia: NuevaGalaxia,
 };

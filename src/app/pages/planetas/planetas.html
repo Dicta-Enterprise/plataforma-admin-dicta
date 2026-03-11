@@ -8,14 +8,15 @@
   </div>
   <div>
     <button
-      type="button"
-      pButton
-      icon="pi pi-plus"
-      class="p-button-outlined p-button-secondary w-7rem p-2"
-      iconPos="right"
-      label="Nuevo planeta"
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        class="p-button-outlined p-button-secondary w-7rem p-2"
+        iconPos="right"
+        label="Nuevo planeta"
+        (click)="nuevoPlaneta()"
     ></button>
-  </div>
+  </div>  
 </div>
 <p class="text-600 text-xl">
   Descripción
@@ -116,25 +117,28 @@
                 {{ planeta.galaxia | formatoTexto }}
             </td>
             <td>
-                <ng-container [ngSwitch]="planeta.estado">
-                    <p-tag
-                    *ngSwitchCase="'ACTIVO'"
-                    value="ACTIVO"
-                    severity="success">
-                    </p-tag>
+                @switch (planeta.estado) {
+                    @case ('ACTIVO') {
+                        <p-tag
+                        value="ACTIVO"
+                        severity="success">
+                        </p-tag>
+                    }
 
-                    <p-tag
-                    *ngSwitchCase="'INACTIVO'"
-                    value="INACTIVO"
-                    severity="danger">
-                    </p-tag>
+                    @case ('INACTIVO') {
+                        <p-tag
+                        value="INACTIVO"
+                        severity="danger">
+                        </p-tag>
+                    }       
 
-                    <p-tag
-                    *ngSwitchDefault
-                    value="DESCONOCIDO"
-                    severity="contrast">
-                    </p-tag>
-                </ng-container>
+                    @default {
+                        <p-tag
+                        value="DESCONOCIDO"
+                        severity="contrast">
+                        </p-tag>
+                    }
+                }
             </td>
             <td class="text-center">
                 <button
