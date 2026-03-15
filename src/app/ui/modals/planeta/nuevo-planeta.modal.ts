@@ -18,8 +18,8 @@ import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { TabsModule } from 'primeng/tabs';
 import { FieldsetModule } from 'primeng/fieldset';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { CUSTOM_PLANETA_PROVIDER } from 'src/app/core/providers/planeta.provider';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-nuevo-planeta',
@@ -37,7 +37,7 @@ import { CUSTOM_PLANETA_PROVIDER } from 'src/app/core/providers/planeta.provider
     FloatLabelModule,
     TabsModule,
     FieldsetModule,
-    AutoComplete,
+    SelectModule
   ],
   providers: [CUSTOM_PLANETA_PROVIDER, PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService],
   
@@ -104,15 +104,6 @@ export class NuevoPlaneta implements OnInit {
     if (!nuevoPlaneta) return;
     const planetaInst = Planeta.fromJson(nuevoPlaneta as unknown);
     this.planetaFacade.actualizarPlaneta(planetaInst);
-  }
-
-  buscarGalaxia(event: AutoCompleteCompleteEvent): void {
-    const query = (event.query || '').toLowerCase();
-
-    this.galaxiasFiltradas = this.galaxias.filter((g: Galaxia) =>
-      g.nombre.toLowerCase().includes(query)
-    );  
-
   }
 
   close() {

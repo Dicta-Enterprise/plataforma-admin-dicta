@@ -70,10 +70,9 @@
                           <div formGroupName="datos" class="grid formgrid p-fluid row-gap-2 pt-3">                                                 
                             <div class="field col-12 md:col-6">
                               <p-floatLabel>
-                                <p-autocomplete
+                                <p-select
                                   formControlName="galaxia"
-                                  [suggestions]="galaxiasFiltradas"
-                                  (completeMethod)="buscarGalaxia($event)"
+                                  [options]="galaxias"
                                   optionLabel="nombre"
                                   class="w-full"
                                   inputStyleClass="w-full">
@@ -83,7 +82,7 @@
                                       <div>{{ galaxia.nombre }}</div>                                      
                                     </div>
                                   </ng-template>
-                                </p-autocomplete>
+                                </p-select>
                                 <label>Galaxia</label>
                               </p-floatLabel>
                             </div>
