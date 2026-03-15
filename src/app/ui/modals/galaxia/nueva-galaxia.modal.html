@@ -133,7 +133,7 @@
         iconPos="right"
         (onClick)="guardarGalaxia()"
         severity="success"
-        
+        [disabled]="!galaxiaFormPresenter.Form.valid"
       />
     </div>
   </ng-template>
