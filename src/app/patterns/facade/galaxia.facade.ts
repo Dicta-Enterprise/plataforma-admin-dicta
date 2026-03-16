@@ -42,4 +42,16 @@ export class GalaxiaFacade {
       .actualizarGalaxia(galaxia)
       .subscribe((galaxia) => this.galaxia$.next(galaxia));
   }
+
+  eliminarGalaxia(id: string) {
+    this.galaxiaService.eliminarGalaxia(id).subscribe({
+      next: () => {
+        this.listarGalaxias();
+      },
+      error: (err) => {
+        console.error('Error eliminando galaxia', err?.error || err);
+      },
+    });
+  }
+
 }
