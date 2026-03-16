@@ -92,7 +92,10 @@ export class Galaxias implements OnInit, OnDestroy {
   }  
 
   eliminar(id: string) {
-    console.log(id);
+    const ok = confirm('¿Eliminar galaxia?');
+    if (!ok) return;
+
+    this.galaxiaFacade.eliminarGalaxia(id);
   }
 
   editar(id: string) {

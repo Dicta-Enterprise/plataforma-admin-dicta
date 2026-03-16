@@ -53,22 +53,24 @@
       </div>
     </ng-template>
   </p-multiSelect>
-  <p-toggleButton
+  <p-togglebutton
     [(ngModel)]="activos"
     onLabel="Activos"
     offLabel="Activos"
-    onIcon="pi pi-check"
+    onIcon="'pi pi-check'"
     offIcon="pi pi-times"
     class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-12rem"
-  ></p-toggleButton>
+  ></p-togglebutton>
   <p-toggleButton
     [(ngModel)]="inactivos"
     onLabel="Inactivos"
     offLabel="Inactivos"
-    onIcon="pi pi-check"
+    onIcon="'pi pi-check'"
     offIcon="pi pi-times"
     class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"
+    
   ></p-toggleButton>
+  
   <a
     pRipple
     tabindex="0"
