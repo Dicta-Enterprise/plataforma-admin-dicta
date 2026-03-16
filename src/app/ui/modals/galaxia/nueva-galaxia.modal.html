@@ -42,11 +42,9 @@
 
           <div class="field col-12 md:col-6">
             <p-floatLabel>
-              <p-autocomplete
+              <p-select
                 formControlName="categoria"
-                [suggestions]="categoriasFiltradas"
-                (completeMethod)="buscarCategoria($event)"
-                (onSelect)="setCategoria($event.value, 0)"
+                [options]="categorias"
                 optionLabel="nombre"
                 class="w-full"
                 inputStyleClass="w-full">
@@ -54,7 +52,7 @@
                 <ng-template let-cat pTemplate="item">
                   {{cat.nombre}}
                 </ng-template>
-              </p-autocomplete>
+              </p-select>
               <label>Categoría</label>
             </p-floatLabel>
           </div>

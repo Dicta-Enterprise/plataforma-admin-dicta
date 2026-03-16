@@ -17,7 +17,6 @@ import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { TabsModule } from 'primeng/tabs';
 import { FieldsetModule } from 'primeng/fieldset';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
-import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { CUSTOM_GALAXIA_PROVIDER } from 'src/app/core/providers/galaxia.provider';
 import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
@@ -25,6 +24,7 @@ import { Categoria } from '@class/categoria/Categoria.class';
 import { Divider } from 'primeng/divider';
 import { ColorPicker} from 'primeng/colorpicker';
 import { FormGroup } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-nueva-galaxia',
@@ -42,9 +42,9 @@ import { FormGroup } from '@angular/forms';
     FloatLabelModule,
     TabsModule,
     FieldsetModule,
-    AutoComplete,
     Divider,
     ColorPicker,
+    SelectModule
   ],
   providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, CategoriaService],  
   templateUrl: './nueva-galaxia.modal.html',
@@ -56,7 +56,6 @@ export class NuevaGalaxia implements OnInit {
   activeTab = '';
 
   categorias: Categoria[] = [];
-  categoriasFiltradas: Categoria[] = [];
 
   constructor(
     private modalService: ModalService,
@@ -138,20 +137,6 @@ export class NuevaGalaxia implements OnInit {
     this.galaxiaFacade.actualizarGalaxia(galaxiaInst);  
   }
 
-  buscarCategoria(event:AutoCompleteCompleteEvent){
-    const q=event.query.toLowerCase();
-
-    this.categoriasFiltradas = this.categorias.filter(c =>
-      c.nombre.toLowerCase().includes(q)
-    );
-  }
-
-  setCategoria(cat:Categoria,index:number){
-    this.galaxiaFormPresenter.galaxias.at(index).patchValue({
-      categoriaId: cat.id,
-      categoria: cat.nombre
-    });
-  }
 
   close() {
     this.visible = false;
