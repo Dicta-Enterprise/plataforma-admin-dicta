@@ -23,36 +23,19 @@
   ves la misma galaxia en los diferentes filtros
 </p>
 <p-divider class="w-full"></p-divider>
-<div class="grid grid-nogutter align-items-center">
+<div class="flex flex-wrap gap-3 align-items-center">
   <p-multiSelect
     [options]="categorias"
     [(ngModel)]="categoriaSelected"
     placeholder="Categoria"
     optionLabel="nombre"
-    class="w-full"
     [maxSelectedLabels]="2"
     selectedItemsLabel="{0} categorias seleccionados"
-    class="flex-auto lg:flex-1 mb-3 lg:mt-0 w-full mr-0 lg:mr-4 text-900"
+    class="w-30rem mb-3 text-900"
+    appendTo="body"
+    (onChange)="filtrarGalaxias(galaxias$.value)"
   ></p-multiSelect>
-  <p-multiSelect
-    [options]="colors"
-    [(ngModel)]="colorSelected"
-    placeholder="Color"
-    optionLabel="nombre"
-    class="w-full"
-    [maxSelectedLabels]="2"
-    selectedItemsLabel="{0} Colores Seleccionados"
-    class="flex-auto lg:flex-1 mb-3 lg:mt-0 w-full mr-0 lg:mr-4 text-900"
-  >
-    <ng-template let-color pTemplate="item">
-      <div class="flex align-items-center">
-        <div
-          class="w-2rem h-2rem border-circle {{color.class}} cursor-pointer border-none"
-        ></div>
-        <div class="text-900 ml-2">{{color.name}}</div>
-      </div>
-    </ng-template>
-  </p-multiSelect>
+  
   <p-togglebutton
     [(ngModel)]="activos"
     onLabel="Activos"
@@ -67,8 +50,7 @@
     offLabel="Inactivos"
     onIcon="'pi pi-check'"
     offIcon="pi pi-times"
-    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"
-    
+    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"    
   ></p-toggleButton>
   
   <a
@@ -80,7 +62,7 @@
 
   <div class="surface-ground">
     <div class="grid">
-      @for (galaxia of (galaxias$ | async); track galaxia.id) {
+      @for (galaxia of (galaxiasFiltradas$ | async); track galaxia.id) {
       <div class="col-12 md:col-6 xl:col-3 p-3">
         <app-card-galaxias
           [galaxia]="galaxia"
