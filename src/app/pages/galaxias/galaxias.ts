@@ -115,7 +115,7 @@ export class Galaxias implements OnInit, OnDestroy {
     const idsSeleccionados = this.categoriaSelected.map(c => c.id);
 
     const filtradas = galaxias.filter(g =>
-      idsSeleccionados.includes(g.categoriaId) // 👈 ajusta esto según tu modelo
+      idsSeleccionados.includes(g.categoriaId)
     );
 
     this.galaxiasFiltradas$.next(filtradas);
