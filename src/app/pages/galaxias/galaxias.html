@@ -23,7 +23,7 @@
   ves la misma galaxia en los diferentes filtros
 </p>
 <p-divider class="w-full"></p-divider>
-<div class="flex flex-wrap gap-3 align-items-center">
+<div class="flex flex-wrap gap-3 align-items-center mb-4">
   <p-multiSelect
     [options]="categorias"
     [(ngModel)]="categoriaSelected"
@@ -59,23 +59,23 @@
     class="cursor-pointer flex align-items-center mb-3 lg:mt-0 text-900"
     >Limpiar Todo</a
   >
+</div>
 
-  <div class="surface-ground">
-    <div class="grid">
-      @for (galaxia of (galaxiasFiltradas$ | async); track galaxia.id) {
-      <div class="col-12 md:col-6 xl:col-3 p-3">
-        <app-card-galaxias
-          [galaxia]="galaxia"
-          [categorias]="categorias"
-          (eliminarEmit)="eliminar($event)"
-          (editarEmit)="editar($event)"
-        ></app-card-galaxias>
-      </div>
-      } @empty {
-      <div class="col-12 text-center text-gray-500">
-        No hay categorías disponibles
-      </div>
-      }
+<div class="surface-ground">
+  <div class="grid">
+    @for (galaxia of (galaxiasFiltradas$ | async); track galaxia.id) {
+    <div class="col-12 md:col-6 xl:col-3 p-3">
+      <app-card-galaxias
+        [galaxia]="galaxia"
+        [categorias]="categorias"
+        (eliminarEmit)="eliminar($event)"
+        (editarEmit)="editar($event)"
+      ></app-card-galaxias>
     </div>
+    } @empty {
+    <div class="col-12 text-center text-gray-500">
+      No hay categorías disponibles
+    </div>
+    }
   </div>
 </div>
