@@ -57,10 +57,10 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
   }
 
   eliminarPlanetaService(planetaId: string): Observable<Planeta> {
-    const direccion = `${this.apiUrl}/planetas`;
+    const direccion = `${this.apiUrl}/planetas/${planetaId}`;
 
     return this.http
-      .delete<IGeneric<Planeta>>(direccion, { params: { planetaId } })
-      .pipe(map((response: IGeneric<Planeta>) => response.data._value));
+      .delete<IGeneric<Planeta>>(direccion)
+      .pipe(map((response) => Planeta.fromJson(response.data._value)));
   }
 }

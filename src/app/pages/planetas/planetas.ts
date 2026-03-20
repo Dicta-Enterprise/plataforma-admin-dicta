@@ -83,7 +83,10 @@ export class Planetas implements OnInit, OnDestroy {
     });
   }
 
-  eliminar(id: string): void {
-    console.log('Eliminar:', id);
+  eliminarPlaneta(planeta: Planeta): void {
+    const ok = confirm(`¿Eliminar planeta "${ planeta.nombre }"?`);
+    if (!ok) return;
+
+    this.planetaFacade.eliminarPlaneta(planeta.id);
   }
 }
