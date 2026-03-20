@@ -48,12 +48,10 @@ import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repos
   templateUrl: './galaxias.html',
   styleUrl: './galaxias.css',
 })
-export class Galaxias implements OnInit, OnDestroy {
-  colors: Estandar[] = [];
+export class Galaxias implements OnInit, OnDestroy { 
   categorias: Categoria[]=[];
 
-  categoriaSelected: Estandar = new Estandar();
-  colorSelected: Estandar = new Estandar();
+  categoriaSelected: Categoria[] = [];
 
   activos = false;
   inactivos = false;
@@ -62,6 +60,8 @@ export class Galaxias implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   galaxias$ = new BehaviorSubject<Galaxia[]>([]);
+
+  galaxiasFiltradas$ = new BehaviorSubject<Galaxia[]>([]);
 
   constructor(
     private readonly galaxiaFacade: GalaxiaFacade,     
@@ -75,6 +75,10 @@ export class Galaxias implements OnInit, OnDestroy {
     this.galaxiaFacade.listarGalaxias();
     this.categoriaService.listarCategorias().subscribe(res => {
       this.categorias = res;
+    });
+
+    this.galaxias$.subscribe(galaxias => {
+      this.filtrarGalaxias(galaxias);
     });
   }
 
@@ -100,5 +104,20 @@ export class Galaxias implements OnInit, OnDestroy {
 
   editar(id: string) {
     console.log(id);
+  }
+
+  filtrarGalaxias(galaxias: Galaxia[]) {
+    if (!this.categoriaSelected || this.categoriaSelected.length === 0) {
+      this.galaxiasFiltradas$.next(galaxias);
+      return;
+    }
+
+    const idsSeleccionados = this.categoriaSelected.map(c => c.id);
+
+    const filtradas = galaxias.filter(g =>
+      idsSeleccionados.includes(g.categoriaId)
+    );
+
+    this.galaxiasFiltradas$.next(filtradas);
   }
 }
