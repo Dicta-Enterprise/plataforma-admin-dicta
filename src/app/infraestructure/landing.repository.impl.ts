@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environments/environment';
-import { Landing } from '@class/landing/Landing.class';
+import { Landing, LandingPayload } from '@class/landing/Landing.class';
 import { LandingRepository } from 'src/app/repositories/landing.repository';
 import { IGeneric} from '@interfaces/genericas/IGeneric.interface';
 
@@ -55,20 +55,20 @@ export class LandingRepositoryImpl implements LandingRepository {
       .pipe(map((response) => Landing.fromJson(response.data._value)));
   }
 
-  crearLandingService(landing: Landing): Observable<Landing> {
-    const direccion = `${this.apiUrl}/landing-page`;
+  crearLandingService(landing: LandingPayload): Observable<Landing> {
+    const direccion = `${this.apiUrl}/landing-page`;   
 
     return this.http
-      .post<IGeneric<Landing>>(direccion, Landing.toJson(landing))
-      .pipe(map((response) => Landing.fromJson(response.data._value)));
+      .post<IGeneric<Landing>>(direccion, landing)
+      .pipe(map((response) => Landing.fromJson(response)));
   }
 
-  editarLandingService(landing: Landing): Observable<Landing> {
-    const direccion = `${this.apiUrl}/landing-page/${landing.id}`;
+  editarLandingService(landingId: string, landing: LandingPayload): Observable<Landing> {
+    const direccion = `${this.apiUrl}/landing-page/${landingId}`;
 
     return this.http
-      .patch<IGeneric<Landing>>(direccion, Landing.toJson(landing))
-      .pipe(map((response) => Landing.fromJson(response.data._value)));
+      .patch<IGeneric<Landing>>(direccion, landing)
+      .pipe(map((response) => Landing.fromJson(response)));
   }
 
 
@@ -77,8 +77,7 @@ export class LandingRepositoryImpl implements LandingRepository {
 
     return this.http
       .delete<IGeneric<Landing>>(direccion)
-      .pipe(map((response) => Landing.fromJson(response.data._value)));
-  }
-
+      .pipe(map((response: IGeneric<Landing>) => Landing.fromJson(response)));
+  } 
 
 }

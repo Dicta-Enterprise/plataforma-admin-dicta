@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
@@ -20,6 +21,8 @@ import { LandingService } from 'src/app/core/services/landing/landing.service';
     InputTextModule,
     ButtonModule,
     ToggleSwitchModule,
+    InputTextModule,
+    TextareaModule
     
   ],
   providers: [LandingFacade, LandingService],
@@ -83,9 +86,8 @@ export class NuevaLanding implements OnInit {
       .filter(Boolean)
       .map((color) => ({ color }));
 
-    const payload = new Landing({
+    const landing = new Landing({
       ...this.model,
-      id: this.model.id,
       titulo: (this.model.titulo || '').trim(),
       descripcion: (this.model.descripcion || '').trim(),
       slug: (this.model.slug || '').trim().toLowerCase().replace(/\s+/g, '-'),
@@ -98,6 +100,8 @@ export class NuevaLanding implements OnInit {
       estado: this.model.estado ?? true,
     });
 
+    const payload = Landing.toJson(landing);
+
     const error = this.validar(payload);
     if (error) {
       this.errorMsg = error;
@@ -105,16 +109,21 @@ export class NuevaLanding implements OnInit {
     }
 
     if (this.isEdit) {
-      this.landingFacade.editarLanding(payload);
+      this.landingFacade.editarLanding(this.model.id,payload);
     } else {
       this.landingFacade.guardarLanding(payload);
     }
 
     this.close();
-    
+
+
+    console.log('Payload que se enviaría al back:', payload);
+    console.log('Payload JSON:', JSON.stringify(payload, null, 2));
+
+    return;
   }
 
-  private validar(payload: Landing): string {
+  private validar(payload: Omit<Landing, 'id'>): string {
     if (!payload.titulo) return 'El titulo es obligatorio.';
     if ((payload.descripcion || '').length < 10) return 'La descripcion debe tener al menos 10 caracteres.';
     if ((payload.metaKeywords || '').length < 3) return 'Meta keywords debe tener al menos 3 caracteres.';

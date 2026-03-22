@@ -6,7 +6,7 @@ export interface LandingImagenItem {
 export interface LandingColorItem {
   color: string;
 }
-
+export type LandingPayload = Omit<Landing, 'id'>;
 export class Landing {
   id: string;
   titulo: string;
@@ -19,6 +19,7 @@ export class Landing {
   landingUrl: string;
   itemImagenesLanding: LandingImagenItem[];
   itemColores: LandingColorItem[];
+  
 
   constructor(landing: Partial<Landing> = {}) {
     this.id = landing.id ?? '';
@@ -33,6 +34,7 @@ export class Landing {
     this.itemImagenesLanding = landing.itemImagenesLanding ?? [];
     this.itemColores = landing.itemColores ?? [];
   }
+  
 
   static fromJson(landing: unknown): Landing {
     const casted = landing as Record<string, unknown>;
@@ -53,7 +55,9 @@ export class Landing {
     });
   }
 
-  static toJson(landing: Landing): unknown {
+  
+
+  static toJson(landing: Landing): LandingPayload {
     return {
       titulo: landing.titulo,
       descripcion: landing.descripcion,
@@ -68,3 +72,4 @@ export class Landing {
     };
   }
 }
+
