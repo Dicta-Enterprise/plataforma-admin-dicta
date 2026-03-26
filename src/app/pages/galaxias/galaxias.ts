@@ -13,7 +13,6 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { CommonModule } from '@angular/common';
-import { Estandar } from '@class/estandar/Estandar.class';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
@@ -103,7 +102,10 @@ export class Galaxias implements OnInit, OnDestroy {
   }
 
   editar(id: string) {
-    console.log(id);
+    const galaxia = this.galaxias$.getValue().find(g => g.id === id);
+    if (!galaxia) return;
+
+    this.modalService.openByName(MODELS_ENUM.EDITAR_GALAXIA, { galaxia });
   }
 
   filtrarGalaxias(galaxias: Galaxia[]) {
