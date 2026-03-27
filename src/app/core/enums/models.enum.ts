@@ -4,4 +4,5 @@ export enum MODELS_ENUM {
   IMAGEN_PLANETA = 'imagenPlaneta',
   NUEVO_PLANETA = 'nuevoPlaneta',
   NUEVA_GALAXIA = 'nuevaGalaxia',
+  EDITAR_GALAXIA = 'editarGalaxia',
 }

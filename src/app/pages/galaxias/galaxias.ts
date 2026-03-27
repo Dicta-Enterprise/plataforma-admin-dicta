@@ -13,13 +13,13 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { CommonModule } from '@angular/common';
-import { Estandar } from '@class/estandar/Estandar.class';
 import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { CATEGORIA_REPOSITORY } from 'src/app/core/tokens/categoria.token';
 import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repository.impl';
+
 
 
 @Component({
@@ -103,20 +103,31 @@ export class Galaxias implements OnInit, OnDestroy {
   }
 
   editar(id: string) {
-    console.log(id);
+    const galaxia = this.galaxias$.getValue().find(g => g.id === id);
+    if (!galaxia) return;
+    this.modalService.openByName(MODELS_ENUM.EDITAR_GALAXIA, { galaxia });
+  }
+
+  limpiarFiltros() {
+    this.activos = false;
+    this.inactivos = false;
+    this.categoriaSelected = [];
+    this.filtrarGalaxias(this.galaxias$.getValue());
   }
 
   filtrarGalaxias(galaxias: Galaxia[]) {
-    if (!this.categoriaSelected || this.categoriaSelected.length === 0) {
-      this.galaxiasFiltradas$.next(galaxias);
-      return;
+    let filtradas = galaxias;
+
+    if (this.categoriaSelected && this.categoriaSelected.length > 0) {
+      const idsSeleccionados = this.categoriaSelected.map(c => c.id);
+      filtradas = filtradas.filter(g => idsSeleccionados.includes(g.categoriaId));
     }
 
-    const idsSeleccionados = this.categoriaSelected.map(c => c.id);
-
-    const filtradas = galaxias.filter(g =>
-      idsSeleccionados.includes(g.categoriaId)
-    );
+    if (this.activos && !this.inactivos) {
+      filtradas = filtradas.filter(g => g.estado === true);
+    } else if (this.inactivos && !this.activos) {
+      filtradas = filtradas.filter(g => g.estado === false);
+    }
 
     this.galaxiasFiltradas$.next(filtradas);
   }
