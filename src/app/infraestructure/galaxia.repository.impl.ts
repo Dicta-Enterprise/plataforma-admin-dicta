@@ -53,13 +53,14 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
   }
 
   editarGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {
-    const direccion = `${this.apiUrl}/galaxias`;
+    const direccion = `${this.apiUrl}/galaxias/${galaxia.id}`;
+    const body = Galaxia.toJson(galaxia);
 
     return this.http
-      .patch<IGeneric<Galaxia>>(direccion, galaxia)
+      .patch<IGeneric<Galaxia>>(direccion, body)
       .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
   }
-
+    
   eliminarGalaxiaService(galaxiaId: string): Observable<Galaxia> {
     const direccion = `${this.apiUrl}/galaxias/${galaxiaId}`;
 
