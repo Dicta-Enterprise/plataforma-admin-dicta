@@ -154,14 +154,15 @@
                 ></button>
             </td> 
             <td class="flex text-center">
-                <button 
+              <button 
                     pButton 
                     type="button" 
                     icon="pi pi-pencil" 
                     class="p-button-rounded p-button-text"
                     pTooltip="Editar planeta"
-                    tooltipPosition="top">
-                </button>
+                    tooltipPosition="top"
+                    (click)="editar(planeta.id)">
+                    </button>
                 <button 
                     pButton 
                     type="button" 

@@ -73,8 +73,10 @@ export class Planetas implements OnInit, OnDestroy {
   }
 
   editar(id: string): void {
-    console.log('Editar:', id);
-  }  
+    const planeta = this.planetas$.getValue().find(p => p.id === id);
+    if (!planeta) return;
+    this.modalService.openByName(MODELS_ENUM.EDITAR_PLANETA, { planeta });
+  } 
 
   nuevoPlaneta() {
     this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
