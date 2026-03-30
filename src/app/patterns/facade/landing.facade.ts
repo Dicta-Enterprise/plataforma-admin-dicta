@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Landing, LandingPayload } from '@class/landing/Landing.class';
+import { Landing } from '@class/landing/Landing.class';
+import { CreateLandingDto } from '@interfaces/landing/iLanding.dto';
 import { BehaviorSubject } from 'rxjs';
 import { LandingService } from 'src/app/core/services/landing/landing.service';
 
@@ -19,7 +20,7 @@ export class LandingFacade {
       .subscribe((landings) => this.landings$.next(landings));
   }
 
-  guardarLanding(landing: LandingPayload) {
+  guardarLanding(landing: CreateLandingDto) {
     this.landingService.crearLanding(landing).subscribe({
       next: (created) => {
         this.landing$.next(created);
@@ -36,7 +37,7 @@ export class LandingFacade {
 
 
 
-  editarLanding(id: string, landing: LandingPayload) {
+  editarLanding(id: string, landing: CreateLandingDto) {
     this.landingService.editarLanding(id, landing).subscribe({
       next: (updated) => {
         this.landing$.next(updated);

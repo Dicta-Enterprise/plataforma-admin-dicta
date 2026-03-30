@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environments/environment';
-import { Landing, LandingPayload } from '@class/landing/Landing.class';
+import { Landing } from '@class/landing/Landing.class';
 import { LandingRepository } from 'src/app/repositories/landing.repository';
 import { IGeneric} from '@interfaces/genericas/IGeneric.interface';
+import { CreateLandingDto } from '@interfaces/landing/iLanding.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -17,58 +18,41 @@ export class LandingRepositoryImpl implements LandingRepository {
   listarLandingService(): Observable<Landing[]> {
     const direccion = `${this.apiUrl}/landing-page`;
 
-
-    return this.http.get<unknown>(direccion).pipe(
-      map((response) => {
-        if (Array.isArray(response)) {
-          return response.map((landing) => Landing.fromJson(landing));
-        }
-
-        if (response && typeof response === 'object') {
-          const payload = response as {
-          data?: unknown[] | { _value?: unknown[] };
-        };
-
-          if (Array.isArray(payload.data)) {
-            return payload.data.map((landing) => Landing.fromJson(landing));
-          }
-
-          if (payload.data && typeof payload.data === 'object') {
-            const inner = payload.data as { _value?: unknown[] };
-            if (Array.isArray(inner._value)) {
-              return inner._value.map((landing) => Landing.fromJson(landing));
-            }
-          }
-        }
-
-        return [];
-      })
-    );
+    return this.http
+      .get<{data:CreateLandingDto[]}>(direccion)
+      .pipe(
+        map((response) =>
+          response.data.map((dto: CreateLandingDto) => Landing.fromJson(dto))
+        )
+      );
   }
-
 
   obtenerLandingService(landingId: string): Observable<Landing> {
     const direccion = `${this.apiUrl}/landing-page`;
 
     return this.http
-      .get<IGeneric<Landing>>(direccion, { params: { landingId } })
-      .pipe(map((response) => Landing.fromJson(response.data._value)));
+      .get<{data: CreateLandingDto}>(direccion, { params: { landingId } })
+      .pipe(map((response) => Landing.fromJson(response.data)));
   }
 
-  crearLandingService(landing: LandingPayload): Observable<Landing> {
+  crearLandingService(landing: CreateLandingDto): Observable<Landing> {
     const direccion = `${this.apiUrl}/landing-page`;   
 
     return this.http
-      .post<IGeneric<Landing>>(direccion, landing)
-      .pipe(map((response) => Landing.fromJson(response)));
+      .post<{ data: CreateLandingDto }>(direccion, landing)
+      .pipe(
+        map(response => {
+          console.log('RESPONSE 🔍', response);
+          return Landing.fromJson(response.data);
+        }));
   }
 
-  editarLandingService(landingId: string, landing: LandingPayload): Observable<Landing> {
+  editarLandingService(landingId: string, landing: CreateLandingDto): Observable<Landing> {
     const direccion = `${this.apiUrl}/landing-page/${landingId}`;
 
     return this.http
-      .patch<IGeneric<Landing>>(direccion, landing)
-      .pipe(map((response) => Landing.fromJson(response)));
+      .patch<{ data: CreateLandingDto }>(direccion, landing)
+      .pipe(map((response) => Landing.fromJson(response.data)));
   }
 
 
@@ -76,8 +60,8 @@ export class LandingRepositoryImpl implements LandingRepository {
     const direccion = `${this.apiUrl}/landing-page/${landingId}`;
 
     return this.http
-      .delete<IGeneric<Landing>>(direccion)
-      .pipe(map((response: IGeneric<Landing>) => Landing.fromJson(response)));
+      .delete<{ data: CreateLandingDto }>(direccion)
+      .pipe(map((response) => Landing.fromJson(response.data)));
   } 
 
 }

@@ -10,6 +10,11 @@ import { ModalService } from 'src/app/containers/host/app-modal.service';
 import { Landing } from '@class/landing/Landing.class';
 import { LandingFacade } from 'src/app/patterns/facade/landing.facade';
 import { LandingService } from 'src/app/core/services/landing/landing.service';
+import { LandingMapper } from 'src/app/core/mappers/landing.mapper';
+import { LandingFormPresenter } from 'src/app/pages/landing/landing-form.presenter';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-nueva-landing',
@@ -22,10 +27,13 @@ import { LandingService } from 'src/app/core/services/landing/landing.service';
     ButtonModule,
     ToggleSwitchModule,
     InputTextModule,
-    TextareaModule
+    TextareaModule,
+    ReactiveFormsModule,
+    InputNumberModule,
+    MessageModule
     
   ],
-  providers: [LandingFacade, LandingService],
+  providers: [LandingFacade, LandingService,LandingFormPresenter],
 
   templateUrl: './nueva-landing.modal.html',
 })
@@ -43,105 +51,73 @@ export class NuevaLanding implements OnInit {
     imagenPrincipal: '',
     metaKeywords: '',
     estado: true,
+    
+
+    contenido: [],
+    itemImagenesLanding: [],
+    itemColores: []
+
+    
   });
 
   visible = true;
-  contenidoTexto = '';
-  imagenesTexto = '';
-  coloresTexto = '';
-  errorMsg = '';
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly landingFacade: LandingFacade
+    private readonly landingFacade: LandingFacade,
+    private landingService: LandingService,
+
+
+    
+    public readonly landingFormPresenter: LandingFormPresenter,
+
   ) {}
 
   ngOnInit(): void {
-    this.contenidoTexto = (this.model.contenido ?? []).join('\n');
-    this.imagenesTexto = (this.model.itemImagenesLanding ?? [])
-      .map((x) => x.url)
-      .join('\n');
-    this.coloresTexto = (this.model.itemColores ?? [])
-      .map((x) => x.color)
-      .join('\n');
+    this.landingFormPresenter.createForm();
+    
   }
 
-  guardarLanding(): void {
-    this.errorMsg = '';
+  guardarLanding() {
+    this.landingFormPresenter.Form.markAllAsTouched();
 
-    const contenido = this.contenidoTexto
-      .split('\n')
-      .map((x) => x.trim())
-      .filter(Boolean);
-
-    const itemImagenesLanding = this.imagenesTexto
-      .split('\n')
-      .map((x) => x.trim())
-      .filter(Boolean)
-      .map((url) => ({ url }));
-
-    const itemColores = this.coloresTexto
-      .split('\n')
-      .map((x) => x.trim())
-      .filter(Boolean)
-      .map((color) => ({ color }));
-
-    const landing = new Landing({
-      ...this.model,
-      titulo: (this.model.titulo || '').trim(),
-      descripcion: (this.model.descripcion || '').trim(),
-      slug: (this.model.slug || '').trim().toLowerCase().replace(/\s+/g, '-'),
-      landingUrl: (this.model.landingUrl || '').trim(),
-      imagenPrincipal: (this.model.imagenPrincipal || '').trim(),
-      metaKeywords: (this.model.metaKeywords || '').trim(),
-      contenido,
-      itemImagenesLanding,
-      itemColores,
-      estado: this.model.estado ?? true,
-    });
-
-    const payload = Landing.toJson(landing);
-
-    const error = this.validar(payload);
-    if (error) {
-      this.errorMsg = error;
+    if (this.landingFormPresenter.Form.invalid) {
       return;
     }
 
+    const dto = LandingMapper.formToCreateDto(
+      this.landingFormPresenter.Form
+    );
+
     if (this.isEdit) {
-      this.landingFacade.editarLanding(this.model.id,payload);
+      console.log('json del mapper:', dto);
+      console.log('form válido:', this.landingFormPresenter.Form.valid);
+      console.log('DTO enviado:', JSON.stringify(dto, null, 2));
+      this.landingFacade.editarLanding(this.landingId, dto);
+
     } else {
-      this.landingFacade.guardarLanding(payload);
+      console.log('json del mapper:', dto);
+      console.log('form válido:', this.landingFormPresenter.Form.valid);
+      console.log('DTO enviado:', JSON.stringify(dto, null, 2));
+      this.landingFacade.guardarLanding(dto);
+
     }
 
     this.close();
 
 
-    console.log('Payload que se enviaría al back:', payload);
-    console.log('Payload JSON:', JSON.stringify(payload, null, 2));
-
-    return;
   }
 
-  private validar(payload: Omit<Landing, 'id'>): string {
-    if (!payload.titulo) return 'El titulo es obligatorio.';
-    if ((payload.descripcion || '').length < 10) return 'La descripcion debe tener al menos 10 caracteres.';
-    if ((payload.metaKeywords || '').length < 3) return 'Meta keywords debe tener al menos 3 caracteres.';
-    if (!this.esUrlValida(payload.imagenPrincipal)) return 'Imagen principal debe ser una URL valida.';
-    if (!this.esUrlValida(payload.landingUrl)) return 'Landing URL debe ser una URL valida.';
-    if (!payload.contenido.length) return 'Debes agregar al menos 1 item en contenido.';
-    if (!payload.itemImagenesLanding.length) return 'Debes agregar al menos 1 URL en imagenes.';
-    if (!payload.itemColores.length) return 'Debes agregar al menos 1 color.';
-    return '';
+  get contenido() {
+    return this.landingFormPresenter.contenido;
   }
 
-  private esUrlValida(value: string): boolean {
-    try {
-      const url = new URL(value);
-      return !!url;
-    } catch {
-      return false;
-    }
+  get imagenes() {
+    return this.landingFormPresenter.imagenes;
+  }
+
+  get colores() {
+    return this.landingFormPresenter.colores;
   }
 
   close(): void {
