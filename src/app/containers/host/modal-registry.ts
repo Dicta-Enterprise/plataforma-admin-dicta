@@ -5,6 +5,7 @@ import { ImagenPlaneta } from 'src/app/ui/modals/planeta/imagen-planeta.modal';
 import { NuevaGalaxia } from 'src/app/ui/modals/galaxia/nueva-galaxia.modal';
 import { NuevoPlaneta } from 'src/app/ui/modals/planeta/nuevo-planeta.modal';
 import { NuevaLanding } from 'src/app/ui/modals/landing/nueva-landing.modal';
+import { EditarGalaxia } from 'src/app/ui/modals/galaxia/editar-galaxia.modal';
 
 
 export const MODAL_REGISTRY: Record<string, Type<object>> = {
@@ -14,4 +15,5 @@ export const MODAL_REGISTRY: Record<string, Type<object>> = {
   imagenPlaneta: ImagenPlaneta,
   nuevoPlaneta: NuevoPlaneta,
   nuevaGalaxia: NuevaGalaxia,
+  editarGalaxia: EditarGalaxia,
 };

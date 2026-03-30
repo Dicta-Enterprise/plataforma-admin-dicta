@@ -50,10 +50,11 @@
             <th class="w-3rem"></th>
             <th class="w-3rem">Índice</th>
             <th class="w-12rem">Nombre</th>
-            <th class="w-9rem">Categoría</th>
+            <th class="w-6rem">Categoría</th>
             <th class="w-9rem">Galaxia</th>
-            <th class="w-9rem">Estado</th>
+            <th class="w-6rem">Estado</th>
             <th class="w-6rem">Ver Imagen</th>
+            <th class="w-6rem">Acciones</th>
         </tr>
         <tr>
             <th></th>
@@ -90,6 +91,7 @@
                     ariaLabel="Filtrar Estado"
                 ></p-columnFilter>
             </th>            
+            <th></th>
             <th></th>
         </tr>
     </ng-template>
@@ -150,7 +152,27 @@
                     tooltipPosition="top"
                     (click)="verImagen(planeta)"
                 ></button>
-            </td>     
+            </td> 
+            <td class="flex text-center">
+                <button 
+                    pButton 
+                    type="button" 
+                    icon="pi pi-pencil" 
+                    class="p-button-rounded p-button-text"
+                    pTooltip="Editar planeta"
+                    tooltipPosition="top">
+                </button>
+                <button 
+                    pButton 
+                    type="button" 
+                    icon="pi pi-trash" 
+                    class="p-button-rounded p-button-text p-button-danger"
+                    pTooltip="Eliminar planeta"
+                    tooltipPosition="top"
+                    (click)="eliminarPlaneta(planeta)">
+                </button>
+            </td>  
+
         </tr>
     </ng-template>
     <ng-template #expandedrow let-planeta>
@@ -171,5 +193,3 @@
         </tr>
     </ng-template>
 </p-table>
-
-

@@ -42,4 +42,15 @@ export class PlanetaFacade {
       .actualizarPlaneta(planeta)
       .subscribe((planeta) => this.planeta$.next(planeta));
   }
+
+  eliminarPlaneta(id: string) {
+    this.planetaService.eliminarPlaneta(id).subscribe({
+      next: () => {
+        this.listarPlanetas();
+      },
+      error: (err) => {
+        console.error('Error eliminando planeta', err?.error || err);
+      },
+    });
+  }
 }
