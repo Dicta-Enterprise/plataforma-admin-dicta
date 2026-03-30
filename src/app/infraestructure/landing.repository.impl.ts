@@ -4,7 +4,6 @@ import { map, Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Landing } from '@class/landing/Landing.class';
 import { LandingRepository } from 'src/app/repositories/landing.repository';
-import { IGeneric} from '@interfaces/genericas/IGeneric.interface';
 import { CreateLandingDto } from '@interfaces/landing/iLanding.dto';
 
 @Injectable({
