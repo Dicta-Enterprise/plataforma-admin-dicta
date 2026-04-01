@@ -1,3 +1,5 @@
+import { CreateLandingDto, ItemColorDto, ItemImagenLandingDto } from '@interfaces/landing/iLanding.dto';
+
 export interface LandingImagenItem {
   url: string;
 }
@@ -19,6 +21,7 @@ export class Landing {
   landingUrl: string;
   itemImagenesLanding: LandingImagenItem[];
   itemColores: LandingColorItem[];
+  
 
   constructor(landing: Partial<Landing> = {}) {
     this.id = landing.id ?? '';
@@ -32,28 +35,31 @@ export class Landing {
     this.landingUrl = landing.landingUrl ?? '';
     this.itemImagenesLanding = landing.itemImagenesLanding ?? [];
     this.itemColores = landing.itemColores ?? [];
-  }
+  }  
 
-  static fromJson(landing: unknown): Landing {
-    const casted = landing as Record<string, unknown>;
-
+  static fromJson(dto: CreateLandingDto & { id?: string }): Landing {
     return new Landing({
-      id: (casted['id'] as string) ?? '',
-      titulo: (casted['titulo'] as string) ?? '',
-      descripcion: (casted['descripcion'] as string) ?? '',
-      imagenPrincipal: (casted['imagenPrincipal'] as string) ?? '',
-      contenido: (casted['contenido'] as string[]) ?? [],
-      estado: (casted['estado'] as boolean) ?? false,
-      slug: (casted['slug'] as string) ?? '',
-      metaKeywords: (casted['metaKeywords'] as string) ?? '',
-      landingUrl: (casted['landingUrl'] as string) ?? '',
-      itemImagenesLanding:
-        (casted['itemImagenesLanding'] as LandingImagenItem[]) ?? [],
-      itemColores: (casted['itemColores'] as LandingColorItem[]) ?? [],
-    });
-  }
+      id: dto.id,
+      titulo: dto.titulo,
+      descripcion: dto.descripcion,
+      imagenPrincipal: dto.imagenPrincipal,
+      contenido: dto.contenido,
+      estado: dto.estado,
+      slug: dto.slug,
+      metaKeywords: dto.metaKeywords,
+      landingUrl: dto.landingUrl,
 
-  static toJson(landing: Landing): unknown {
+      itemImagenesLanding: (dto.itemImagenesLanding ?? []).map((img: ItemImagenLandingDto) => ({
+        url: img.url
+      })),
+
+      itemColores: (dto.itemColores ?? []).map((col: ItemColorDto) => ({
+        color: col.color
+      })),
+    });
+  }  
+
+  static toJson(landing: Landing): CreateLandingDto {
     return {
       titulo: landing.titulo,
       descripcion: landing.descripcion,
@@ -63,8 +69,14 @@ export class Landing {
       slug: landing.slug,
       metaKeywords: landing.metaKeywords,
       landingUrl: landing.landingUrl,
-      itemImagenesLanding: landing.itemImagenesLanding,
-      itemColores: landing.itemColores,
+      itemImagenesLanding: landing.itemImagenesLanding.map(img => ({
+        url: img.url
+      })),
+
+      itemColores: landing.itemColores.map(col => ({
+        color: col.color
+      })),
     };
   }
 }
+
