@@ -43,6 +43,7 @@
     onIcon="'pi pi-check'"
     offIcon="pi pi-times"
     class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-12rem"
+    (onChange)="filtrarGalaxias(galaxias$.value)"
   ></p-togglebutton>
   <p-toggleButton
     [(ngModel)]="inactivos"
@@ -50,13 +51,15 @@
     offLabel="Inactivos"
     onIcon="'pi pi-check'"
     offIcon="pi pi-times"
-    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"    
+    class="mb-3 lg:mt-0 mr-4 flex-shrink-0 w-9rem"
+    (onChange)="filtrarGalaxias(galaxias$.value)"    
   ></p-toggleButton>
   
   <a
     pRipple
     tabindex="0"
     class="cursor-pointer flex align-items-center mb-3 lg:mt-0 text-900"
+    (click)="limpiarFiltros()"
     >Limpiar Todo</a
   >
 </div>

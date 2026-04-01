@@ -62,20 +62,23 @@ export class EditarGalaxia implements OnInit {
 
     this.categoriaService.listarCategorias().subscribe(res => {
       this.categorias = res;
-    });
 
-    this.galaxiaFormPresenter.getGalaxia(0).patchValue({
-      nombre: this.galaxia.nombre,
-      descripcion: this.galaxia.descripcion,
-      imagen: this.galaxia.imagen,
-      url: this.galaxia.url,
-      textura: this.galaxia.textura,
-      estado: this.galaxia.estado,
-      tema: this.galaxia.tema,
-      color: this.galaxia.color,
-      categoriaId: this.galaxia.categoriaId,
-      posicion: this.galaxia.posicion,
-      rotacion: this.galaxia.rotacion,
+      const categoriaSeleccionada = res.find(c => c.id === this.galaxia.categoriaId);
+
+      this.galaxiaFormPresenter.getGalaxia(0).patchValue({
+        nombre: this.galaxia.nombre,
+        descripcion: this.galaxia.descripcion,
+        imagen: this.galaxia.imagen,
+        url: this.galaxia.url,
+        textura: this.galaxia.textura,
+        estado: this.galaxia.estado,
+        tema: this.galaxia.tema,
+        color: this.galaxia.color,
+        categoriaId: this.galaxia.categoriaId,
+        categoria: categoriaSeleccionada ?? null,
+        posicion: this.galaxia.posicion,
+        rotacion: this.galaxia.rotacion,
+      });
     });
   }
 
