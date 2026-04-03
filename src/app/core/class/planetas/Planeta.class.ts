@@ -4,6 +4,7 @@ import { InfoPlaneta, Peligro, Beneficio } from '@interfaces/planeta/iPlaneta.in
 export class Planeta {
   id: string;
   nombre: string;
+  codigo: string;
   categoria: string;
   resumenCurso: string;
   imagenResumen: string;
@@ -19,6 +20,7 @@ export class Planeta {
   constructor(planeta: Partial<Planeta> = {}) {
     this.id = planeta.id ?? '';
     this.nombre = planeta.nombre ?? '';
+    this.codigo = planeta.codigo ?? '';
     this.categoria = planeta.categoria ?? '';
     this.resumenCurso = planeta.resumenCurso ?? '';
     this.imagenResumen = planeta.imagenResumen ?? '';
@@ -38,6 +40,7 @@ export class Planeta {
     return new Planeta({
       id: casted['id'] as string,
       nombre: casted['nombre'] as string,
+      codigo: casted['codigo'] as string,
       categoria: casted['categoria'] as string,
       resumenCurso: casted['resumenCurso'] as string,
       imagenResumen: casted['imagenResumen'] as string,
@@ -56,6 +59,7 @@ export class Planeta {
     return {
       id: planeta.id,
       nombre: planeta.nombre,
+      codigo: planeta.codigo,
       categoria: planeta.categoria,
       resumenCurso: planeta.resumenCurso,
       imagenResumen: planeta.imagenResumen,

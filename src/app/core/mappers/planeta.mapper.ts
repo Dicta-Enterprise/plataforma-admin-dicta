@@ -12,6 +12,7 @@ export class PlanetaMapper {
 
     return {      
       nombre: rootNombre ?? '',
+      codigo: datos.codigo ?? '',
       categoria: datos.categoria, 
       galaxia: typeof datos.galaxia === 'object'
         ? datos.galaxia.nombre
@@ -33,6 +34,7 @@ export class PlanetaMapper {
   static domainToCreateDto(planeta: Planeta): CreatePlanetaDto {
     return {
       nombre: planeta.nombre,
+      codigo: planeta.codigo,
       categoria: planeta.categoria,
       galaxia: planeta.galaxia,
       galaxiaId: planeta.galaxiaId,

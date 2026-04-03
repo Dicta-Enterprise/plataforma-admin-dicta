@@ -22,10 +22,10 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
 
     return this.http
-      .get<IGenericArrays<IPlanetaDto>>(direccion)
+      .get<{ data: IPlanetaDto[] }>(direccion)
       .pipe(
-        map((response: IGenericArrays<IPlanetaDto>) =>
-          response.data._value.map((dto: IPlanetaDto) => Planeta.fromJson(dto))
+        map((response) =>
+          response.data.map((dto: IPlanetaDto) => Planeta.fromJson(dto))
         )
       );
   }
@@ -34,33 +34,41 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
 
     return this.http
-      .get<IGeneric<Planeta>>(direccion, { params: { planetaId } })
-      .pipe(map((response: IGeneric<IPlanetaDto>) => Planeta.fromJson(response.data._value)));
+      .get<{ data: IPlanetaDto }>(direccion, { params: { planetaId } })
+      .pipe(map((response) => Planeta.fromJson(response.data)));
   }
 
   crearPlanetaService(dto: CreatePlanetaDto): Observable<Planeta> {
     const direccion = `${this.apiUrl}/planetas`;
-    return this.http.post<Planeta>(direccion, dto);
+    return this.http
+      .post<{ data: IPlanetaDto }>(direccion, dto)
+      .pipe(
+        map(response => Planeta.fromJson(response.data)
+      ));
   }
 
   crearMultiplesPlanetasService(dto: CreateMultiplesPlanetaDto): Observable<Planeta[]> {
     const url = `${this.apiUrl}/planetas/multiples`;
-    return this.http.post<Planeta[]>(url, dto);
+    return this.http
+      .post<{ data: IPlanetaDto[] }>(url, dto)
+      .pipe(
+        map(response => response.data.map(dto => Planeta.fromJson(dto)))
+      );
   }
 
   editarPlanetaService(planeta: Planeta): Observable<Planeta> {
-    const direccion = `${this.apiUrl}/planetas`;
+    const direccion = `${this.apiUrl}/planetas/${planeta.id}`;
 
     return this.http
-      .put<IGeneric<Planeta>>(direccion, planeta)
-      .pipe(map((response: IGeneric<Planeta>) => response.data._value));
+      .patch<{ data: IPlanetaDto }>(direccion, planeta)
+      .pipe(map(response => Planeta.fromJson(response.data)));
   }
 
   eliminarPlanetaService(planetaId: string): Observable<Planeta> {
     const direccion = `${this.apiUrl}/planetas/${planetaId}`;
 
     return this.http
-      .delete<IGeneric<Planeta>>(direccion)
-      .pipe(map((response) => Planeta.fromJson(response.data._value)));
+      .delete<{ data: IPlanetaDto }>(direccion)
+      .pipe(map(response => Planeta.fromJson(response.data)));
   }
 }

@@ -24,6 +24,7 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     this.form = this.fb.group({
       planetas: this.planetas,
       nombre: new FormControl(null, [Validators.required]),    
+      codigo: new FormControl(null, [Validators.required]),
     });
   }
 
