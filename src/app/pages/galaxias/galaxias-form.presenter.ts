@@ -21,7 +21,7 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
   public createForm(): void {
     this.form = this.fb.group({
       
-      multiple: [false],
+      multiple: [true],
       nombreComun: [''],
       galaxias:this.fb.array([])
 
