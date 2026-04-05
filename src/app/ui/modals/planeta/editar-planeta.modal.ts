@@ -121,6 +121,14 @@ export class EditarPlaneta implements OnInit {
     const datos = this.planetaFormPresenter.getPlaneta(index).get('datos')?.value;
     const info = this.planetaFormPresenter.getPlaneta(index).get('info')?.value;
 
+    const galaxiaSeleccionada = datos?.galaxia;
+    const galaxiaNombre = typeof galaxiaSeleccionada === 'object' && galaxiaSeleccionada !== null
+      ? galaxiaSeleccionada.nombre
+      : this.planeta.galaxia;
+    const galaxiaId = typeof galaxiaSeleccionada === 'object' && galaxiaSeleccionada !== null
+      ? galaxiaSeleccionada.id
+      : this.planeta.galaxiaId;
+
     const planetaActualizado = new Planeta({
       ...this.planeta,
       nombre,
@@ -130,6 +138,8 @@ export class EditarPlaneta implements OnInit {
       textura: datos?.textura ?? this.planeta.textura,
       url: datos?.url ?? this.planeta.url,
       info: info ?? this.planeta.info,
+      galaxia: galaxiaNombre,
+      galaxiaId: galaxiaId,
     });
 
     this.planetaFacade.actualizarPlaneta(planetaActualizado);
