@@ -80,35 +80,38 @@
 
             <div formArrayName="galaxias">
 
-              <p-tabs value="0">
+              @if (galaxias.length === categorias.length) {
 
-                <p-tablist>
-                  <div class="flex align-items-center gap-3">
+                <p-tabs value="0">
+
+                  <p-tablist>
+                    <div class="flex align-items-center gap-3">
+                      @for (categoria of categorias; track categoria.id; let i = $index) {
+                        <p-tab [value]="i.toString()">
+                          {{ categoria.nombre }}
+                        </p-tab>
+                      }
+                    </div>
+                  </p-tablist>
+
+                  <p-tabpanels>
+
                     @for (categoria of categorias; track categoria.id; let i = $index) {
-                      <p-tab [value]="i.toString()">
-                        {{ categoria.nombre }}
-                      </p-tab>
+
+                      <p-tabpanel [value]="i.toString()">
+
+                        <div [formGroupName]="i" class="grid formgrid p-fluid">
+
+                          <ng-container
+                            *ngTemplateOutlet="camposInternos; context: { group: getGalaxia(i) }">
+                          </ng-container>
+
+                        </div>
+                      </p-tabpanel>
                     }
-                  </div>
-                </p-tablist>
-
-                <p-tabpanels>
-
-                  @for (categoria of categorias; track categoria.id; let i = $index) {
-
-                    <p-tabpanel [value]="i.toString()">
-
-                      <div [formGroupName]="i" class="grid formgrid p-fluid">
-
-                        <ng-container
-                          *ngTemplateOutlet="camposInternos; context: { group: galaxias.at(i) }">
-                        </ng-container>
-
-                      </div>
-                    </p-tabpanel>
-                  }
-                </p-tabpanels>
-              </p-tabs>
+                  </p-tabpanels>
+                </p-tabs>
+              }
             </div>
           </div>
         </div>

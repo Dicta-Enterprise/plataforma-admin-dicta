@@ -74,6 +74,9 @@ export class NuevaGalaxia implements OnInit {
       if (res.length) {
         this.activeTab = res[0].id.toString();
       }
+      if (this.multiple) {
+        this.galaxiaFormPresenter.activarMultiples(res);
+      }
     });
 
     this.galaxiaFormPresenter.Form.get('multiple')?.valueChanges.subscribe(m => {
@@ -101,7 +104,7 @@ export class NuevaGalaxia implements OnInit {
   }
 
   getGalaxia(index: number) {
-    return this.galaxiaFormPresenter.getGalaxia(index);
+    return this.galaxias.at(index) as FormGroup;
   }
 
   guardarGalaxia() {    
@@ -144,7 +147,7 @@ export class NuevaGalaxia implements OnInit {
   }
 
   onMultipleChange(value: boolean) {
-    if (value) {
+    if (value && this.categorias.length) {
       this.galaxiaFormPresenter.activarMultiples(this.categorias);
       this.activeTab = this.categorias[0]?.id?.toString() ?? '';
     } else {
