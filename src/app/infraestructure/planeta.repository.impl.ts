@@ -49,10 +49,11 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
   }
 
   editarPlanetaService(planeta: Planeta): Observable<Planeta> {
-    const direccion = `${this.apiUrl}/planetas`;
+    const { nombre, categoria, resumenCurso, imagenResumen, estado, galaxiaId, galaxia, textura, url, info, peligros, beneficios } = Planeta.toJson(planeta);
+    const direccion = `${this.apiUrl}/planetas/${planeta.id}`;
 
     return this.http
-      .put<IGeneric<Planeta>>(direccion, planeta)
+      .patch<IGeneric<Planeta>>(direccion, { nombre, categoria, resumenCurso, imagenResumen, estado, galaxiaId, galaxia, textura, url, info, peligros, beneficios })
       .pipe(map((response: IGeneric<Planeta>) => response.data._value));
   }
 
