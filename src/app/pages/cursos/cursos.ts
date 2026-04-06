@@ -9,6 +9,11 @@ import { Curso } from '@class/cursos/Curso.class';
 import { CursoFacade } from 'src/app/patterns/facade/curso.facade';
 import { CursoService } from 'src/app/core/services/cursos/curso.service';
 
+import { ModalService } from 'src/app/containers/host/app-modal.service';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
+
+import { EliminarCurso } from 'src/app/ui/modals/curso/eliminar-curso.modal';
+
 interface FilterOption {
   label: string;
   value: string;
@@ -45,7 +50,11 @@ export class Cursos implements OnInit, OnDestroy {
     maximumFractionDigits: 0,
   });
 
-  constructor(private readonly cursoFacade: CursoFacade) {
+  constructor(
+  private readonly cursoFacade: CursoFacade,
+  private readonly modalService: ModalService,
+  ) 
+  {
     this.cursos$ = this.cursoFacade.cursos$;
 
     this.categoriasOptions$ = this.cursos$.pipe(
@@ -62,10 +71,12 @@ export class Cursos implements OnInit, OnDestroy {
         if (unique.has('')) {
           options.push({ label: 'Sin categoria', value: EMPTY_CATEGORY_VALUE });
         }
+        
 
         return options;
       })
     );
+    
 
     this.precioRango$ = this.cursos$.pipe(
       map((cursos) => {
@@ -144,6 +155,12 @@ export class Cursos implements OnInit, OnDestroy {
     console.log('Editar curso', curso);
   }
 
+  eliminarCurso(curso: Curso): void {
+    const ref = this.modalService.openByName(MODELS_ENUM.ELIMINAR_CURSO, { curso });
+    (ref.instance as EliminarCurso).eliminado.subscribe(() => {
+      this.cursoFacade.listarCursos();
+    });
+  }
   onCategoriaFilterChange(value: string): void {
     this.selectedCategoria = value;
     this.categoriaFiltro$.next(value);

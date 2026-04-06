@@ -128,6 +128,16 @@
                 (click)="editarCurso(curso)"
                 [attr.aria-label]="'Editar curso ' + (curso.nombre || curso.id)"
               ></button>
+
+              <button
+                type="button"
+                pButton
+                class="curso-card__eliminar-btn p-button-rounded p-button-text p-button-danger"
+                icon="pi pi-trash"
+                (click)="eliminarCurso(curso)"
+                [attr.aria-label]="'Eliminar curso ' + (curso.nombre || curso.id)"
+              ></button>
+              
               <div class="curso-card__estado">
                 <label class="curso-card__estado-toggle">
                   <input
