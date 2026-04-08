@@ -31,6 +31,15 @@ export class CursoFacade {
       })
     );
   }
+  
+  eliminarCurso(id: string): Observable<Curso> {
+    return this.cursoService.eliminarCurso(id).pipe(
+      tap(() => {
+        const cursos = this.cursos$.value.filter((c) => c.id !== id);
+        this.cursos$.next(cursos);
+      })
+    );
+  }
 
   actualizarEstado(id: string, estado: boolean): Observable<Curso> {
     return this.cursoService.eliminarCurso(id).pipe(
