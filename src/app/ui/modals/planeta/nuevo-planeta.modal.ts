@@ -83,6 +83,14 @@ export class NuevoPlaneta implements OnInit {
 
   guardarPlaneta() {    
     this.planetaFormPresenter.Form.markAllAsTouched();
+    console.log(this.planetaFormPresenter.Form);
+
+    const dtos = PlanetaMapper.formToCreateDtos(this.planetaFormPresenter.Form);
+
+     console.log('json del mapper:', dtos);
+    console.log('form válido:', this.planetaFormPresenter.Form.valid);
+    console.log('DTO enviado:', JSON.stringify(dtos, null, 2));
+
 
     if (this.planetaFormPresenter.Form.invalid) {
       console.warn('Formulario inválido');
@@ -114,7 +122,7 @@ export class NuevoPlaneta implements OnInit {
   grupos = [
     { title: 'Niños', value: 'NIÑOS' },
     { title: 'Jóvenes', value: 'JOVENES' },
-    { title: 'Adultos', value: 'ADULTOS' }
+    { title: 'Padres', value: 'PADRES' }
   ];
 
   subTabs = [
