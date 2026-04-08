@@ -36,7 +36,10 @@ export class GalaxiaMapper {
   static formToCreateDto(form: FormGroup): CreateGalaxiaDto {
     const galaxiasArray = form.get('galaxias') as FormArray;
 
-    const group = galaxiasArray.at(0) as FormGroup;
-    return this.mapGalaxiaGroupToDto(group);
+    if (!galaxiasArray || galaxiasArray.length === 0) {
+      throw new Error('No hay galaxias en el formulario');
+    }
+
+    return this.mapGalaxiaGroupToDto(galaxiasArray.at(0) as FormGroup);
   }
 }

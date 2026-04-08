@@ -28,7 +28,7 @@ export class GalaxiaFacade {
   guardarMultiplesGalaxias(data:CreateMultipleGalaxiasDto){
     this.galaxiaService
       .guardarMultiplesGalaxias(data)
-      .subscribe();
+      .subscribe(() => this.listarGalaxias());
   }
 
   obtenerGalaxia(id: string) {
