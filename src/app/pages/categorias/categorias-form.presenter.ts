@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { LocalStateService } from '@class/state/local-state.class';
-import { StepPresenter } from 'src/app/core/helpers/step.presenter';
+import { StepPresenter } from 'src/app/core/helpers/forms/step.presenter';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class CategoriasFormPresenter extends StepPresenter<Categoria> {
 
   public constructor(
     private readonly fb: FormBuilder,
-    private readonly localStateService: LocalStateService
+    private readonly localStateService: LocalStateService,
   ) {
     super();
   }
