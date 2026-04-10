@@ -90,8 +90,10 @@ export class NuevoPlaneta implements OnInit {
      console.log('json del mapper:', dtos);
     console.log('form válido:', this.planetaFormPresenter.Form.valid);
     console.log('DTO enviado:', JSON.stringify(dtos, null, 2));
+    console.log('value:', this.planetaFormPresenter.Form.value);
+console.log('rawValue:', this.planetaFormPresenter.Form.getRawValue());
 
-
+/*
     if (this.planetaFormPresenter.Form.invalid) {
       console.warn('Formulario inválido');
       return;
@@ -102,7 +104,7 @@ export class NuevoPlaneta implements OnInit {
     );
 
     this.close();
-      
+  */    
   }
 
   actualizarPlaneta() {

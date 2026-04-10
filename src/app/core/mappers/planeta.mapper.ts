@@ -13,7 +13,7 @@ export class PlanetaMapper {
 
     return {      
       nombre: rootNombre ?? '',
-      codigo: PlanetaMapper.buildCodigo(rootCodigo, datos.categoria),
+      codigo: rootCodigo ?? '',
       categoria: datos.categoria, 
       galaxia: typeof datos.galaxia === 'object'
         ? datos.galaxia.nombre
@@ -66,20 +66,5 @@ export class PlanetaMapper {
     return {
       planetas: this.formToCreateDtos(form)
     };
-  }
-
-  private static buildCodigo(baseCodigo: string | null, categoria: string): string {
-    if (!baseCodigo) return '';
-
-    const categoriaClean = categoria.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-    const match = baseCodigo.match(/(.*)(_\d{3})$/);
-
-    if (!match) return baseCodigo;
-
-    const base = match[1];
-    const numero = match[2];
-
-    return `${base}_${categoriaClean}${numero}`;
   }
 }

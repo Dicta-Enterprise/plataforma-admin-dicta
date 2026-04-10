@@ -24,7 +24,7 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     this.form = this.fb.group({
       planetas: this.planetas,
       nombre: new FormControl(null, [Validators.required]),    
-      codigo: new FormControl(null, [Validators.required]),
+      codigo: new FormControl({ value: null, disabled: true }, [Validators.required]),
     });
 
     this.listenNombreChanges();
@@ -108,16 +108,16 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     const stopWords = ['de', 'la', 'el', 'y', 'en', 'para', 'con'];
 
     let limpio = nombre
-      .toLowerCase()
+      .toUpperCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/[^A-Z0-9 ]/g, '')
       .trim();
 
     const palabras = limpio.split(' ').filter(p => p && !stopWords.includes(p));
 
     const partes = palabras.map(p => p.substring(0, 4));
 
-    return `${partes.join('_')}_001`;
+    return `P_${partes.join('_')}`;
   }
 }
