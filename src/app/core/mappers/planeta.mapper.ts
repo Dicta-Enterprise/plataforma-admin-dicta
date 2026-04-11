@@ -1,7 +1,6 @@
 import { FormArray, FormGroup } from '@angular/forms';
 import { CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfaces';
 import { Planeta } from '@class/planetas/Planeta.class';
-import { root } from '@primeuix/themes/aura/accordion';
 
 export class PlanetaMapper {
 

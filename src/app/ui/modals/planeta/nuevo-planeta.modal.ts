@@ -83,9 +83,6 @@ export class NuevoPlaneta implements OnInit {
 
   guardarPlaneta() {    
     this.planetaFormPresenter.Form.markAllAsTouched();
-    console.log(this.planetaFormPresenter.Form);
-
-    const dtos = PlanetaMapper.formToCreateDtos(this.planetaFormPresenter.Form);
 
     if (this.planetaFormPresenter.Form.invalid) {
       console.warn('Formulario inválido');

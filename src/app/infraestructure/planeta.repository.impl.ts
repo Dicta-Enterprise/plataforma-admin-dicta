@@ -4,10 +4,6 @@ import { Planeta } from '@class/planetas/Planeta.class';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
-import {
-  IGeneric,
-  IGenericArrays,
-} from '@interfaces/genericas/IGeneric.interface';
 import { IPlanetaDto, CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfaces';
 
 @Injectable({
@@ -42,9 +38,7 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
     return this.http
       .post<{ data: IPlanetaDto }>(direccion, dto)
-      .pipe(
-        map(response => Planeta.fromJson(response.data)
-      ));
+      .pipe(map(response => Planeta.fromJson(response.data)));
   }
 
   crearMultiplesPlanetasService(dto: CreateMultiplesPlanetaDto): Observable<Planeta[]> {

@@ -107,7 +107,7 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     if (!nombre) return '';
     const stopWords = ['de', 'la', 'el', 'y', 'en', 'para', 'con'];
 
-    let limpio = nombre
+    const limpio = nombre
       .toUpperCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
