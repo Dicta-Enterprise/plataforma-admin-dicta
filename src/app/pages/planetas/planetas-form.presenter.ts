@@ -23,21 +23,13 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     this.planetas = this.fb.array([
       this.crearPlaneta('NIÑOS'),
       this.crearPlaneta('JOVENES'),
-<<<<<<< HEAD
       this.crearPlaneta('PADRES')
-=======
-      this.crearPlaneta('ADULTOS'),
->>>>>>> 15a712406627216503bc7d971b70eb65684e71e3
     ]);
 
     this.form = this.fb.group({
       planetas: this.planetas,
-<<<<<<< HEAD
       nombre: new FormControl(null, [Validators.required]),    
       codigo: new FormControl({ value: null, disabled: true }, [Validators.required]),
-=======
-      nombre: new FormControl(null, [Validators.required]),
->>>>>>> 15a712406627216503bc7d971b70eb65684e71e3
     });
 
     this.listenNombreChanges();
