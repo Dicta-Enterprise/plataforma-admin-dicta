@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormArray,
+  Validators,
+} from '@angular/forms';
 import { Planeta } from '@class/planetas/Planeta.class';
-import { StepPresenter } from 'src/app/core/helpers/step.presenter';
+import { StepPresenter } from 'src/app/core/helpers/forms/step.presenter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanetaFormPresenter extends StepPresenter<Planeta> {
-
   public planetas!: FormArray;
 
   constructor(private readonly fb: FormBuilder) {
@@ -18,22 +23,30 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     this.planetas = this.fb.array([
       this.crearPlaneta('NIÑOS'),
       this.crearPlaneta('JOVENES'),
+<<<<<<< HEAD
       this.crearPlaneta('PADRES')
+=======
+      this.crearPlaneta('ADULTOS'),
+>>>>>>> 15a712406627216503bc7d971b70eb65684e71e3
     ]);
 
     this.form = this.fb.group({
       planetas: this.planetas,
+<<<<<<< HEAD
       nombre: new FormControl(null, [Validators.required]),    
       codigo: new FormControl({ value: null, disabled: true }, [Validators.required]),
+=======
+      nombre: new FormControl(null, [Validators.required]),
+>>>>>>> 15a712406627216503bc7d971b70eb65684e71e3
     });
 
     this.listenNombreChanges();
   }
 
   private crearPlaneta(categoria: string): FormGroup {
-    return this.fb.group({        
+    return this.fb.group({
       datos: this.fb.group({
-        categoria: new FormControl(categoria, [Validators.required]),        
+        categoria: new FormControl(categoria, [Validators.required]),
         resumenCurso: new FormControl('', [Validators.required]),
         imagenResumen: new FormControl('', [Validators.required]),
         estado: new FormControl(true),
@@ -65,14 +78,14 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
       nivelRiesgo: [''],
       temperatura: [''],
       villano: [''],
-      cta: ['']
+      cta: [''],
     });
   }
 
   private crearBeneficio(): FormGroup {
     return this.fb.group({
       titulo: [''],
-      descripcion: ['']
+      descripcion: [''],
     });
   }
 
