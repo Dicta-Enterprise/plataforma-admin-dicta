@@ -1,5 +1,6 @@
 export interface CreatePlanetaDto {
   nombre: string;
+  codigo: string;
   categoria: string;
   resumenCurso: string;
   imagenResumen: string;

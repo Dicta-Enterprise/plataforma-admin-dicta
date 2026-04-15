@@ -4,7 +4,7 @@ import { Planeta } from '@class/planetas/Planeta.class';
 
 export class PlanetaMapper {
 
-  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null): CreatePlanetaDto {
+  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null, rootCodigo: string | null): CreatePlanetaDto {
     const datos = planetaGroup.get('datos')?.value;
     const info = planetaGroup.get('info')?.value;
     const peligros = planetaGroup.get('peligros')?.value ?? [];
@@ -12,6 +12,7 @@ export class PlanetaMapper {
 
     return {      
       nombre: rootNombre ?? '',
+      codigo: rootCodigo ?? '',
       categoria: datos.categoria, 
       galaxia: typeof datos.galaxia === 'object'
         ? datos.galaxia.nombre
@@ -33,6 +34,7 @@ export class PlanetaMapper {
   static domainToCreateDto(planeta: Planeta): CreatePlanetaDto {
     return {
       nombre: planeta.nombre,
+      codigo: planeta.codigo,
       categoria: planeta.categoria,
       galaxia: planeta.galaxia,
       galaxiaId: planeta.galaxiaId,
@@ -49,12 +51,13 @@ export class PlanetaMapper {
 
   static formToCreateDtos(form: FormGroup): CreatePlanetaDto[] {
     const rootNombre = form.get('nombre')?.value ?? '';
+    const rootCodigo = form.get('codigo')?.value ?? '';
     const planetasArray = form.get('planetas') as FormArray;
 
     if (!planetasArray) return [];
 
     return planetasArray.controls.map((fg) =>
-      PlanetaMapper.mapPlanetaGroupToDto(fg as FormGroup, rootNombre)
+      PlanetaMapper.mapPlanetaGroupToDto(fg as FormGroup, rootNombre,rootCodigo)
     );
   }
   

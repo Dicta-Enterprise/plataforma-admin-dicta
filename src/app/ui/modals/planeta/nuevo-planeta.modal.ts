@@ -94,7 +94,7 @@ export class NuevoPlaneta implements OnInit {
     );
 
     this.close();
-      
+    
   }
 
   actualizarPlaneta() {
@@ -114,7 +114,7 @@ export class NuevoPlaneta implements OnInit {
   grupos = [
     { title: 'Niños', value: 'NIÑOS' },
     { title: 'Jóvenes', value: 'JOVENES' },
-    { title: 'Adultos', value: 'ADULTOS' }
+    { title: 'Padres', value: 'PADRES' }
   ];
 
   subTabs = [

@@ -23,13 +23,16 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     this.planetas = this.fb.array([
       this.crearPlaneta('NIÑOS'),
       this.crearPlaneta('JOVENES'),
-      this.crearPlaneta('ADULTOS'),
+      this.crearPlaneta('PADRES')
     ]);
 
     this.form = this.fb.group({
       planetas: this.planetas,
-      nombre: new FormControl(null, [Validators.required]),
+      nombre: new FormControl(null, [Validators.required]),    
+      codigo: new FormControl({ value: null, disabled: true }, [Validators.required]),
     });
+
+    this.listenNombreChanges();
   }
 
   private crearPlaneta(categoria: string): FormGroup {
@@ -96,5 +99,30 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
 
   public addBeneficio(index: number): void {
     this.getBeneficios(index).push(this.crearBeneficio());
+  }
+
+  private listenNombreChanges(): void {
+    this.form.get('nombre')?.valueChanges.subscribe(nombre => {
+      const codigo = this.generarCodigo(nombre);
+      this.form.patchValue({ codigo }, { emitEvent: false });
+    });
+  }
+
+  private generarCodigo(nombre: string): string {
+    if (!nombre) return '';
+    const stopWords = ['de', 'la', 'el', 'y', 'en', 'para', 'con'];
+
+    const limpio = nombre
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Z0-9 ]/g, '')
+      .trim();
+
+    const palabras = limpio.split(' ').filter(p => p && !stopWords.includes(p));
+
+    const partes = palabras.map(p => p.substring(0, 4));
+
+    return `P_${partes.join('_')}`;
   }
 }
