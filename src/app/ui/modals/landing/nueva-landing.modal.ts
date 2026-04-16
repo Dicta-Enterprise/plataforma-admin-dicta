@@ -75,7 +75,27 @@ export class NuevaLanding implements OnInit {
 
   ngOnInit(): void {
     this.landingFormPresenter.createForm();
-    
+
+    if (this.isEdit) {
+      this.landingFormPresenter.Form.patchValue({
+        titulo: this.model.titulo,
+        descripcion: this.model.descripcion,
+        slug: this.model.slug,
+        landingUrl: this.model.landingUrl,
+        imagenPrincipal: this.model.imagenPrincipal,
+        metaKeywords: this.model.metaKeywords,
+        estado: this.model.estado,
+        contenidoTexto: Array.isArray(this.model.contenido)
+          ? this.model.contenido.join('\n')
+          : '',
+        imagenesTexto: Array.isArray(this.model.itemImagenesLanding)
+          ? this.model.itemImagenesLanding.map((i) => i.url).join('\n')
+          : '',
+        coloresTexto: Array.isArray(this.model.itemColores)
+          ? this.model.itemColores.map((c) => c.color).join('\n')
+          : '',
+      });
+    }
   }
 
   guardarLanding() {
