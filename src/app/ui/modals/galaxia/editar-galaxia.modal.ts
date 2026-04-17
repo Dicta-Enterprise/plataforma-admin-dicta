@@ -18,7 +18,6 @@ import { CUSTOM_GALAXIA_PROVIDER } from 'src/app/core/providers/galaxia.provider
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { Divider } from 'primeng/divider';
-import { ColorPicker } from 'primeng/colorpicker';
 import { SelectModule } from 'primeng/select';
 import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
@@ -37,7 +36,6 @@ import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
     FloatLabelModule,
     FieldsetModule,
     Divider,
-    ColorPicker,
     SelectModule,
   ],
   providers: [CUSTOM_GALAXIA_PROVIDER, GalaxiaService, GalaxiaFacade, CategoriaService],
@@ -73,7 +71,6 @@ export class EditarGalaxia implements OnInit {
         textura: this.galaxia.textura,
         estado: this.galaxia.estado,
         tema: this.galaxia.tema,
-        color: this.galaxia.color,
         categoriaId: this.galaxia.categoriaId,
         categoria: categoriaSeleccionada ?? null,
         posicion: this.galaxia.posicion,
@@ -105,11 +102,5 @@ export class EditarGalaxia implements OnInit {
   close(): void {
     this.visible = false;
     this.modalService.close();
-  }
-
-  onHexInput(event: Event, group: FormGroup): void {
-    const value = (event.target as HTMLInputElement).value?.toUpperCase();
-    if (!value) return;
-    group.get('color')?.setValue(value);
   }
 }

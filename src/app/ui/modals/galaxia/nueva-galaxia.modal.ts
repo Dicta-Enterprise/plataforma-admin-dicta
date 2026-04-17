@@ -22,7 +22,6 @@ import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { Divider } from 'primeng/divider';
-import { ColorPicker} from 'primeng/colorpicker';
 import { FormGroup } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 
@@ -43,7 +42,6 @@ import { SelectModule } from 'primeng/select';
     TabsModule,
     FieldsetModule,
     Divider,
-    ColorPicker,
     SelectModule
   ],
   providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, CategoriaService],  
@@ -154,13 +152,5 @@ export class NuevaGalaxia implements OnInit {
       this.galaxiaFormPresenter.activarSimple();
       this.activeTab = '';
     }
-  }
-
-  onHexInput(event: Event, group: FormGroup) {
-    const value = (event.target as HTMLInputElement).value?.toUpperCase();
-
-    if (!value) return;
-
-    group.get('color')?.setValue(value);
   }
 }

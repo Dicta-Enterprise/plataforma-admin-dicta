@@ -110,29 +110,6 @@
       </p-floatLabel>
     </div>
 
-    <div class="field mb-3 col-12 md:col-6">
-      <p-floatLabel>
-        <div class="color-input-wrapper">
-          <input
-            pInputText
-            [value]="group.get('color')?.value"
-            (input)="onHexInput($event, group)"
-            class="w-full pr-8"/>
-          <p-colorpicker
-            formControlName="color"
-            format="hex"
-            appendTo="body"
-            [style]="{
-              position: 'absolute',
-              right: '0.5rem',
-              top: '50%',
-              transform: 'translateY(-50%)'
-            }">
-          </p-colorpicker>
-        </div>
-        <label>Color</label>
-      </p-floatLabel>
-    </div>
 
     <div class="field col-12 md:col-6">
       <p-floatLabel>

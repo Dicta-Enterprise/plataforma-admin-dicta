@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Galaxia } from '@class/galaxias/Galaxia.class';
-import { LocalStateService } from '@class/state/local-state.class';
 import { StepPresenter } from 'src/app/core/helpers/forms/step.presenter';
 import { Categoria } from '@class/categoria/Categoria.class';
 
@@ -13,7 +12,6 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly localStateService: LocalStateService,
   ) {
     super();
   }
@@ -35,7 +33,6 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       descripcion: ['', Validators.required],
       imagen: ['', Validators.required],
       estado: [true],
-      color: ['#989898', Validators.required],
       categoria: ['', Validators.required],
       categoriaId: ['', Validators.required],
       tema: [''],
@@ -55,19 +52,6 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       }),
     });
 
-    const colorControl = group.get('color');
-
-    colorControl?.valueChanges.subscribe((value) => {
-      if (!value) return;
-
-      const upper = value.toUpperCase();
-
-      if (value !== upper) {
-        colorControl.setValue(upper, { emitEvent: false });
-      }
-
-      colorControl.updateValueAndValidity({ emitEvent: false });
-    });
 
     return group;
   }
