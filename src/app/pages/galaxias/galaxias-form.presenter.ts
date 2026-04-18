@@ -37,7 +37,6 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       estado: [true],
       color: ['#989898', Validators.required],
       categoria: ['', Validators.required],
-      categoriaId: ['', Validators.required],
       tema: [''],
       url: [''],
       textura: [''],
@@ -95,8 +94,8 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       const group = this.createGalaxiaGroup();
 
       group.patchValue({
-        categoriaId: String(cat.id),
-        categoria: cat.nombre ?? null,
+        categoria: cat,
+        categoriaId: cat.id
       });
 
       group.get('nombre')?.clearValidators();

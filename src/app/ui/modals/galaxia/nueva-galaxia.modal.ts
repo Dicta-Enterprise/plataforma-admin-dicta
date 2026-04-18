@@ -25,6 +25,7 @@ import { Divider } from 'primeng/divider';
 import { ColorPicker} from 'primeng/colorpicker';
 import { FormGroup } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-nueva-galaxia',
@@ -44,7 +45,7 @@ import { SelectModule } from 'primeng/select';
     FieldsetModule,
     Divider,
     ColorPicker,
-    SelectModule
+    SelectModule,
   ],
   providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, CategoriaService],  
   templateUrl: './nueva-galaxia.modal.html',

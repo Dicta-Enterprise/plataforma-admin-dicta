@@ -14,10 +14,7 @@ export class GalaxiaMapper {
       textura: value.textura,      
       estado: value.estado,  
       tema: value.tema,    
-      categoriaId: typeof value.categoria === 'object'
-        ? value.categoria.id
-        : value.categoria,     
-      
+      categoriaId: value.categoria.id,
       color: value.color,
       posicion: {
         x: Number(value.posicion?.x ?? 0),
