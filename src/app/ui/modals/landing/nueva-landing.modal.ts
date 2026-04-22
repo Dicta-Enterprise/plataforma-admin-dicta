@@ -89,15 +89,14 @@ export class NuevaLanding implements OnInit {
           ? this.model.contenido.join('\n')
           : '',
         imagenesTexto: Array.isArray(this.model.itemImagenesLanding)
-          ? this.model.itemImagenesLanding.map((i) => i.url).join('\n')
+          ? this.model.itemImagenesLanding.map(i => i.url).join('\n')
           : '',
         coloresTexto: Array.isArray(this.model.itemColores)
-          ? this.model.itemColores.map((c) => c.color).join('\n')
+          ? this.model.itemColores.map(c => c.color).join('\n')
           : '',
       });
     }
   }
-
   guardarLanding() {
     this.landingFormPresenter.Form.markAllAsTouched();
 
@@ -110,22 +109,12 @@ export class NuevaLanding implements OnInit {
     );
 
     if (this.isEdit) {
-      console.log('json del mapper:', dto);
-      console.log('form válido:', this.landingFormPresenter.Form.valid);
-      console.log('DTO enviado:', JSON.stringify(dto, null, 2));
       this.landingFacade.editarLanding(this.landingId, dto);
-
     } else {
-      console.log('json del mapper:', dto);
-      console.log('form válido:', this.landingFormPresenter.Form.valid);
-      console.log('DTO enviado:', JSON.stringify(dto, null, 2));
       this.landingFacade.guardarLanding(dto);
-
     }
 
     this.close();
-
-
   }
 
   get contenido() {
