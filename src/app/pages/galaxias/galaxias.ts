@@ -4,7 +4,6 @@ import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MenuModule } from 'primeng/menu';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { CardGalaxias } from '@components//categorias/galaxias/card-galaxias';
@@ -19,6 +18,7 @@ import { CategoriaService } from 'src/app/core/services/categorias/categoria.ser
 import { Categoria } from '@class/categoria/Categoria.class';
 import { CATEGORIA_REPOSITORY } from 'src/app/core/tokens/categoria.token';
 import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repository.impl';
+import { SelectModule } from 'primeng/select';
 
 
 
@@ -29,12 +29,12 @@ import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repos
     BadgeModule,
     ButtonModule,
     DividerModule,
-    MultiSelectModule,
     StyleClassModule,
     ToggleButtonModule,
     FormsModule,
     MenuModule,
     CardGalaxias,
+    SelectModule,
   ],
   providers: [
     GalaxiaFacade, 
@@ -51,7 +51,7 @@ import { CategoriaRepositoryImpl } from 'src/app/infraestructure/categoria.repos
 export class Galaxias implements OnInit, OnDestroy { 
   categorias: Categoria[]=[];
 
-  categoriaSelected: Categoria[] = [];
+  categoriaSelected: Categoria | null = null;
 
   activos = false;
   inactivos = false;
@@ -111,16 +111,15 @@ export class Galaxias implements OnInit, OnDestroy {
   limpiarFiltros() {
     this.activos = false;
     this.inactivos = false;
-    this.categoriaSelected = [];
+    this.categoriaSelected = null;
     this.filtrarGalaxias(this.galaxias$.getValue());
   }
 
   filtrarGalaxias(galaxias: Galaxia[]) {
     let filtradas = galaxias;
 
-    if (this.categoriaSelected && this.categoriaSelected.length > 0) {
-      const idsSeleccionados = this.categoriaSelected.map(c => c.id);
-      filtradas = filtradas.filter(g => idsSeleccionados.includes(g.categoriaId));
+    if (this.categoriaSelected) {
+      filtradas = filtradas.filter(g => g.categoriaId === this.categoriaSelected!.id);
     }
 
     if (this.activos && !this.inactivos) {

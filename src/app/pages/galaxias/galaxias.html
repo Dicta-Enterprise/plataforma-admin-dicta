@@ -24,18 +24,17 @@
 </p>
 <p-divider class="w-full"></p-divider>
 <div class="flex flex-wrap gap-3 align-items-center mb-4">
-  <p-multiSelect
-    [options]="categorias"
-    [(ngModel)]="categoriaSelected"
-    placeholder="Categoria"
-    optionLabel="nombre"
-    [maxSelectedLabels]="2"
-    selectedItemsLabel="{0} categorias seleccionados"
-    class="w-30rem mb-3 text-900"
-    appendTo="body"
-    (onChange)="filtrarGalaxias(galaxias$.value)"
-  ></p-multiSelect>
-  
+        <p-select
+        [options]="categorias"
+        [(ngModel)]="categoriaSelected"
+        placeholder="Categoria"
+        optionLabel="nombre"
+        [showClear]="true"
+        class="w-30rem mb-3 text-900"
+        appendTo="body"
+        (onChange)="filtrarGalaxias(galaxias$.value)"
+      ></p-select>
+        
   <p-togglebutton
     [(ngModel)]="activos"
     onLabel="Activos"
