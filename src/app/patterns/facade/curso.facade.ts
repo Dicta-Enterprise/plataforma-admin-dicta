@@ -40,6 +40,15 @@ export class CursoFacade {
       })
     );
   }
+  
+  crearCurso(payload: Partial<Curso>): Observable<Curso> {
+    return this.cursoService.crearCurso(payload).pipe(
+      tap((cursoCreado) => {
+        const cursos = [...this.cursos$.value, new Curso(cursoCreado)];
+        this.cursos$.next(cursos);
+      })
+    );
+  }
 
   actualizarEstado(id: string, estado: boolean): Observable<Curso> {
     return this.cursoService.eliminarCurso(id).pipe(
