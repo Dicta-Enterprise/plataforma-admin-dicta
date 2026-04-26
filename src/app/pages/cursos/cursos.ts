@@ -14,21 +14,23 @@ import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 
 import { EliminarCurso } from 'src/app/ui/modals/curso/eliminar-curso.modal';
 
-interface FilterOption {
-  label: string;
-  value: string;
-}
+import { NuevoCurso } from 'src/app/ui/modals/curso/nuevo-curso.modal';
+
+  interface FilterOption {
+    label: string;
+    value: string;
+  }
 
 const EMPTY_CATEGORY_VALUE = '__EMPTY_CATEGORY__';
 
-@Component({
-  selector: 'app-cursos',
-  standalone: true,
-  imports: [CommonModule, ButtonModule, RippleModule],
-  providers: [CursoFacade, CursoService],
-  templateUrl: './cursos.html',
-  styleUrls: ['./cursos.css'],
-})
+  @Component({
+    selector: 'app-cursos',
+    standalone: true,
+    imports: [CommonModule, ButtonModule, RippleModule],
+    providers: [CursoFacade, CursoService],
+    templateUrl: './cursos.html',
+    styleUrls: ['./cursos.css'],
+  })
 export class Cursos implements OnInit, OnDestroy {
   private readonly subscription = new Subscription();
   readonly cursos$: Observable<Curso[]>;
@@ -51,8 +53,8 @@ export class Cursos implements OnInit, OnDestroy {
   });
 
   constructor(
-  private readonly cursoFacade: CursoFacade,
-  private readonly modalService: ModalService,
+    private readonly cursoFacade: CursoFacade,
+    private readonly modalService: ModalService,
   ) 
   {
     this.cursos$ = this.cursoFacade.cursos$;
@@ -71,12 +73,12 @@ export class Cursos implements OnInit, OnDestroy {
         if (unique.has('')) {
           options.push({ label: 'Sin categoria', value: EMPTY_CATEGORY_VALUE });
         }
-        
+          
 
         return options;
       })
     );
-    
+      
 
     this.precioRango$ = this.cursos$.pipe(
       map((cursos) => {
@@ -141,6 +143,13 @@ export class Cursos implements OnInit, OnDestroy {
   refrescar(): void {
     this.cursoFacade.listarCursos();
   }
+    
+  nuevoCurso(): void {
+    const ref = this.modalService.openByName(MODELS_ENUM.NUEVO_CURSO);
+    (ref.instance as NuevoCurso).creado.subscribe(() => {
+      this.cursoFacade.listarCursos();
+    });
+  }
 
   cambiarEstado(curso: Curso, estado: boolean): void {
     const sub = this.cursoFacade
@@ -161,6 +170,8 @@ export class Cursos implements OnInit, OnDestroy {
       this.cursoFacade.listarCursos();
     });
   }
+
+    
   onCategoriaFilterChange(value: string): void {
     this.selectedCategoria = value;
     this.categoriaFiltro$.next(value);
