@@ -1,0 +1,101 @@
+<p-toast></p-toast>
+<p-dialog
+  [(visible)]="visible"
+  appendTo="body"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [style]="{ width: '40vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-plus-circle text-primary"></i>
+      <span class="font-bold text-xl">Crear Curso</span>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="form" class="flex flex-column gap-4 pt-3">
+    <p-floatLabel>
+      <input pInputText id="nombre" formControlName="nombre" class="w-full" />
+      <label for="nombre">Nombre</label>
+    </p-floatLabel>
+
+    <p-floatLabel>
+      <textarea
+        pInputTextarea
+        id="descripcion"
+        formControlName="descripcion"
+        class="w-full"
+        rows="3"
+      ></textarea>
+      <label for="descripcion">Descripción</label>
+    </p-floatLabel>
+
+    <p-floatLabel>
+      <input pInputText id="imagen" formControlName="imagen" class="w-full" />
+      <label for="imagen">URL de imagen</label>
+    </p-floatLabel>
+
+    <div class="flex flex-column gap-1">
+      <label for="categoriaId" class="text-600 text-sm">Categoría</label>
+      <p-select
+        id="categoriaId"
+        formControlName="categoriaId"
+        [options]="categorias"
+        optionLabel="nombre"
+        optionValue="id"
+        placeholder="Selecciona una categoría"
+        appendTo="body"
+        class="w-full"
+      ></p-select>
+    </div>
+
+    <p-floatLabel>
+      <input pInputText id="profesorId" formControlName="profesorId" class="w-full" />
+      <label for="profesorId">ID del Profesor</label>
+    </p-floatLabel>
+
+    <div class="flex gap-3">
+      <p-floatLabel class="flex-1">
+        <input pInputText id="precio" type="number" formControlName="precio" class="w-full" />
+        <label for="precio">Precio (COP)</label>
+      </p-floatLabel>
+
+      <p-floatLabel class="flex-1">
+        <input pInputText id="duracionSemanas" type="number" formControlName="duracionSemanas" class="w-full" />
+        <label for="duracionSemanas">Duración (semanas)</label>
+      </p-floatLabel>
+    </div>
+
+      <div class="flex gap-3">
+      <div class="flex flex-column gap-1 flex-1">
+        <label for="fechaInicio" class="text-600 text-sm">Fecha de inicio</label>
+        <input pInputText id="fechaInicio" type="date" formControlName="fechaInicio" class="w-full" />
+      </div>
+
+      <div class="flex flex-column gap-1 flex-1">
+        <label for="fechaFinal" class="text-600 text-sm">Fecha de fin</label>
+        <input pInputText id="fechaFinal" type="date" formControlName="fechaFinal" class="w-full" />
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      class="p-button-outlined p-button-secondary"
+      (click)="close()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Guardar"
+      class="p-button-primary"
+      (click)="guardar()"
+    ></button>
+  </ng-template>
+  
+</p-dialog>
