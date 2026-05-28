@@ -19,16 +19,22 @@ export class GalaxiaFacade {
       .subscribe((galaxia) => this.galaxias$.next(galaxia));
   }
 
-  guardarGalaxia(dto: CreateGalaxiaDto) {    
+  guardarGalaxia(dto: CreateGalaxiaDto, onSuccess?: (galaxia: Galaxia) => void) {    
     this.galaxiaService
       .guardarGalaxia(dto)
-      .subscribe(resp => this.galaxia$.next(resp));
+      .subscribe(resp => {
+        this.galaxia$.next(resp);
+        if (onSuccess) onSuccess(resp);
+      });
   }
 
-  guardarMultiplesGalaxias(data:CreateMultipleGalaxiasDto){
+  guardarMultiplesGalaxias(data: CreateMultipleGalaxiasDto, onSuccess?: () => void) {
     this.galaxiaService
       .guardarMultiplesGalaxias(data)
-      .subscribe(() => this.listarGalaxias());
+      .subscribe(() => {
+        this.listarGalaxias();
+        if (onSuccess) onSuccess();
+      });
   }
 
   obtenerGalaxia(id: string) {

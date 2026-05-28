@@ -4,22 +4,34 @@ import { Planeta } from '@class/planetas/Planeta.class';
 
 export class PlanetaMapper {
 
-  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null, rootCodigo: string | null): CreatePlanetaDto {
+  private static mapPlanetaGroupToDto(planetaGroup: FormGroup, rootNombre: string | null): CreatePlanetaDto {
     const datos = planetaGroup.get('datos')?.value;
     const info = planetaGroup.get('info')?.value;
     const peligros = planetaGroup.get('peligros')?.value ?? [];
     const beneficios = planetaGroup.get('beneficios')?.value ?? [];
 
+    // Generar codigo a partir del nombre + sufijo por categoria
+    const nombre = rootNombre ?? '';
+    const stopWords = ['DE', 'LA', 'EL', 'Y', 'EN', 'PARA', 'CON'];
+    const limpio = nombre.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Z0-9 ]/g, '').trim();
+    const palabras = limpio.split(' ').filter(p => p && !stopWords.includes(p));
+    const base = `P${palabras.map(p => p.substring(0, 4)).join('')}`;
+
+    const sufijos: Record<string, string> = {
+      'NIÑOS': '_NIN',
+      'JOVENES': '_JOV',
+      'PADRES': '_PAD'
+    };
+    const categoria = datos.categoria ?? '';
+    const sufijo = sufijos[categoria] ?? `_${categoria.substring(0, 3)}`;
+    const codigo = `${base}${sufijo}`;
+
     return {      
       nombre: rootNombre ?? '',
-      codigo: rootCodigo ?? '',
+      codigo: codigo,
       categoria: datos.categoria, 
-      galaxia: typeof datos.galaxia === 'object'
-        ? datos.galaxia.nombre
-        : datos.galaxia,
-      galaxiaId: typeof datos.galaxia === 'object'
-        ? datos.galaxia.id
-        : datos.galaxiaId,
+      galaxia: typeof datos.galaxia === 'object' ? datos.galaxia.nombre : datos.galaxia,
+      galaxiaId: typeof datos.galaxia === 'object' ? datos.galaxia.id : datos.galaxiaId,
       textura: datos.textura ?? '',
       url: datos.url ?? '',
       imagenResumen: datos.imagenResumen ?? '',
@@ -34,7 +46,6 @@ export class PlanetaMapper {
   static domainToCreateDto(planeta: Planeta): CreatePlanetaDto {
     return {
       nombre: planeta.nombre,
-      codigo: planeta.codigo,
       categoria: planeta.categoria,
       galaxia: planeta.galaxia,
       galaxiaId: planeta.galaxiaId,
@@ -51,13 +62,12 @@ export class PlanetaMapper {
 
   static formToCreateDtos(form: FormGroup): CreatePlanetaDto[] {
     const rootNombre = form.get('nombre')?.value ?? '';
-    const rootCodigo = form.get('codigo')?.value ?? '';
     const planetasArray = form.get('planetas') as FormArray;
 
     if (!planetasArray) return [];
 
     return planetasArray.controls.map((fg) =>
-      PlanetaMapper.mapPlanetaGroupToDto(fg as FormGroup, rootNombre,rootCodigo)
+      PlanetaMapper.mapPlanetaGroupToDto(fg as FormGroup, rootNombre)
     );
   }
   

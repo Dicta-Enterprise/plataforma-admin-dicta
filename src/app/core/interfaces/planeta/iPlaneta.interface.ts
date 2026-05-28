@@ -1,12 +1,12 @@
 export interface CreatePlanetaDto {
   nombre: string;
-  codigo: string;
+  codigo?: string;
   categoria: string;
   resumenCurso: string;
   imagenResumen: string;
   estado: string;
   galaxiaId: string;
-  galaxia: string;  
+  galaxia: string;
   textura: string;
   url: string;
   info?: InfoPlaneta;

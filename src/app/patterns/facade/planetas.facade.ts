@@ -19,10 +19,14 @@ export class PlanetaFacade {
       .subscribe((planeta) => this.planetas$.next(planeta));
   }
 
-  guardarPlaneta(dto: CreatePlanetaDto) {    
-    this.planetaService
-      .guardarPlaneta(dto)
-      .subscribe((resp) => this.planeta$.next(resp));
+  guardarPlaneta(dto: CreatePlanetaDto) {
+    this.planetaService.guardarPlaneta(dto).subscribe({
+      next: (resp) => {
+        this.planeta$.next(resp);
+        this.listarPlanetas();
+      },
+      error: (err) => console.error('Error guardando planeta', err),
+    });
   }
 
   guardarMultiplesPlanetas(data: CreateMultiplesPlanetaDto) {

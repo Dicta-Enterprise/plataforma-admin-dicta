@@ -18,11 +18,16 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
     const direccion = `${this.apiUrl}/planetas`;
 
     return this.http
-      .get<{ data: IPlanetaDto[] }>(direccion)
+      .get<{ data: { _value?: IPlanetaDto[]; value?: IPlanetaDto[] } | IPlanetaDto[] }>(direccion)
       .pipe(
-        map((response) =>
-          response.data.map((dto: IPlanetaDto) => Planeta.fromJson(dto))
-        )
+        map((response) => {
+          const planetas =
+            Array.isArray(response.data)
+              ? response.data
+              : response.data._value ?? response.data.value ?? [];
+
+          return planetas.map((dto: IPlanetaDto) => Planeta.fromJson(dto));
+        })
       );
   }
 
