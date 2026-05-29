@@ -9,7 +9,6 @@ import { EditarGalaxia } from 'src/app/ui/modals/galaxia/editar-galaxia.modal';
 import { EliminarCurso } from 'src/app/ui/modals/curso/eliminar-curso.modal';
 import { NuevoCurso } from 'src/app/ui/modals/curso/nuevo-curso.modal';
 
-
 export const MODAL_REGISTRY: Record<string, Type<object>> = {
   user: UserModalComponent,
   nuevaCategoria:NuevaCategoria,

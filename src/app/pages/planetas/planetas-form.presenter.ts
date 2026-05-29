@@ -110,7 +110,7 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
 
   private generarCodigo(nombre: string): string {
     if (!nombre) return '';
-    const stopWords = ['de', 'la', 'el', 'y', 'en', 'para', 'con'];
+    const stopWords = ['DE', 'LA', 'EL', 'Y', 'EN', 'PARA', 'CON'];
 
     const limpio = nombre
       .toUpperCase()

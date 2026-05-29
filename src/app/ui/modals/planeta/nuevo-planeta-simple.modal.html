@@ -1,0 +1,110 @@
+<p-dialog
+  [(visible)]="visible"
+  appendTo="body"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [style]="{ width: '40vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <ng-template pTemplate="header">
+    <div class="flex flex-column gap-1">
+      <h1 class="m-0 text-900 font-semibold text-xl">NUEVO PLANETA</h1>
+      <span class="text-600 text-sm">Ingrese los datos del nuevo planeta.</span>
+    </div>
+  </ng-template>
+
+  <form class="flex flex-column gap-4 mt-4" [formGroup]="form">
+    <div class="grid formgrid p-fluid row-gap-3">
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <input pInputText formControlName="nombre" class="w-full" />
+          <label>Nombre del planeta</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <p-select
+            formControlName="categoria"
+            [options]="grupos"
+            optionLabel="title"
+            class="w-full"
+            inputStyleClass="w-full"
+          ></p-select>
+          <label>Categoría</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <p-select
+            formControlName="galaxia"
+            [options]="galaxias"
+            optionLabel="nombre"
+            class="w-full"
+            inputStyleClass="w-full"
+          ></p-select>
+          <label>Galaxia</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <input pInputText formControlName="textura" class="w-full" />
+          <label>Textura</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <input pInputText formControlName="url" class="w-full" />
+          <label>URL</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 md:col-6">
+        <p-floatLabel>
+          <input pInputText formControlName="imagenResumen" class="w-full" />
+          <label>URL de la Imagen</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12">
+        <p-floatLabel>
+          <textarea pTextarea formControlName="resumenCurso" rows="5" class="w-full"></textarea>
+          <label>Descripción del Curso</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field col-12 flex align-items-center gap-2">
+        <label>Estado:</label>
+        <p-toggleswitch formControlName="estado"></p-toggleswitch>
+      </div>
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        iconPos="right"
+        variant="outlined"
+        class="text-gray-600"
+        (onClick)="close()"
+      />
+      <p-button
+        label="Guardar"
+        type="button"
+        icon="pi pi-check"
+        iconPos="right"
+        (onClick)="guardarPlaneta()"
+        severity="success"
+        [disabled]="!form.valid"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

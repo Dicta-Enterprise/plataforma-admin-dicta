@@ -2,7 +2,7 @@
   <div class="flex align-items-center mb-3 md:mb-0">
     <div class="text-900 font-bold text-3xl">PLANETAS</div>
     <p-badge
-      [value]="(planetas$ | async)?.length || 0"
+      [value]="(planetasFiltrados$ | async)?.length || 0"
       class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
     ></p-badge>
   </div>
@@ -23,9 +23,64 @@
 </p>
 <p-divider class="w-full"></p-divider>
 
+<div class="flex flex-wrap gap-3 align-items-center mb-4">
+<p-iconField>
+  <p-inputIcon styleClass="pi pi-search" />
+    <input 
+    pInputText 
+    type="text"
+    class="w-20rem"
+    placeholder="Buscar planeta..." 
+    (input)="dt2.filterGlobal($any($event.target).value, 'contains')"                 
+    />
+</p-iconField>
+        <p-select
+        [options]="(categorias$ | async) ?? []"
+        [(ngModel)]="categoriaSelected"
+        placeholder="Categoría"
+        optionLabel="nombre"
+        optionValue="nombre"
+        [showClear]="true"
+        class="w-15rem"
+        appendTo="body"
+        (onChange)="aplicarFiltros()"
+        ></p-select>
+
+        <p-select
+        [options]="(galaxias$ | async) ?? []"
+        [(ngModel)]="galaxiaSelected"
+        placeholder="Galaxia"
+        optionLabel="nombre"
+        optionValue="nombre"
+        [showClear]="true"
+        class="w-15rem"
+        appendTo="body"
+        (onChange)="aplicarFiltros()"
+        ></p-select>
+
+        <p-select
+        [options]="estadoOpciones"
+        [(ngModel)]="estadoSelected"
+        placeholder="Estado"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        class="w-10rem"
+        appendTo="body"
+        (onChange)="aplicarFiltros()"
+        ></p-select>
+
+  <span
+    pRipple
+    tabindex="0"
+    class="cursor-pointer flex align-items-center text-900"
+    (click)="limpiarFiltros()"
+  >Limpiar Todo</span>
+</div>
+
 <p-table
     #dt2
-    [value]="(planetas$ | async) ?? []"
+    [value]="(planetasFiltrados$ | async) ?? []"
     dataKey="id"
     [rows]="10"
     [rowsPerPageOptions]="[10, 25, 50]"
@@ -35,66 +90,18 @@
     [tableStyle]="{ 'min-width': '75rem' }"
     showGridlines
 >    
-    <ng-template #caption>
-        <div class="flex">                
-            <input 
-                pInputText type="text"
-                class="w-20rem p-inputtext-lg border-round-lg border-1 border-gray-300" 
-                placeholder="Buscar planeta..." 
-                (input)="dt2.filterGlobal($event.target.value, 'contains')"                 
-            />        
-        </div>
-    </ng-template>
-    <ng-template #header>
-        <tr>
-            <th class="w-3rem"></th>
-            <th class="w-3rem">Índice</th>
-            <th class="w-12rem">Nombre</th>
-            <th class="w-6rem">Categoría</th>
-            <th class="w-9rem">Galaxia</th>
-            <th class="w-6rem">Estado</th>
-            <th class="w-6rem">Ver Imagen</th>
-            <th class="w-6rem">Acciones</th>
-        </tr>
-        <tr>
-            <th></th>
-            <th></th>
-            <th>
-                <p-columnFilter 
-                    type="text" 
-                    field="nombre" 
-                    placeholder="Ingresar busqueda..." 
-                    ariaLabel="Filtrar Nombre"
-                ></p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter 
-                    type="text" 
-                    field="categoria" 
-                    placeholder="Ingresar busqueda..." 
-                    ariaLabel="Filtrar Categoría"
-                ></p-columnFilter>
-            </th>            
-            <th>
-                <p-columnFilter 
-                    type="text" 
-                    field="galaxia" 
-                    placeholder="Ingresar busqueda..." 
-                    ariaLabel="Filtrar Galaxia"
-                ></p-columnFilter>
-            </th>
-            <th>
-                <p-columnFilter 
-                    type="text" 
-                    field="estado" 
-                    placeholder="Ingresar busqueda..." 
-                    ariaLabel="Filtrar Estado"
-                ></p-columnFilter>
-            </th>            
-            <th></th>
-            <th></th>
-        </tr>
-    </ng-template>
+ <ng-template #header>
+    <tr>
+        <th class="w-3rem"></th>
+        <th class="w-3rem">Índice</th>
+        <th class="w-6rem">Categoría</th>
+        <th class="w-9rem">Galaxia</th>
+        <th class="w-12rem">Nombre del Planeta</th>
+        <th class="w-6rem">Estado</th>
+        <th class="w-6rem">Ver Imagen</th>
+        <th class="w-6rem">Acciones</th>
+    </tr>
+</ng-template>
     <ng-template #body let-planeta let-i="rowIndex" let-expanded="expanded">
         <tr>
             <td>
@@ -110,13 +117,13 @@
                 {{ i + 1 + (dt2.first ?? 0) }}                
             </td>
             <td>
-                {{ planeta.nombre }}
+                {{ planeta.categoria }}
             </td>
             <td>
-                {{ planeta.categoria }}
-            </td>            
-            <td>
                 {{ planeta.galaxia | formatoTexto }}
+            </td>
+            <td>
+                {{ planeta.nombre }}
             </td>
             <td>
                 @switch (planeta.estado) {
@@ -172,7 +179,6 @@
                     (click)="eliminarPlaneta(planeta)">
                 </button>
             </td>  
-
         </tr>
     </ng-template>
     <ng-template #expandedrow let-planeta>

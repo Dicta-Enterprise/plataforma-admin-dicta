@@ -18,14 +18,18 @@ import { TabsModule } from 'primeng/tabs';
 import { FieldsetModule } from 'primeng/fieldset';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { CUSTOM_GALAXIA_PROVIDER } from 'src/app/core/providers/galaxia.provider';
-import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
 import { Categoria } from '@class/categoria/Categoria.class';
 import { Divider } from 'primeng/divider';
 import { ColorPicker} from 'primeng/colorpicker';
 import { FormGroup } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
-import { FormArray } from '@angular/forms';
+  
+import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
 
 @Component({
   selector: 'app-nueva-galaxia',
@@ -46,8 +50,9 @@ import { FormArray } from '@angular/forms';
     Divider,
     ColorPicker,
     SelectModule,
+    ConfirmDialogModule,
   ],
-  providers: [CUSTOM_GALAXIA_PROVIDER,GalaxiaService, GalaxiaFacade, CategoriaService],  
+  providers: [CUSTOM_GALAXIA_PROVIDER, GalaxiaService, GalaxiaFacade, CategoriaService, ConfirmationService],  
   templateUrl: './nueva-galaxia.modal.html',
   
 })
@@ -65,6 +70,8 @@ export class NuevaGalaxia implements OnInit {
     public readonly galaxiaFormPresenter: GalaxiasFormPresenter,
     private galaxiaService: GalaxiaService,
     private categoriaService: CategoriaService,
+    private router: Router,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
@@ -109,7 +116,6 @@ export class NuevaGalaxia implements OnInit {
   }
 
   guardarGalaxia() {    
-    
     this.galaxiaFormPresenter.Form.markAllAsTouched();
 
     if (this.galaxiaFormPresenter.Form.invalid) {
@@ -120,16 +126,36 @@ export class NuevaGalaxia implements OnInit {
     if (this.multiple) {
       const dto = GalaxiaMultipleMapper.formToCreateMultiplesDto(this.galaxiaFormPresenter.Form);
 
-      this.galaxiaFacade.guardarMultiplesGalaxias(dto);
+      this.galaxiaFacade.guardarMultiplesGalaxias(dto, () => {
+        this.mostrarConfirmacion(null, true);
+      });
 
     } else {
       const dto = GalaxiaMapper.formToCreateDto(this.galaxiaFormPresenter.Form);
 
-      this.galaxiaFacade.guardarGalaxia(dto);    
-        
+      this.galaxiaFacade.guardarGalaxia(dto, (galaxiaGuardada) => {
+        this.mostrarConfirmacion(galaxiaGuardada, false);
+      });    
     }
 
     this.close();
+  }
+
+  private mostrarConfirmacion(galaxia: IGalaxiaDto | null, esMultiple: boolean) {
+    this.confirmationService.confirm({
+      message: esMultiple 
+        ? '¿Deseas agregar planetas a estas galaxias?' 
+        : '¿Deseas agregar un planeta a esta galaxia?',
+      header: 'Ir a Planetas',
+      icon: 'pi pi-arrow-right',
+      acceptLabel: 'Sí, ir a Planetas',
+      rejectLabel: 'No, quedarse aquí',
+      accept: () => {
+        this.router.navigate(['/planetas'], {
+          state: { galaxia, esMultiple }
+        });
+      }
+    });
   }
 
   actualizarGalaxia() {   
