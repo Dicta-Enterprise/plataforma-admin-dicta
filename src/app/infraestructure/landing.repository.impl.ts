@@ -60,7 +60,6 @@ export class LandingRepositoryImpl implements LandingRepository {
 
     return this.http
       .delete<{ data: CreateLandingDto }>(direccion)
-      .pipe(map((response) => Landing.fromJson(response.data)));
-  } 
-
+      .pipe(map((response) => response.data ? Landing.fromJson(response.data) : new Landing()));
+  }
 }
