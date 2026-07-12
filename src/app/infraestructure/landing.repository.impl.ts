@@ -41,7 +41,6 @@ export class LandingRepositoryImpl implements LandingRepository {
       .post<{ data: CreateLandingDto }>(direccion, landing)
       .pipe(
         map(response => {
-          console.log('RESPONSE 🔍', response);
           return Landing.fromJson(response.data);
         }));
   }
@@ -51,7 +50,7 @@ export class LandingRepositoryImpl implements LandingRepository {
 
     return this.http
       .patch<{ data: CreateLandingDto }>(direccion, landing)
-      .pipe(map((response) => Landing.fromJson(response.data)));
+      .pipe(map((response) => response.data ? Landing.fromJson(response.data) : new Landing()));
   }
 
 

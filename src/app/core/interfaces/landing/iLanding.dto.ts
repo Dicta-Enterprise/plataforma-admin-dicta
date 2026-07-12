@@ -1,5 +1,7 @@
 export interface ItemImagenLandingDto {
-  url: string;
+  url?: string;
+  imagenUrl?: string;
+  id?: string;
 }
 
 export interface ItemColorDto {

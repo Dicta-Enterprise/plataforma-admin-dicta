@@ -50,7 +50,7 @@ export class Landing {
       landingUrl: dto.landingUrl,
 
       itemImagenesLanding: (dto.itemImagenesLanding ?? []).map((img: ItemImagenLandingDto) => ({
-        url: img.url
+        url: img.imagenUrl ?? img.url ?? ''
       })),
 
       itemColores: (dto.itemColores ?? []).map((col: ItemColorDto) => ({
