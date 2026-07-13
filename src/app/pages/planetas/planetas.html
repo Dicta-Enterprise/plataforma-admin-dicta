@@ -31,7 +31,7 @@
     type="text"
     class="w-20rem"
     placeholder="Buscar planeta..." 
-    (input)="dt2.filterGlobal(($event.target | asInputElement).value, 'contains')"                  
+    (input)="dt2.filterGlobal($event.target.value, 'contains')"                  
     />
   </p-iconField>
 
