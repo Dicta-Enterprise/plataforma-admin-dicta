@@ -16,6 +16,7 @@ export class Planeta {
   info?: InfoPlaneta;
   peligros: Peligro[]=[];
   beneficios: Beneficio[]=[];
+  createdAt?: string;
 
   constructor(planeta: Partial<Planeta> = {}) {
     this.id = planeta.id ?? '';
@@ -32,6 +33,7 @@ export class Planeta {
     this.info = planeta.info;
     this.peligros = planeta.peligros ?? [];
     this.beneficios = planeta.beneficios ?? [];  
+    this.createdAt = planeta.createdAt;
   }
 
   static fromJson(planeta: unknown): Planeta {
@@ -52,6 +54,7 @@ export class Planeta {
       info: casted['info'] as InfoPlaneta,
       peligros: casted['peligros'] as Peligro[],
       beneficios: casted['beneficios'] as Beneficio[],
+      createdAt: (casted['createdAt'] || casted['created_at']) as string | undefined,
     });
   }
 

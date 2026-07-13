@@ -24,51 +24,54 @@
 <p-divider class="w-full"></p-divider>
 
 <div class="flex flex-wrap gap-3 align-items-center mb-4">
-<p-iconField>
-  <p-inputIcon styleClass="pi pi-search" />
+  <p-iconField>
+    <p-inputIcon styleClass="pi pi-search" />
     <input 
     pInputText 
     type="text"
     class="w-20rem"
     placeholder="Buscar planeta..." 
-    (input)="dt2.filterGlobal($any($event.target).value, 'contains')"                 
+    (input)="dt2.filterGlobal(($event.target | asInputElement).value, 'contains')"                  
     />
-</p-iconField>
-        <p-select
-        [options]="(categorias$ | async) ?? []"
-        [(ngModel)]="categoriaSelected"
-        placeholder="Categoría"
-        optionLabel="nombre"
-        optionValue="nombre"
-        [showClear]="true"
-        class="w-15rem"
-        appendTo="body"
-        (onChange)="aplicarFiltros()"
-        ></p-select>
+  </p-iconField>
 
-        <p-select
-        [options]="(galaxias$ | async) ?? []"
-        [(ngModel)]="galaxiaSelected"
-        placeholder="Galaxia"
-        optionLabel="nombre"
-        optionValue="nombre"
-        [showClear]="true"
-        class="w-15rem"
-        appendTo="body"
-        (onChange)="aplicarFiltros()"
-        ></p-select>
+  <p-select
+  [options]="(categorias$ | async) ?? []"
+  [(ngModel)]="categoriaSelected"
+  placeholder="Categoría"
+  optionLabel="nombre"
+  optionValue="nombre"
+  [showClear]="true"
+  class="w-15rem"
+  appendTo="body"
+  (onChange)="aplicarFiltros()"
+  ></p-select>
 
-        <p-select
-        [options]="estadoOpciones"
-        [(ngModel)]="estadoSelected"
-        placeholder="Estado"
-        optionLabel="label"
-        optionValue="value"
-        [showClear]="true"
-        class="w-10rem"
-        appendTo="body"
-        (onChange)="aplicarFiltros()"
-        ></p-select>
+  <p-select
+  [options]="(galaxias$ | async) ?? []"
+  [(ngModel)]="galaxiaSelected"
+  placeholder="Galaxia"
+  optionLabel="nombre"
+  optionValue="nombre"
+  [showClear]="true"
+  class="w-15rem"
+  appendTo="body"
+  (onChange)="aplicarFiltros()"
+  ></p-select>
+
+  <p-select
+  [options]="estadoOpciones"
+  [(ngModel)]="estadoSelected"
+  placeholder="Estado"
+  optionLabel="label"
+  optionValue="value"
+  [showClear]="true"
+  class="w-10rem"
+  appendTo="body"
+  (onChange)="aplicarFiltros()"
+  ></p-select>
+
+  <p-button icon="pi pi-refresh" (onClick)="recargarDatos()"></p-button>
 
   <span
     pRipple
@@ -178,7 +181,7 @@
                     tooltipPosition="top"
                     (click)="eliminarPlaneta(planeta)">
                 </button>
-            </td>  
+            </td>   
         </tr>
     </ng-template>
     <ng-template #expandedrow let-planeta>

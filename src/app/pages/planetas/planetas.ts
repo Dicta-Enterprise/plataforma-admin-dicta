@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table'; 
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { DialogModule } from 'primeng/dialog';
@@ -28,10 +28,7 @@ import { GALAXIA_REPOSITORY } from 'src/app/core/tokens/galaxia.token';
 import { GalaxiaRepositoryImpl } from 'src/app/infraestructure/galaxia.repository.impl';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { InputTextModule } from 'primeng/inputtext';
-
-
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-planetas',
@@ -65,6 +62,7 @@ import { Router } from '@angular/router';
   styleUrl: './planetas.css',
 })
 export class Planetas implements OnInit, OnDestroy {
+  @ViewChild('dt2') table!: Table;
 
   public subscription: Subscription = new Subscription();
   private destroy$ = new Subject<void>();
@@ -74,7 +72,7 @@ export class Planetas implements OnInit, OnDestroy {
   categorias$ = new BehaviorSubject<Categoria[]>([]);
   galaxias$ = new BehaviorSubject<Galaxia[]>([]);
   planetasFiltrados$ = new BehaviorSubject<Planeta[]>([]);
-    
+      
   categoriaSelected: string | null = null;
   galaxiaSelected: string | null = null;
   estadoSelected: string | null = null;
@@ -85,11 +83,11 @@ export class Planetas implements OnInit, OnDestroy {
   ];
 
   constructor(
-      private readonly planetaFacade: PlanetaFacade,
-      private readonly categoriaFacade: CategoriaFacade,
-      private readonly galaxiaFacade: GalaxiaFacade,
-      private modalService: ModalService,
-      private router: Router,
+    private readonly planetaFacade: PlanetaFacade,
+    private readonly categoriaFacade: CategoriaFacade,
+    private readonly galaxiaFacade: GalaxiaFacade,
+    private modalService: ModalService,
+    private router: Router,
   ) {
     this.categorias$ = this.categoriaFacade.categorias$;
     this.galaxias$ = this.galaxiaFacade.galaxias$;
@@ -100,10 +98,13 @@ export class Planetas implements OnInit, OnDestroy {
     this.categoriaFacade.listarCategorias();
     this.galaxiaFacade.listarGalaxias();
     this.subscription.add(
-      this.planetaFacade.planetas$.subscribe(planetas => this.filtrarPlanetas(planetas))
+      this.planetaFacade.planetas$.subscribe((planetas) => {
+        if (planetas) {
+          this.filtrarPlanetas(planetas);
+        }
+      })
     );
 
-    // Detectar si viene navegado desde Galaxias
     const state = this.router.lastSuccessfulNavigation?.extras?.state;
     if (state?.['galaxia'] || state?.['esMultiple']) {
       const galaxia = state['galaxia'];
@@ -136,9 +137,16 @@ export class Planetas implements OnInit, OnDestroy {
   }
 
   nuevoPlaneta() {
-    this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
+    const ref = this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
       title: 'Nuevo Planeta',
-    });
+    }) as ComponentRef<{ visible: boolean }>;
+
+    if (ref && ref.onDestroy) {
+      ref.onDestroy(() => {
+        this.planetaFacade.listarPlanetas();
+        this.aplicarFiltros();
+      });
+    }
   }
 
   eliminarPlaneta(planeta: Planeta): void {
@@ -146,6 +154,11 @@ export class Planetas implements OnInit, OnDestroy {
     if (!ok) return;
     this.planetaFacade.eliminarPlaneta(planeta.id);
   }
+
+  recargarDatos() {
+    this.planetaFacade.listarPlanetas();
+  }
+
   filtrarPlanetas(planetas: Planeta[]): void {
     let resultado = [...planetas];
 
@@ -156,16 +169,30 @@ export class Planetas implements OnInit, OnDestroy {
     }
 
     if (this.galaxiaSelected) {
-      resultado = resultado.filter(p =>
-        p.galaxia?.toUpperCase() === this.galaxiaSelected!.toUpperCase()
-      );
+      resultado = resultado.filter(p => {
+        const nombreGalaxia = p.galaxia && typeof p.galaxia === 'object' && 'nombre' in p.galaxia
+          ? (p.galaxia as Record<string, string>)['nombre']
+          : p.galaxia;
+        return nombreGalaxia?.toUpperCase() === this.galaxiaSelected!.toUpperCase();
+      });
     }
 
     if (this.estadoSelected) {
       resultado = resultado.filter(p => p.estado === this.estadoSelected);
     }
 
-    this.planetasFiltrados$.next(resultado);
+    resultado.sort((a, b) => {
+      const fechaA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const fechaB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return fechaB - fechaA;
+    });
+
+    if (this.table) {
+      this.table.sortField = '';
+      this.table.sortOrder = 1;
+    }
+
+    this.planetasFiltrados$.next([...resultado]);
   }
 
   limpiarFiltros(): void {
@@ -174,7 +201,8 @@ export class Planetas implements OnInit, OnDestroy {
     this.estadoSelected = null;
     this.aplicarFiltros();
   }
-  aplicarFiltros(): void {
+
+  aplicarFiltros() {
     this.filtrarPlanetas(this.planetaFacade.planetas$.value);
   }
 }

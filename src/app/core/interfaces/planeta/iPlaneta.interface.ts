@@ -16,6 +16,7 @@ export interface CreatePlanetaDto {
 
 export interface IPlanetaDto extends CreatePlanetaDto {
   id: string;
+  createdAt?: string;
 }
 
 export interface InfoPlaneta {
