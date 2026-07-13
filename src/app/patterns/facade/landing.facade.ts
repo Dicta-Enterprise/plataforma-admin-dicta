@@ -11,12 +11,11 @@ export class LandingFacade {
   landings$ = new BehaviorSubject<Landing[]>([]);
   landing$ = new BehaviorSubject<Landing>(new Landing());
 
-  constructor(private readonly landingService: LandingService) { console.log('LandingFacade initialized'); }
+  constructor(private readonly landingService: LandingService) {}
 
-  listarLandings() {
-    console.log('Listing landings');
+  listarLandings(categoriaId: string, galaxiaId: string, planetaId: string): void {
     this.landingService
-      .listarLanding()
+      .listarLanding(categoriaId, galaxiaId, planetaId)
       .subscribe((landings) => this.landings$.next(landings));
   }
 
@@ -24,7 +23,6 @@ export class LandingFacade {
     this.landingService.crearLanding(landing).subscribe({
       next: (created) => {
         this.landing$.next(created);
-        this.listarLandings();
       },
       error: (err) => {
         console.error('Error creando landing', err?.error || err);
@@ -34,14 +32,10 @@ export class LandingFacade {
     });
   }
 
-
-
-
   editarLanding(id: string, landing: CreateLandingDto) {
     this.landingService.editarLanding(id, landing).subscribe({
       next: (updated) => {
         this.landing$.next(updated);
-        this.listarLandings();
       },
       error: (err) => {
         console.error('Error editando landing', err?.error || err);
@@ -51,13 +45,11 @@ export class LandingFacade {
 
   eliminarLanding(id: string) {
     this.landingService.eliminarLanding(id).subscribe({
-      next: () => {
-        this.listarLandings();
-      },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      next: () => {},
       error: (err) => {
         console.error('Error eliminando landing', err?.error || err);
       },
     });
   }
-
 }

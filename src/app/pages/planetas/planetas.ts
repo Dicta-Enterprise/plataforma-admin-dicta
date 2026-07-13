@@ -28,9 +28,8 @@ import { GALAXIA_REPOSITORY } from 'src/app/core/tokens/galaxia.token';
 import { GalaxiaRepositoryImpl } from 'src/app/infraestructure/galaxia.repository.impl';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { InputTextModule } from 'primeng/inputtext';
-
-
 import { Router } from '@angular/router';
+import { PlanetaEventosService } from 'src/app/core/services/planetas/planeta-eventos.service';
 
 
 @Component({
@@ -74,7 +73,7 @@ export class Planetas implements OnInit, OnDestroy {
   categorias$ = new BehaviorSubject<Categoria[]>([]);
   galaxias$ = new BehaviorSubject<Galaxia[]>([]);
   planetasFiltrados$ = new BehaviorSubject<Planeta[]>([]);
-    
+
   categoriaSelected: string | null = null;
   galaxiaSelected: string | null = null;
   estadoSelected: string | null = null;
@@ -83,13 +82,17 @@ export class Planetas implements OnInit, OnDestroy {
     { label: 'ACTIVO', value: 'ACTIVO' },
     { label: 'INACTIVO', value: 'INACTIVO' },
   ];
+  mostrarSelectorGalaxias = false;
+  galaxiaSeleccionada: Galaxia | null = null;
+  galaxiasParaSelector: Galaxia[] = [];
 
   constructor(
-      private readonly planetaFacade: PlanetaFacade,
-      private readonly categoriaFacade: CategoriaFacade,
-      private readonly galaxiaFacade: GalaxiaFacade,
-      private modalService: ModalService,
-      private router: Router,
+    private readonly planetaFacade: PlanetaFacade,
+    private readonly categoriaFacade: CategoriaFacade,
+    private readonly galaxiaFacade: GalaxiaFacade,
+    private modalService: ModalService,
+    private router: Router,
+    private planetaEventosService: PlanetaEventosService,
   ) {
     this.categorias$ = this.categoriaFacade.categorias$;
     this.galaxias$ = this.galaxiaFacade.galaxias$;
@@ -102,19 +105,28 @@ export class Planetas implements OnInit, OnDestroy {
     this.subscription.add(
       this.planetaFacade.planetas$.subscribe(planetas => this.filtrarPlanetas(planetas))
     );
+    this.subscription.add(
+      this.planetaEventosService.planetaGuardado$.subscribe(() => {
+        this.planetaFacade.listarPlanetas();
+      })
+    );
 
-    // Detectar si viene navegado desde Galaxias
-    const state = this.router.lastSuccessfulNavigation?.extras?.state;
-    if (state?.['galaxia'] || state?.['esMultiple']) {
-      const galaxia = state['galaxia'];
-      const esMultiple = state['esMultiple'];
+    const state = window.history.state;
+    if (state?.galaxia) {
+      const galaxia = state.galaxia;
       setTimeout(() => {
         this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
           title: 'Nuevo Planeta',
           galaxiaPreseleccionada: galaxia,
-          esMultiple: esMultiple,
+          esMultiple: false,
         });
-      }, 300);
+      }, 500);
+    } else if (state?.esMultiple) {
+      const galaxiasRecienCreadas: Galaxia[] = state.galaxiasRecienCreadas ?? [];
+      setTimeout(() => {
+        this.galaxiasParaSelector = galaxiasRecienCreadas;
+        this.mostrarSelectorGalaxias = true;
+      }, 500);
     }
   }
 
@@ -146,6 +158,7 @@ export class Planetas implements OnInit, OnDestroy {
     if (!ok) return;
     this.planetaFacade.eliminarPlaneta(planeta.id);
   }
+
   filtrarPlanetas(planetas: Planeta[]): void {
     let resultado = [...planetas];
 
@@ -174,7 +187,22 @@ export class Planetas implements OnInit, OnDestroy {
     this.estadoSelected = null;
     this.aplicarFiltros();
   }
+
   aplicarFiltros(): void {
-    this.filtrarPlanetas(this.planetaFacade.planetas$.value);
+    this.subscription.add(
+      this.planetaFacade.planetas$.subscribe(planetas => this.filtrarPlanetas(planetas))
+    );
+    this.planetaFacade.listarPlanetas();
+  }
+
+  seleccionarGalaxia(galaxia: Galaxia): void {
+    this.mostrarSelectorGalaxias = false;
+    setTimeout(() => {
+      this.modalService.openByName(MODELS_ENUM.NUEVO_PLANETA, {
+        title: 'Nuevo Planeta',
+        galaxiaPreseleccionada: galaxia,
+        esMultiple: false,
+      });
+    }, 300);
   }
 }

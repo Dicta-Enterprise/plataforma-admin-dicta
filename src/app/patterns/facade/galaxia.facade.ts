@@ -28,12 +28,12 @@ export class GalaxiaFacade {
       });
   }
 
-  guardarMultiplesGalaxias(data: CreateMultipleGalaxiasDto, onSuccess?: () => void) {
+  guardarMultiplesGalaxias(data: CreateMultipleGalaxiasDto, onSuccess?: (galaxias: Galaxia[]) => void) {
     this.galaxiaService
       .guardarMultiplesGalaxias(data)
-      .subscribe(() => {
+      .subscribe((galaxias) => {
         this.listarGalaxias();
-        if (onSuccess) onSuccess();
+        if (onSuccess) onSuccess(galaxias);
       });
   }
 

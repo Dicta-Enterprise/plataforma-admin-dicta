@@ -21,8 +21,16 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { GalaxiaService } from 'src/app/core/services/galaxias/galaxia.service';
 import { CUSTOM_PLANETA_PROVIDER } from 'src/app/core/providers/planeta.provider';
 import { SelectModule } from 'primeng/select';
-
 import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
+import { CategoriaService } from 'src/app/core/services/categorias/categoria.service';
+import { Categoria } from '@class/categoria/Categoria.class';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { filter, take } from 'rxjs';
+import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
+import { Landing } from '@class/landing/Landing.class';
+
+import { PlanetaEventosService } from 'src/app/core/services/planetas/planeta-eventos.service';
 
 @Component({
   selector: 'app-nuevo-planeta',
@@ -41,19 +49,30 @@ import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
     TabsModule,
     FieldsetModule,
     SelectModule,
+    ConfirmDialogModule,
   ],
-  providers: [CUSTOM_PLANETA_PROVIDER, PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService],
+  providers: [CUSTOM_PLANETA_PROVIDER, PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService, CategoriaService, ConfirmationService],
   templateUrl: './nuevo-planeta.modal.html',
 })
 export class NuevoPlaneta implements OnInit {
   @Input() title = 'Nuevo Planeta';
   @Input() galaxiaPreseleccionada: IGalaxiaDto | null = null;
   @Input() esMultiple = true;
+  @Input() planetasPendientes: Planeta[] = [];
+  
   visible = true;
   galaxias: Galaxia[] = [];
-  galaxiasFiltradas: Galaxia[] = [];
+  galaxiasPorCategoria: Record<string, Galaxia[]> = {
+    'NIÑOS': [],
+    'JOVENES': [],
+    'PADRES': [],
+  };
+  categoriasBackend: Categoria[] = [];
   multiple = true;
   formSimple!: FormGroup;
+  mostrarSelectorPlaneta = false;
+  planetasCreados: Planeta[] = [];
+  planetaElegido: Planeta | null = null;
 
   grupos = [
     { title: 'Niños', value: 'NIÑOS' },
@@ -74,6 +93,9 @@ export class NuevoPlaneta implements OnInit {
     private readonly planetaFacade: PlanetaFacade,
     public readonly planetaFormPresenter: PlanetaFormPresenter,
     private galaxiaService: GalaxiaService,
+    private categoriaService: CategoriaService,
+    private confirmationService: ConfirmationService,
+    private planetaEventosService: PlanetaEventosService,
   ) {}
 
   ngOnInit(): void {
@@ -114,23 +136,58 @@ export class NuevoPlaneta implements OnInit {
     this.galaxiaService.listarGalaxias().subscribe(res => {
       this.galaxias = res;
 
-      // Preseleccionar galaxia si viene desde Galaxias
+      this.categoriaService.listarCategorias().subscribe((cats: Categoria[]) => {
+        this.categoriasBackend = cats;
+        const normalizar = (s: string) =>
+          s.toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        this.grupos.forEach(grupo => {
+          const catReal = cats.find((c: Categoria) =>
+            normalizar(c.nombre) === normalizar(grupo.title) ||
+        normalizar(c.nombre) === normalizar(grupo.value)
+          );
+          this.galaxiasPorCategoria[grupo.value] = catReal
+            ? this.galaxias.filter(g => g.categoriaId === catReal.id)
+            : [];
+        });
+      });
+
       if (this.galaxiaPreseleccionada) {
         this.multiple = this.esMultiple;
 
-        const galaxiaEncontrada = this.galaxias.find(g => g.id === this.galaxiaPreseleccionada?.id);
+        setTimeout(() => {
+          const galaxiaEncontrada = this.galaxias.find(g => g.id === this.galaxiaPreseleccionada?.id);
 
-        if (galaxiaEncontrada) {
-          if (!this.multiple) {
-            this.formSimple.get('galaxia')?.setValue(galaxiaEncontrada);
-          } else {
-            this.planetas.controls.forEach(control => {
-              control.get('datos')?.get('galaxia')?.setValue(galaxiaEncontrada);
-            });
+          if (galaxiaEncontrada) {
+            if (!this.multiple) {
+              this.formSimple.get('galaxia')?.setValue(galaxiaEncontrada);
+
+              this.categoriaService.listarCategorias().subscribe((cats: Categoria[]) => {
+                const catEncontrada = cats.find((c: Categoria) => c.id === galaxiaEncontrada.categoriaId);
+                if (catEncontrada) {
+                  const grupoEncontrado = this.grupos.find(g =>
+                    g.title.toUpperCase() === catEncontrada.nombre.toUpperCase() ||
+                        g.value === catEncontrada.nombre.toUpperCase()
+                  );
+                  if (grupoEncontrado) {
+                    this.formSimple.get('categoria')?.setValue(grupoEncontrado);
+                  }
+                }
+              });
+            } else {
+              this.planetas.controls.forEach((control) => {
+                control.get('datos')?.get('galaxia')?.setValue(galaxiaEncontrada);
+              });
+            }
           }
-        }
+        }, 100);
       }
     });
+  }
+        
+  getGalaxiasPorTab(index: number): Galaxia[] {
+    const grupo = this.grupos[index];
+    return this.galaxiasPorCategoria[grupo.value] ?? [];
   }
 
   get planetas() {
@@ -149,7 +206,6 @@ export class NuevoPlaneta implements OnInit {
     return this.planetaFormPresenter.getBeneficios(index);
   }
 
-
   get peligrosSimple(): FormArray {
     return this.formSimple.get('peligros') as FormArray;
   }
@@ -157,7 +213,6 @@ export class NuevoPlaneta implements OnInit {
   get beneficiosSimple(): FormArray {
     return this.formSimple.get('beneficios') as FormArray;
   }
-
 
   addPeligroSimple(): void {
     this.peligrosSimple.push(this.fb.group({
@@ -185,38 +240,23 @@ export class NuevoPlaneta implements OnInit {
     this.beneficiosSimple.removeAt(index);
   }
 
-  guardarPlaneta(): void {
-    this.planetaFormPresenter.Form.markAllAsTouched();
-    if (this.planetaFormPresenter.Form.invalid) return;
-
-    const dto = PlanetaMapper.guardarPlanetasMultiples(this.planetaFormPresenter.Form);
-    this.planetaFacade.guardarMultiplesPlanetas(dto);
-    this.close();
+  propagarGalaxia(galaxia: Galaxia, indexOrigen: number): void {
+    this.planetaFormPresenter.planetas.controls.forEach((control, i) => {
+      if (i !== indexOrigen) {
+        control.get('datos')?.get('galaxia')?.setValue(galaxia);
+      }
+    });
   }
 
   guardarSimple(): void {
     this.formSimple.markAllAsTouched();
     if (this.formSimple.invalid) return;
 
-    const val = this.formSimple.value;
-    const nombre = val.nombre as string;
-    const stopWords = ['DE', 'LA', 'EL', 'Y', 'EN', 'PARA', 'CON'];
-    const limpio = nombre
-      .toUpperCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^A-Z0-9 ]/g, '')
-      .trim();
-
-    const palabras = limpio
-      .split(' ')
-      .filter((p: string) => p && !stopWords.includes(p));
-
-    const codigo = `P${palabras.map((p: string) => p.substring(0, 4)).join('')}`;
+    const val = this.formSimple.getRawValue();
 
     const dto = {
       nombre: val.nombre,
-      codigo: codigo,
+      codigo: val.codigo,
       categoria: val.categoria?.value ?? val.categoria,
       galaxia: typeof val.galaxia === 'object' ? val.galaxia.nombre : val.galaxia,
       galaxiaId: typeof val.galaxia === 'object' ? val.galaxia.id : '',
@@ -239,8 +279,39 @@ export class NuevoPlaneta implements OnInit {
       beneficios: val.beneficios ?? [],
     };
 
+    this.planetaFacade.planeta$.next(new Planeta());
     this.planetaFacade.guardarPlaneta(dto as unknown as CreatePlanetaDto);
-    this.close();
+    this.planetaFacade.planeta$.pipe(
+      filter((p) => !!p.id),
+      take(1)
+    ).subscribe((planetaGuardado) => {
+      this.confirmationService.confirm({
+        message: '¿Deseas crear una Landing Page para este planeta?',
+        header: 'Ir a Landing',
+        icon: 'pi pi-arrow-right',
+        acceptLabel: 'Sí, crear Landing',
+        rejectLabel: 'No, quedarse aquí',
+        accept: () => {
+          this.planetaEventosService.planetaGuardado$.next();
+          this.close();
+          this.modalService.openByName(MODELS_ENUM.NUEVA_LANDING, {
+            title: 'Nueva Landing',
+            isEdit: false,
+            categoriaPreseleccionada: val.categoria?.title ?? val.categoria,
+            galaxiaPreseleccionada: typeof val.galaxia === 'object' ? val.galaxia : null,
+            planetaPreseleccionado: planetaGuardado,
+            model: new Landing({
+              estado: true,
+              planetaId: planetaGuardado.id,
+            }),
+          });
+        },
+        reject: () => {
+          this.planetaEventosService.planetaGuardado$.next();
+          this.close();
+        }
+      });
+    });
   }
 
   actualizarPlaneta() {
@@ -249,6 +320,62 @@ export class NuevoPlaneta implements OnInit {
     if (!nuevoPlaneta) return;
     const planetaInst = Planeta.fromJson(nuevoPlaneta as unknown);
     this.planetaFacade.actualizarPlaneta(planetaInst);
+  }
+
+  guardarPlaneta(): void {
+    this.planetaFormPresenter.Form.markAllAsTouched();
+    if (this.planetaFormPresenter.Form.invalid) return;
+
+    const dto = PlanetaMapper.guardarPlanetasMultiples(this.planetaFormPresenter.Form);
+    this.planetaFacade.guardarMultiplesPlanetas(dto, (planetasCreados) => {
+      const orden = ['NIÑOS', 'JOVENES', 'PADRES'];
+      const ordenados = [...planetasCreados].sort((a, b) => orden.indexOf(a.categoria) - orden.indexOf(b.categoria));
+      const primerPlaneta = ordenados[0];
+      if (!primerPlaneta) return;
+      this.planetasPendientes = ordenados.slice(1);
+      this.confirmationService.confirm({
+        message: '¿Deseas crear una Landing Page para estos planetas?',
+        header: 'Ir a Landing',
+        icon: 'pi pi-arrow-right',
+        acceptLabel: 'Sí, crear Landing',
+        rejectLabel: 'No, quedarse aquí',
+        accept: () => {
+          this.close();
+          this.modalService.openByName(MODELS_ENUM.NUEVA_LANDING, {
+            title: 'Nueva Landing',
+            isEdit: false,
+            categoriaPreseleccionada: primerPlaneta.categoria,
+            galaxiaPreseleccionada: { id: primerPlaneta.galaxiaId } as Galaxia,
+            planetaPreseleccionado: primerPlaneta,
+            planetasPendientes: this.planetasPendientes,
+            model: new Landing({
+              estado: true,
+              planetaId: primerPlaneta.id,
+            }),
+          });
+        },
+        reject: () => {
+          this.close();
+        }
+      });
+    });
+  }
+    
+  irALandingConPlaneta(): void {
+    if (!this.planetaElegido) return;
+    this.mostrarSelectorPlaneta = false;
+    this.close();
+    this.modalService.openByName(MODELS_ENUM.NUEVA_LANDING, {
+      title: 'Nueva Landing',
+      isEdit: false,
+      categoriaPreseleccionada: this.planetaElegido.categoria,
+      galaxiaPreseleccionada: { id: this.planetaElegido.galaxiaId } as Galaxia,
+      planetaPreseleccionado: this.planetaElegido,
+      model: new Landing({
+        estado: true,
+        planetaId: this.planetaElegido.id,
+      }),
+    });
   }
 
   close() {

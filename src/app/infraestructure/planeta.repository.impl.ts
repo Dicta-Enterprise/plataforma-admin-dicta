@@ -6,6 +6,8 @@ import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { IPlanetaDto, CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfaces';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,21 +18,20 @@ export class PlanetaRepositoryImpl implements PlanetaRepository {
 
   listarPlanetasService(): Observable<Planeta[]> {
     const direccion = `${this.apiUrl}/planetas`;
-
+    const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
+    const params = { limit: '1000', page: '1' };
     return this.http
-      .get<{ data: { _value?: IPlanetaDto[]; value?: IPlanetaDto[] } | IPlanetaDto[] }>(direccion)
+      .get<{ data: { _value?: IPlanetaDto[]; value?: IPlanetaDto[] } | IPlanetaDto[] }>(direccion, { headers, params })
       .pipe(
         map((response) => {
           const planetas =
-            Array.isArray(response.data)
-              ? response.data
-              : response.data._value ?? response.data.value ?? [];
-
+              Array.isArray(response.data)
+                ? response.data
+                : response.data._value ?? response.data.value ?? [];
           return planetas.map((dto: IPlanetaDto) => Planeta.fromJson(dto));
         })
       );
   }
-
   obtenerPlanetaService(planetaId: string): Observable<Planeta> {
     const direccion = `${this.apiUrl}/planetas`;
 
