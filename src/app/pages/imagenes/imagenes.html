@@ -1,0 +1,187 @@
+<p-toast></p-toast>
+
+<div class="image-upload-page">
+  <section class="hero-panel">
+    <div class="hero-copy">
+      <span class="eyebrow">Biblioteca de recursos</span>
+      <h1>Carga de imágenes</h1>
+      <p>
+        Sube una imagen desde tu dispositivo, recibe la URL pública y reutilízala después en cursos,
+        landings, perfiles, planetas o cualquier formulario que consuma recursos gráficos.
+      </p>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-label">Formatos</span>
+        <strong>JPG, PNG, WEBP</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Tamaño máximo</span>
+        <strong>5 MB</strong>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Destino</span>
+        <strong>{{ selectedFolder }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-grid">
+    <section class="panel upload-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Seleccionar archivo</h2>
+          <p>El archivo se valida antes de enviarse al servidor.</p>
+        </div>
+
+        <p-tag severity="info" value="Subida directa"></p-tag>
+      </div>
+
+      <div class="field-group">
+        <label for="folder">Destino de almacenamiento</label>
+        <select id="folder" class="folder-select" [(ngModel)]="selectedFolder" [disabled]="isUploading">
+          @for (folder of folderOptions; track folder.value) {
+            <option [value]="folder.value">{{ folder.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label>Archivo físico</label>
+        <div class="drop-zone" [class.drop-zone--active]="!!selectedFile">
+          <input
+            #fileInput
+            type="file"
+            class="file-input"
+            [accept]="acceptedExtensions"
+            (change)="onFileSelected($event)"
+          />
+
+          <div class="drop-zone__content">
+            <i class="pi pi-cloud-upload"></i>
+            <h3>{{ selectedFile ? selectedFile.name : 'Arrastra o selecciona una imagen' }}</h3>
+            <p>
+              {{
+                selectedFile
+                  ? 'Revisa la vista previa y envía el archivo cuando estés listo.'
+                  : 'El sistema acepta solo imágenes permitidas por la configuración.'
+              }}
+            </p>
+
+            <div class="actions-row">
+              <button
+                pButton
+                type="button"
+                label="Elegir archivo"
+                (click)="triggerFileInput()"
+                [disabled]="isUploading"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="Limpiar"
+                class="p-button-secondary"
+                (click)="clearSelection()"
+                [disabled]="isUploading && !selectedFile"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <small class="hint">Permitidos: {{ acceptedExtensions }}. Tamaño máximo: {{ maxFileSize / 1024 / 1024 }} MB.</small>
+      </div>
+
+      @if (selectedFile) {
+        <div class="file-summary">
+          <div>
+            <span class="summary-label">Nombre</span>
+            <strong>{{ selectedFile.name }}</strong>
+          </div>
+          <div>
+            <span class="summary-label">Peso</span>
+            <strong>{{ selectedFile.size | number }} bytes</strong>
+          </div>
+          <div>
+            <span class="summary-label">Tipo</span>
+            <strong>{{ selectedFile.type || 'image/*' }}</strong>
+          </div>
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div class="inline-message inline-message--error">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+
+      @if (feedback) {
+        <div class="inline-message inline-message--success">
+          <i class="pi pi-check-circle"></i>
+          <span>{{ feedback }}</span>
+        </div>
+      }
+
+      @if (isUploading || uploadProgress > 0) {
+        <div class="progress-shell">
+          <div class="progress-meta">
+            <span>Progreso de carga</span>
+            <strong>{{ uploadProgress }}%</strong>
+          </div>
+          <p-progressBar [value]="uploadProgress"></p-progressBar>
+        </div>
+      }
+
+      <div class="actions-row actions-row--submit">
+        <button
+          pButton
+          type="button"
+          label="Subir imagen"
+          (click)="uploadImage()"
+          [disabled]="!selectedFile || isUploading"
+        ></button>
+      </div>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="panel-header">
+        <div>
+          <h2>URL generada</h2>
+          <p>Usa este enlace en los demás formularios del sistema.</p>
+        </div>
+      </div>
+
+      @if (generatedUrl) {
+        <div class="preview-box">
+          <img [src]="previewUrl || generatedUrl" alt="Vista previa de la imagen cargada" />
+        </div>
+
+        <div class="field-group field-group--compact">
+          <label for="generatedUrl">URL pública</label>
+          <input id="generatedUrl" pInputText [value]="generatedUrl" readonly />
+        </div>
+
+        <div class="actions-row actions-row--wrap">
+          <button
+            pButton
+            type="button"
+            label="Copiar URL"
+            icon="pi pi-copy"
+            class="p-button-secondary"
+            (click)="copyGeneratedUrl()"
+          ></button>
+          <a class="link-button" [href]="generatedUrl" target="_blank" rel="noopener noreferrer">
+            Abrir enlace
+          </a>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <i class="pi pi-images"></i>
+          <h3>La URL aparecerá aquí cuando la subida termine</h3>
+          <p>Después de cargar la imagen, podrás copiar el enlace y reutilizarlo en otros módulos.</p>
+        </div>
+      }
+    </section>
+  </div>
+</div>
