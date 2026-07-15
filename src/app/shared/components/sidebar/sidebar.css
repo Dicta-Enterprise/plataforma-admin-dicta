@@ -1,0 +1,8 @@
+.menu-item-btn {
+  border-color: rgba(255, 255, 255, 0.2) !important; 
+}
+
+.active-menu-item {
+  border-color: #fbbf24 !important; 
+  background-color: rgba(251, 191, 36, 0.1) !important; 
+}
