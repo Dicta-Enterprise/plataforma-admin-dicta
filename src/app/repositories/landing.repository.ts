@@ -3,7 +3,7 @@ import { CreateLandingDto } from '@interfaces/landing/iLanding.dto';
 import { Observable } from 'rxjs';
 
 export interface LandingRepository {
-  listarLandingService(): Observable<Landing[]>;
+  listarLandingService(categoriaId: string, galaxiaId: string, planetaId: string): Observable<Landing[]>;
   obtenerLandingService(landingId: string): Observable<Landing>;
   crearLandingService(landing: CreateLandingDto): Observable<Landing>;
   editarLandingService(landingId: string, landing: CreateLandingDto): Observable<Landing>;

@@ -1,23 +1,19 @@
 <p-dialog
   [(visible)]="visible"
   [modal]="true"
-  [style]="{ width: '42rem' }"
+  [style]="{ width: '52rem' }"
   [header]="title"
   (onHide)="close()"
 >
+  <form [formGroup]="landingFormPresenter.Form" class="flex flex-column gap-3">
 
-  <form
-    [formGroup]="landingFormPresenter.Form"
-    class="flex flex-column gap-3"
-  >
-  <div class="flex flex-column gap-3">
     <div class="flex flex-column gap-2">
-      <label>Titulo</label>
+      <label>Título</label>
       <input pInputText formControlName="titulo" />
     </div>
 
     <div class="flex flex-column gap-2">
-      <label>Descripcion</label>
+      <label>Descripción</label>
       <textarea pInputTextarea rows="3" formControlName="descripcion"></textarea>
     </div>
 
@@ -26,74 +22,290 @@
         <label>Slug</label>
         <input pInputText formControlName="slug" />
       </div>
-
       <div class="col-12 md:col-6 flex flex-column gap-2">
-        <label>Landing URL</label>
-        <input pInputText formControlName="landingUrl" />
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="col-12 md:col-6 flex flex-column gap-2">
-        <label>Imagen principal</label>
+        <label>Imagen principal (URL)</label>
         <input pInputText formControlName="imagenPrincipal" />
       </div>
-
-      <div class="col-12 md:col-6 flex flex-column gap-2">
-        <label>Meta keywords</label>
-        <input pInputText formControlName="metaKeywords" />
-      </div>
-    </div>
-
-    <div class="flex flex-column gap-2">
-      <label>Contenido (una linea por item)</label>
-      <textarea 
-        pInputTextarea 
-        rows="4" 
-        formControlName="contenidoTexto">
-      </textarea>
-    </div>
-
-    <div class="flex flex-column gap-2">
-      <label>Imagenes landing (una URL por linea)</label>
-      <textarea 
-        pInputTextarea 
-        rows="4" 
-        formControlName="imagenesTexto">
-      </textarea>
-    </div>
-
-    <div class="flex flex-column gap-2">
-      <label>Colores (uno por linea, ej: #2563eb)</label>
-      <textarea 
-        pInputTextarea 
-        rows="3" 
-        formControlName="coloresTexto">
-      </textarea>
     </div>
 
     <div class="flex align-items-center gap-2">
       <label>Estado</label>
       <p-toggleswitch formControlName="estado"></p-toggleswitch>
-    </div>    
-  </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 md:col-4 flex flex-column gap-2">
+        <label>Categoría</label>
+        <p-select
+          [(ngModel)]="categoriaSeleccionada"
+          [ngModelOptions]="{ standalone: true }"
+          [options]="categorias"
+          optionLabel="nombre"
+          placeholder="Seleccionar categoría"
+          [showClear]="true"
+          (onChange)="onCategoriaChange()"
+          styleClass="w-full"
+        />
+      </div>
+      <div class="col-12 md:col-4 flex flex-column gap-2">
+        <label>Galaxia</label>
+        <p-select
+          [(ngModel)]="galaxiaSeleccionada"
+          [ngModelOptions]="{ standalone: true }"
+          [options]="galaxias"
+          optionLabel="nombre"
+          dataKey="id"
+          placeholder="Seleccionar galaxia"
+          [showClear]="true"
+          [disabled]="!categoriaSeleccionada"
+          (onChange)="onGalaxiaChange()"
+          styleClass="w-full"
+        />
+      </div>
+      <div class="col-12 md:col-4 flex flex-column gap-2">
+        <label>Planeta</label>
+          <p-select
+            [(ngModel)]="planetaSeleccionado"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="planetas"
+            optionLabel="nombre"
+            dataKey="id"
+            placeholder="Seleccionar planeta"
+            [showClear]="true"
+            [disabled]="!galaxiaSeleccionada"
+            (onChange)="onPlanetaChange()"
+            styleClass="w-full"
+          />
+      </div>
+    </div>
+
+    <div class="flex flex-column gap-3">
+      <div class="flex justify-content-between align-items-center">
+        <label class="font-semibold">Secciones</label>
+        <div class="flex gap-2 align-items-center">
+          <p-select
+            [(ngModel)]="tipoSeccionAAgregar"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="tiposSeccionDisponibles"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Tipo de sección"
+          />
+          <button
+            pButton
+            type="button"
+            
+            label="Agregar sección"
+            [disabled]="!tipoSeccionAAgregar"
+            (click)="agregarSeccion()"
+          ></button>
+        </div>
+      </div>
+
+      <div formArrayName="secciones" class="flex flex-column gap-3">
+        <p-panel
+          *ngFor="let seccion of landingFormPresenter.secciones.controls; let i = index"
+          [formGroupName]="i"
+          [toggleable]="true"
+          [header]="'Sección ' + (i + 1) + ' — ' + seccion.get('tipo')?.value"
+        >
+          <ng-template pTemplate="icons">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-danger"
+              (click)="landingFormPresenter.removeSeccion(i)"
+            ></button>
+          </ng-template>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'banner'">
+            <label>Título</label>
+            <input pInputText formControlName="titulo" />
+            <label>Descripción</label>
+            <textarea pInputTextarea rows="2" formControlName="descripcion"></textarea>
+            <div class="grid" formGroupName="imagen">
+              <div class="col-6 flex flex-column gap-2">
+                <label>Imagen (URL)</label>
+                <input pInputText formControlName="url" />
+              </div>
+              <div class="col-6 flex flex-column gap-2">
+                <label>Texto alternativo</label>
+                <input pInputText formControlName="alt" />
+              </div>
+            </div>
+            <div class="flex flex-column gap-2">
+              <div class="flex justify-content-between align-items-center">
+                <label>Botones</label>
+                <button pButton type="button" icon="pi pi-plus" class="p-button-text" label="Agregar botón"
+                  (click)="landingFormPresenter.addBoton(seccion)"></button>
+              </div>
+              <div formArrayName="botones" class="flex flex-column gap-2">
+                <div *ngFor="let boton of landingFormPresenter.obtenerBotones(seccion).controls; let bi = index"
+                  [formGroupName]="bi" class="grid align-items-center">
+                  <div class="col-5"><input pInputText placeholder="Texto" formControlName="texto" /></div>
+                  <div class="col-5"><input pInputText placeholder="URL" formControlName="url" /></div>
+                  <div class="col-2">
+                    <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger"
+                      (click)="landingFormPresenter.removeBoton(seccion, bi)"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'texto-imagen'">
+            <label>Layout</label>
+            <input pInputText formControlName="layout" />
+            <label>Título</label>
+            <input pInputText formControlName="titulo" />
+            <label>Texto</label>
+            <textarea pInputTextarea rows="2" formControlName="texto"></textarea>
+            <div class="grid" formGroupName="imagen">
+              <div class="col-6 flex flex-column gap-2">
+                <label>Imagen (URL)</label>
+                <input pInputText formControlName="url" />
+              </div>
+              <div class="col-6 flex flex-column gap-2">
+                <label>Texto alternativo</label>
+                <input pInputText formControlName="alt" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'beneficios'">
+            <label>Título</label>
+            <input pInputText formControlName="titulo" />
+            <div class="flex justify-content-between align-items-center">
+              <label>Items</label>
+              <button pButton type="button" icon="pi pi-plus" class="p-button-text" label="Agregar item"
+                (click)="landingFormPresenter.addItem(seccion)"></button>
+            </div>
+            <div formArrayName="items" class="flex flex-column gap-2">
+              <div *ngFor="let item of landingFormPresenter.obtenerItems(seccion).controls; let ii = index"
+                class="flex gap-2 align-items-center">
+                <input pInputText class="flex-1" [formControlName]="ii" />
+                <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger"
+                  (click)="landingFormPresenter.removeItem(seccion, ii)"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'galeria'">
+            <div class="flex justify-content-between align-items-center">
+              <label>Imágenes</label>
+              <button pButton type="button" icon="pi pi-plus" class="p-button-text" label="Agregar imagen"
+                (click)="landingFormPresenter.addImagenGaleria(seccion)"></button>
+            </div>
+            <div formArrayName="imagenes" class="flex flex-column gap-2">
+              <div *ngFor="let img of landingFormPresenter.obtenerImagenesGaleria(seccion).controls; let gi = index"
+                [formGroupName]="gi" class="grid align-items-center">
+                <div class="col-5"><input pInputText placeholder="URL" formControlName="url" /></div>
+                <div class="col-5"><input pInputText placeholder="Descripción" formControlName="descripcion" /></div>
+                <div class="col-2">
+                  <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger"
+                    (click)="landingFormPresenter.removeImagenGaleria(seccion, gi)"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'video'">
+            <label>Título</label>
+            <input pInputText formControlName="titulo" />
+            <label>URL del video</label>
+            <input pInputText formControlName="url" />
+          </div>
+
+          <div class="flex flex-column gap-2" *ngIf="seccion.get('tipo')?.value === 'llamadaAccion'">
+            <label>Título</label>
+            <input pInputText formControlName="titulo" />
+            <label>Descripción</label>
+            <textarea pInputTextarea rows="2" formControlName="descripcion"></textarea>
+            <div class="flex flex-column gap-2">
+              <div class="flex justify-content-between align-items-center">
+                <label>Botones</label>
+                <button pButton type="button" icon="pi pi-plus" class="p-button-text" label="Agregar botón"
+                  (click)="landingFormPresenter.addBoton(seccion)"></button>
+              </div>
+              <div formArrayName="botones" class="flex flex-column gap-2">
+                <div *ngFor="let boton of landingFormPresenter.obtenerBotones(seccion).controls; let bi = index"
+                  [formGroupName]="bi" class="grid align-items-center">
+                  <div class="col-5"><input pInputText placeholder="Texto" formControlName="texto" /></div>
+                  <div class="col-5"><input pInputText placeholder="URL" formControlName="url" /></div>
+                  <div class="col-2">
+                    <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger"
+                      (click)="landingFormPresenter.removeBoton(seccion, bi)"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+    </div>
+
+    <div class="flex flex-column gap-2" formGroupName="seo">
+      <label class="font-semibold">SEO</label>
+      <div class="flex flex-column gap-2">
+        <label>Meta título</label>
+        <input pInputText formControlName="metaTitle" />
+      </div>
+      <div class="flex flex-column gap-2">
+        <label>Meta descripción</label>
+        <textarea pInputTextarea rows="2" formControlName="metaDescription"></textarea>
+      </div>
+      <div class="flex flex-column gap-2">
+        <div class="flex justify-content-between align-items-center">
+          <label>Keywords</label>
+          <button pButton type="button" icon="pi pi-plus" class="p-button-text" label="Agregar keyword"
+            (click)="landingFormPresenter.addKeyword()"></button>
+        </div>
+        <div formArrayName="keywords" class="flex flex-column gap-2">
+          <div *ngFor="let keyword of landingFormPresenter.keywords.controls; let ki = index"
+            class="flex gap-2 align-items-center">
+            <input pInputText class="flex-1" [formControlName]="ki" />
+            <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger"
+              (click)="landingFormPresenter.removeKeyword(ki)"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </form>
-
+    
   <ng-template pTemplate="footer">
-    <button
-      pButton
-      type="button"
-      label="Cancelar"
-      class="p-button-text"
-      (click)="close()"
-    ></button>
-
-    <button
-      pButton
-      type="button"
-      [label]="isEdit ? 'Actualizar' : 'Guardar'"
-      (click)="guardarLanding()"
-      [disabled]="landingFormPresenter.Form.invalid"
-    ></button>
+    <button pButton type="button" label="Cancelar" class="p-button-text" (click)="close()"></button>
+    <button pButton type="button" [label]="isEdit ? 'Actualizar' : 'Guardar'"
+      (click)="guardarLanding()" [disabled]="landingFormPresenter.Form.invalid"></button>
   </ng-template>
+</p-dialog>
+<p-dialog
+  [(visible)]="mostrarSelectorSiguiente"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '28rem' }"
+  header="¿Crear otra Landing?"
+  appendTo="body"
+>
+  <div class="flex flex-column gap-3 pt-2">
+    <span>Landing guardada. ¿Querés crear otra?</span>
+    <div class="flex flex-column gap-2">
+      <button
+        *ngFor="let planeta of planetasPendientes"
+        pButton
+        type="button"
+        [label]="'Crear Landing de ' + obtenerTituloCategoria(planeta.categoria)"
+        (click)="seleccionarSiguientePlaneta(planeta)"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Terminar por ahora"
+        class="p-button-outlined"
+        (click)="terminarFlujo()"
+      ></button>
+    </div>
+  </div>
 </p-dialog>

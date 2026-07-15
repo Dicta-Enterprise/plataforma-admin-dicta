@@ -41,15 +41,20 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
     const direccion = `${this.apiUrl}/galaxias`;
 
     return this.http
-      .post<IGeneric<Galaxia>>(direccion, galaxia)
-      .pipe(map((response: IGeneric<Galaxia>) => response.data._value));
+      .post<{ data: IGalaxiaDto }>(direccion, galaxia)
+      .pipe(
+        map((response) => {
+          const dto = response?.data ?? response;
+          return new Galaxia(dto);
+        })
+      );
   }
-
+      
   crearMultiplesGalaxiasService(dto: CreateMultipleGalaxiasDto): Observable<Galaxia[]> {
-
     const direccion = `${this.apiUrl}/galaxias/multiple`;
-
-    return this.http.post<Galaxia[]>(direccion, dto);
+    return this.http
+      .post<{ data: IGalaxiaDto[] }>(direccion, dto)
+      .pipe(map(response => response.data.map(d => Galaxia.fromJson(d))));
   }
 
   editarGalaxiaService(galaxia: Galaxia): Observable<Galaxia> {

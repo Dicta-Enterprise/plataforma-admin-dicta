@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Landing } from '@class/landing/Landing.class';
@@ -14,11 +14,19 @@ export class LandingRepositoryImpl implements LandingRepository {
 
   constructor(private readonly http: HttpClient) {}
 
-  listarLandingService(): Observable<Landing[]> {
+  listarLandingService(
+    categoriaId: string,
+    galaxiaId: string,
+    planetaId: string
+  ): Observable<Landing[]> {
     const direccion = `${this.apiUrl}/landing-page`;
+    const params = new HttpParams()
+      .set('categoriaId', categoriaId)
+      .set('galaxiaId', galaxiaId)
+      .set('planetaId', planetaId);
 
     return this.http
-      .get<{data:CreateLandingDto[]}>(direccion)
+      .get<{ data: CreateLandingDto[] }>(direccion, { params })
       .pipe(
         map((response) =>
           response.data.map((dto: CreateLandingDto) => Landing.fromJson(dto))
@@ -54,13 +62,11 @@ export class LandingRepositoryImpl implements LandingRepository {
       .pipe(map((response) => Landing.fromJson(response.data)));
   }
 
-
   eliminarLandingService(landingId: string): Observable<Landing> {
     const direccion = `${this.apiUrl}/landing-page/${landingId}`;
 
     return this.http
       .delete<{ data: CreateLandingDto }>(direccion)
       .pipe(map((response) => Landing.fromJson(response.data)));
-  } 
-
+  }
 }

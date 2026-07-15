@@ -38,7 +38,7 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       color: ['#989898', Validators.required],
       categoria: ['', Validators.required],
       tema: [''],
-      url: [''],
+      url: ['', [Validators.required, Validators.pattern('https?://.+')]],
       textura: [''],
 
       posicion: this.fb.group({

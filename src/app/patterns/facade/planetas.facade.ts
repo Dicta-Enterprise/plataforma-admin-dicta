@@ -28,13 +28,16 @@ export class PlanetaFacade {
       error: (err) => console.error('Error guardando planeta', err),
     });
   }
-
-  guardarMultiplesPlanetas(data: CreateMultiplesPlanetaDto) {
+  
+  guardarMultiplesPlanetas(data: CreateMultiplesPlanetaDto, callback?: (planetas: Planeta[]) => void) {
     this.planetaService
       .guardarMultiplesPlanetas(data)
-      .subscribe(() => this.listarPlanetas());
+      .subscribe((planetas) => {
+        if (callback) callback(planetas);
+        this.listarPlanetas();
+      });
   }
-  
+          
   obtenerPlaneta(id: string) {
     this.planetaService
       .obtenerPlaneta(id)
