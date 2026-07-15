@@ -73,6 +73,7 @@ export class NuevoPlaneta implements OnInit {
   mostrarSelectorPlaneta = false;
   planetasCreados: Planeta[] = [];
   planetaElegido: Planeta | null = null;
+  mensajeErrorNombre: string | null = null;
 
   grupos = [
     { title: 'Niños', value: 'NIÑOS' },
@@ -279,8 +280,16 @@ export class NuevoPlaneta implements OnInit {
       beneficios: val.beneficios ?? [],
     };
 
+    this.mensajeErrorNombre = null;
     this.planetaFacade.planeta$.next(new Planeta());
     this.planetaFacade.guardarPlaneta(dto as unknown as CreatePlanetaDto);
+    this.planetaFacade.planetaError$.pipe(
+      filter((error) => error !== null),
+      take(1)
+    ).subscribe((error) => {
+      this.mensajeErrorNombre = error;
+      this.formSimple.get('nombre')?.setErrors({ nombreDuplicado: true });
+    });
     this.planetaFacade.planeta$.pipe(
       filter((p) => !!p.id),
       take(1)

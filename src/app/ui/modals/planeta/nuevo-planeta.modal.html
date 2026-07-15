@@ -247,11 +247,15 @@
 <form class="flex flex-column gap-4 mt-4" [formGroup]="formSimple">
   <div class="grid formgrid p-fluid row-gap-3">
     <div class="field col-12 md:col-6">
-      <p-floatLabel>
-        <input pInputText formControlName="nombre" class="w-full" />
-        <label>Nombre del planeta</label>
-      </p-floatLabel>
-    </div>
+          <p-floatLabel>
+            <input pInputText formControlName="nombre" class="w-full" />
+            <label>Nombre del planeta</label>
+          </p-floatLabel>
+          @if (formSimple.get('nombre')?.hasError('nombreDuplicado')) {
+            <small class="p-error">{{ mensajeErrorNombre }}</small>
+          }
+        </div>
+        
     <div class="field col-12 md:col-6">
       <p-floatLabel>
         <input pInputText formControlName="codigo" class="w-full" [readonly]="true" style="background-color: var(--p-inputtext-disabled-background)" />
