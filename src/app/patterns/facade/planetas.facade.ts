@@ -10,6 +10,7 @@ import { CreatePlanetaDto, CreateMultiplesPlanetaDto } from '@interfaces/interfa
 export class PlanetaFacade {
   planetas$ = new BehaviorSubject<Planeta[]>([]);
   planeta$ = new BehaviorSubject<Planeta>(new Planeta());
+  planetaError$ = new BehaviorSubject<string | null>(null);
 
   constructor(private readonly planetaService: PlanetaService) {}
 
@@ -20,12 +21,17 @@ export class PlanetaFacade {
   }
 
   guardarPlaneta(dto: CreatePlanetaDto) {
+    this.planetaError$.next(null);
     this.planetaService.guardarPlaneta(dto).subscribe({
       next: (resp) => {
         this.planeta$.next(resp);
         this.listarPlanetas();
       },
-      error: (err) => console.error('Error guardando planeta', err),
+      error: (err) => {
+        const mensaje = err?.error?.message ?? '';
+        const esDuplicado = err?.status === 400 && mensaje.toLowerCase().includes('ya está en uso');
+        this.planetaError$.next(esDuplicado ? 'El nombre del planeta ya existe' : mensaje || 'Error al guardar el planeta');
+      },
     });
   }
   
