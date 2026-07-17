@@ -157,8 +157,7 @@
                             </div>
                           </div>
                         </p-tabpanel>
-
-                        <p-tabpanel value="peligros">
+<p-tabpanel value="peligros">
                           <button pButton type="button" label="Agregar peligro" class="mb-3" (click)="planetaFormPresenter.addPeligro(i)"></button>
                           <div formArrayName="peligros">
                             @for (peligro of getPeligros(i).controls; track peligro; let j = $index) {
@@ -204,9 +203,12 @@
                               </p-fieldset>
                             }
                           </div>
+                          @if (mensajeErrorPeligrosBeneficios) {
+                            <small class="p-error block mt-2">{{ mensajeErrorPeligrosBeneficios }}</small>
+                          }
                         </p-tabpanel>
 
-                        <p-tabpanel value="beneficios">
+                          <p-tabpanel value="beneficios">
                           <button pButton type="button" label="Agregar beneficio" class="mb-3" (click)="planetaFormPresenter.addBeneficio(i)"></button>
                           <div formArrayName="beneficios">
                             @for (beneficio of getBeneficios(i).controls; track beneficio; let j = $index) {
@@ -228,6 +230,9 @@
                               </p-fieldset>
                             }
                           </div>
+                          @if (mensajeErrorPeligrosBeneficios) {
+                            <small class="p-error block mt-2">{{ mensajeErrorPeligrosBeneficios }}</small>
+                          }
                         </p-tabpanel>
 
                       </p-tabpanels>
@@ -247,15 +252,11 @@
 <form class="flex flex-column gap-4 mt-4" [formGroup]="formSimple">
   <div class="grid formgrid p-fluid row-gap-3">
     <div class="field col-12 md:col-6">
-          <p-floatLabel>
-            <input pInputText formControlName="nombre" class="w-full" />
-            <label>Nombre del planeta</label>
-          </p-floatLabel>
-          @if (formSimple.get('nombre')?.hasError('nombreDuplicado')) {
-            <small class="p-error">{{ mensajeErrorNombre }}</small>
-          }
-        </div>
-        
+      <p-floatLabel>
+        <input pInputText formControlName="nombre" class="w-full" />
+        <label>Nombre del planeta</label>
+      </p-floatLabel>
+    </div>
     <div class="field col-12 md:col-6">
       <p-floatLabel>
         <input pInputText formControlName="codigo" class="w-full" [readonly]="true" style="background-color: var(--p-inputtext-disabled-background)" />
@@ -367,60 +368,62 @@
               </div>
             </p-tabpanel>
 
-            <p-tabpanel value="peligros">
-              <div class="pt-3">
-                <button pButton type="button" label="Agregar peligro" class="mb-3" (click)="addPeligroSimple()"></button>
-                <div formArrayName="peligros">
-                  @for (peligro of peligrosSimple.controls; track peligro; let j = $index) {
-                    <p-fieldset legend="Peligro {{j+1}}" class="mb-3">
-                      <div [formGroupName]="j" class="grid formgrid p-fluid row-gap-2 pt-3">
-                        <div class="field col-12 md:col-6">
-                          <p-floatLabel>
-                            <input pInputText formControlName="nombre" class="w-full" />
-                            <label>Nombre</label>
-                          </p-floatLabel>
+          <p-tabpanel value="peligros">
+                <div class="pt-3">
+                  <button pButton type="button" label="Agregar peligro" class="mb-3" (click)="addPeligroSimple()"></button>
+                  <div formArrayName="peligros">
+                    @for (peligro of peligrosSimple.controls; track peligro; let j = $index) {
+                      <p-fieldset legend="Peligro {{j+1}}" class="mb-3">
+                        <div [formGroupName]="j" class="grid formgrid p-fluid row-gap-2 pt-3">
+                          <div class="field col-12 md:col-6">
+                            <p-floatLabel>
+                              <input pInputText formControlName="nombre" class="w-full" />
+                              <label>Nombre</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                            <p-floatLabel>
+                              <input pInputText formControlName="nivelRiesgo" class="w-full" />
+                              <label>Nivel de Riesgo</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                            <p-floatLabel>
+                              <input pInputText formControlName="temperatura" class="w-full" />
+                              <label>Temperatura</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="field col-12 md:col-6">
+                            <p-floatLabel>
+                              <input pInputText formControlName="villano" class="w-full" />
+                              <label>Villano</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="field col-12">
+                            <p-floatLabel>
+                              <input pInputText formControlName="cta" class="w-full" />
+                              <label>Call to Action</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="field col-12">
+                            <p-floatLabel>
+                              <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"></textarea>
+                              <label>Descripción</label>
+                            </p-floatLabel>
+                          </div>
+                          <div class="col-12 flex justify-content-end">
+                            <button pButton type="button" label="Eliminar peligro" severity="danger" (click)="removePeligroSimple(j)"></button>
+                          </div>
                         </div>
-                        <div class="field col-12 md:col-6">
-                          <p-floatLabel>
-                            <input pInputText formControlName="nivelRiesgo" class="w-full" />
-                            <label>Nivel de Riesgo</label>
-                          </p-floatLabel>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                          <p-floatLabel>
-                            <input pInputText formControlName="temperatura" class="w-full" />
-                            <label>Temperatura</label>
-                          </p-floatLabel>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                          <p-floatLabel>
-                            <input pInputText formControlName="villano" class="w-full" />
-                            <label>Villano</label>
-                          </p-floatLabel>
-                        </div>
-                        <div class="field col-12">
-                          <p-floatLabel>
-                            <input pInputText formControlName="cta" class="w-full" />
-                            <label>Call to Action</label>
-                          </p-floatLabel>
-                        </div>
-                        <div class="field col-12">
-                          <p-floatLabel>
-                            <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"></textarea>
-                            <label>Descripción</label>
-                          </p-floatLabel>
-                        </div>
-                        <div class="col-12 flex justify-content-end">
-                          <button pButton type="button" label="Eliminar peligro" severity="danger" (click)="removePeligroSimple(j)"></button>
-                        </div>
-                      </div>
-                    </p-fieldset>
+                      </p-fieldset>
+                    }
+                  </div>
+                  @if (mensajeErrorPeligrosBeneficios) {
+                    <small class="p-error block mt-2">{{ mensajeErrorPeligrosBeneficios }}</small>
                   }
                 </div>
-              </div>
-            </p-tabpanel>
-
-            <p-tabpanel value="beneficios">
+              </p-tabpanel>
+                <p-tabpanel value="beneficios">
               <div class="pt-3">
                 <button pButton type="button" label="Agregar beneficio" class="mb-3" (click)="addBeneficioSimple()"></button>
                 <div formArrayName="beneficios">
@@ -446,8 +449,12 @@
                     </p-fieldset>
                   }
                 </div>
+                @if (mensajeErrorPeligrosBeneficios) {
+                  <small class="p-error block mt-2">{{ mensajeErrorPeligrosBeneficios }}</small>
+                }
               </div>
             </p-tabpanel>
+            
 
           </p-tabpanels>
         </p-tabs>
@@ -455,7 +462,6 @@
     </div>
   </form>
   }
-
   <ng-template pTemplate="footer">
     <div class="flex justify-content-end gap-2">
       <p-button

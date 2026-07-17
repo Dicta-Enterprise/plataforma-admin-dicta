@@ -93,6 +93,10 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
     return this.getPlaneta(index).get('beneficios') as FormArray;
   }
 
+  public tienePeligrosYBeneficios(index: number): boolean {
+    return this.getPeligros(index).length > 0 && this.getBeneficios(index).length > 0;
+  }
+
   public addPeligro(index: number): void {
     this.getPeligros(index).push(this.crearPeligro());
   }
