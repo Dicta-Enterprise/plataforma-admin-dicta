@@ -104,6 +104,13 @@ export class PlanetaFormPresenter extends StepPresenter<Planeta> {
   public addBeneficio(index: number): void {
     this.getBeneficios(index).push(this.crearBeneficio());
   }
+  public removePeligro(planetaIndex: number, peligroIndex: number): void {
+    this.getPeligros(planetaIndex).removeAt(peligroIndex);
+  }
+
+  public removeBeneficio(planetaIndex: number, beneficioIndex: number): void {
+    this.getBeneficios(planetaIndex).removeAt(beneficioIndex);
+  }
 
   private listenNombreChanges(): void {
     this.form.get('nombre')?.valueChanges.subscribe(nombre => {

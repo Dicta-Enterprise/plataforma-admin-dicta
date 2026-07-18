@@ -157,7 +157,8 @@
                             </div>
                           </div>
                         </p-tabpanel>
-<p-tabpanel value="peligros">
+
+                  <p-tabpanel value="peligros">
                           <button pButton type="button" label="Agregar peligro" class="mb-3" (click)="planetaFormPresenter.addPeligro(i)"></button>
                           <div formArrayName="peligros">
                             @for (peligro of getPeligros(i).controls; track peligro; let j = $index) {
@@ -199,6 +200,9 @@
                                       <label>Descripción</label>
                                     </p-floatLabel>
                                   </div>
+                                  <div class="col-12 flex justify-content-end">
+                                    <button pButton type="button" label="Eliminar peligro" severity="danger" (click)="planetaFormPresenter.removePeligro(i, j)"></button>
+                                  </div>
                                 </div>
                               </p-fieldset>
                             }
@@ -225,6 +229,9 @@
                                       <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"></textarea>
                                       <label>Descripción</label>
                                     </p-floatLabel>
+                                  </div>
+                                  <div class="col-12 flex justify-content-end">
+                                    <button pButton type="button" label="Eliminar beneficio" severity="danger" (click)="planetaFormPresenter.removeBeneficio(i, j)"></button>
                                   </div>
                                 </div>
                               </p-fieldset>
