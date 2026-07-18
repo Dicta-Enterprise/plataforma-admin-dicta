@@ -74,6 +74,7 @@ export class NuevoPlaneta implements OnInit {
   planetasCreados: Planeta[] = [];
   planetaElegido: Planeta | null = null;
   mensajeErrorNombre: string | null = null;
+  mensajeErrorPeligrosBeneficios: string | null = null;
 
   grupos = [
     { title: 'Niños', value: 'NIÑOS' },
@@ -253,6 +254,12 @@ export class NuevoPlaneta implements OnInit {
     this.formSimple.markAllAsTouched();
     if (this.formSimple.invalid) return;
 
+    if (this.peligrosSimple.length === 0 || this.beneficiosSimple.length === 0) {
+      this.mensajeErrorPeligrosBeneficios = 'Debes agregar al menos un peligro y un beneficio antes de registrar el planeta';
+      return;
+    }
+    this.mensajeErrorPeligrosBeneficios = null;
+
     const val = this.formSimple.getRawValue();
 
     const dto = {
@@ -334,6 +341,13 @@ export class NuevoPlaneta implements OnInit {
   guardarPlaneta(): void {
     this.planetaFormPresenter.Form.markAllAsTouched();
     if (this.planetaFormPresenter.Form.invalid) return;
+
+    const faltaAlguno = this.planetas.controls.some((_, i) => !this.planetaFormPresenter.tienePeligrosYBeneficios(i));
+    if (faltaAlguno) {
+      this.mensajeErrorPeligrosBeneficios = 'Cada planeta debe tener al menos un peligro y un beneficio antes de registrarse';
+      return;
+    }
+    this.mensajeErrorPeligrosBeneficios = null;
 
     const dto = PlanetaMapper.guardarPlanetasMultiples(this.planetaFormPresenter.Form);
     this.planetaFacade.guardarMultiplesPlanetas(dto, (planetasCreados) => {
