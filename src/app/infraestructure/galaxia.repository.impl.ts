@@ -19,15 +19,16 @@ export class GalaxiaRepositoryImpl implements GalaxiaRepository {
 
   listarGalaxiasService(): Observable<Galaxia[]> {
     const direccion = `${this.apiUrl}/galaxias`;   
+    const params = { limit: '1000', page: '1' };
 
     return this.http
-      .get<{data:IGalaxiaDto[]}>(direccion)
+      .get<{data:IGalaxiaDto[]}>(direccion, { params })
       .pipe(
         map((response) =>
           response.data.map((dto: IGalaxiaDto) => Galaxia.fromJson(dto))
         )
       );
-  } 
+  }
 
   obtenerGalaxiaService(galaxiaId: string): Observable<Galaxia> {
     const direccion = `${this.apiUrl}/galaxias`;
