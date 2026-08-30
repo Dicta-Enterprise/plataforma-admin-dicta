@@ -3,6 +3,7 @@ export interface CreateGalaxiaDto {
   descripcion: string;
   color: string;
   estado: boolean;
+  categoria?: string;
   categoriaId: string;
 
   tema: string;

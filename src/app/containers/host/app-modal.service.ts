@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs';
+
 import { MODAL_REGISTRY } from './modal-registry';
 import { ModalHostComponent } from './app-modal-host.component';
 
@@ -9,8 +11,12 @@ import { ModalHostComponent } from './app-modal-host.component';
 export class ModalService {
   private host!: ModalHostComponent;
 
+  hostReady$ = new BehaviorSubject<boolean>(false);
+
   registerHost(host: ModalHostComponent) {
     this.host = host;
+
+    this.hostReady$.next(true);
   }
 
   openByName(name: string, data?: object) {

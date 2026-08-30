@@ -14,7 +14,8 @@ export class GalaxiaMultipleMapper {
       textura: value.textura,
       estado: value.estado,
       tema: value.tema,
-      categoriaId: value.categoria.id,
+      categoria: value.categoria?.nombre ?? value.categoria,
+      categoriaId: value.categoria?.id ?? value.categoria,
 
       color: value.color,
       posicion: {
@@ -50,9 +51,10 @@ export class GalaxiaMultipleMapper {
     return {
       galaxias: galaxiasArray.controls.map(control => {
         const dto = this.mapGalaxiaGroupToDto(control as FormGroup);
-
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { categoria, ...dtoSinCategoria } = dto;
         return {
-          ...dto,
+          ...dtoSinCategoria,
           nombre: rootNombre
         };
       })

@@ -125,23 +125,17 @@ export class NuevaGalaxia implements OnInit {
 
     if (this.multiple) {
       const dto = GalaxiaMultipleMapper.formToCreateMultiplesDto(this.galaxiaFormPresenter.Form);
-
-      this.galaxiaFacade.guardarMultiplesGalaxias(dto, () => {
-        this.mostrarConfirmacion(null, true);
+      this.galaxiaFacade.guardarMultiplesGalaxias(dto, (galaxiasCreadas) => {
+        this.mostrarConfirmacion(null, true, galaxiasCreadas);
       });
-
     } else {
       const dto = GalaxiaMapper.formToCreateDto(this.galaxiaFormPresenter.Form);
-
       this.galaxiaFacade.guardarGalaxia(dto, (galaxiaGuardada) => {
         this.mostrarConfirmacion(galaxiaGuardada, false);
       });    
     }
-
-    this.close();
   }
-
-  private mostrarConfirmacion(galaxia: IGalaxiaDto | null, esMultiple: boolean) {
+  private mostrarConfirmacion(galaxia: IGalaxiaDto | null, esMultiple: boolean, galaxiasCreadas?: Galaxia[]) {
     this.confirmationService.confirm({
       message: esMultiple 
         ? '¿Deseas agregar planetas a estas galaxias?' 
@@ -151,9 +145,22 @@ export class NuevaGalaxia implements OnInit {
       acceptLabel: 'Sí, ir a Planetas',
       rejectLabel: 'No, quedarse aquí',
       accept: () => {
+        const galaxiasEnriquecidas = (galaxiasCreadas ?? []).map(g => ({
+          ...g,
+          categoria: this.categorias.find(c => c.id === g.categoriaId)?.nombre ?? g.categoria
+        }));
+
         this.router.navigate(['/planetas'], {
-          state: { galaxia, esMultiple }
+          state: { 
+            galaxia: galaxia ? { id: galaxia.id, nombre: galaxia.nombre, categoriaId: galaxia.categoriaId } : null,
+            esMultiple,
+            galaxiasRecienCreadas: galaxiasEnriquecidas
+          }
         });
+        this.close();
+      },
+      reject: () => {
+        this.close();
       }
     });
   }

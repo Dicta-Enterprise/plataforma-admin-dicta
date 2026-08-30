@@ -13,68 +13,120 @@
         height="150"
       />
     </div>
+
     <div class="overflow-y-auto">
-            <ul class="list-none p-3 m-0 flex flex-wrap">
-        <li class="w-6 text-center">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-home text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Home</div>
-        </li>
-        <li class="w-6 text-center" routerLink="/categorias">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-star-fill text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Categorias</div>
-        </li>
-        <li class="w-6 text-center mt-3" routerLink="/galaxias">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-users text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Galaxias</div>
-        </li>
+      <ul class="list-none p-3 m-0 flex flex-wrap">
+        
         <li class="w-6 text-center mt-3">
-          <a
-            routerLink="/planetas"
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-comments text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Planetas</div>
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/dashboard"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-home text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Home</span>
+          </div>
         </li>
-        <li class="w-6 text-center mt-3" routerLink="/cursos">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-cog text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Cursos</div>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/categorias"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-star-fill text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Categorias</span>
+          </div>
         </li>
-        <li class="w-6 text-center mt-3" routerLink="/landing">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-calendar text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Landings</div>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/galaxias"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-users text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Galaxias</span>
+          </div>
+        </li>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/planetas"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-comments text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Planetas</span>
+          </div>
+        </li>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/cursos"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-cog text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Cursos</span>
+          </div>
+        </li>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/landing"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-calendar text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Landings</span>
+          </div>
+        </li>
+
+        <li class="w-6 text-center mt-3">
+          <div class="flex flex-column align-items-center justify-content-center">
+            <a
+              pRipple
+              routerLink="/parametros"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{ exact: false }"
+              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+              style="width: 60px; height: 60px; border-radius: 10px"
+            >
+              <i class="pi pi-sliders-h text-2xl"></i>
+            </a>
+            <span class="mt-2 text-gray-200 font-medium text-sm">Parámetros</span>
+          </div>
         </li>
         <li class="w-6 text-center mt-3" routerLink="/parametros">
           <a
@@ -96,10 +148,12 @@
           </a>
           <div class="mt-2 text-gray-200 font-medium text-sm">Imágenes</div>
         </li>
+
       </ul>
     </div>
+
     <div
-      class="mt-auto border-top-1 border-gray-700 p-3 flex justify-content-between"
+      class="mt-auto border-top-1 border-gray-700 p-3 flex align-items-center justify-content-center gap-3"
     >
       <a
         pRipple
@@ -129,5 +183,3 @@
     </div>
   </div>
 </div>
-
-
