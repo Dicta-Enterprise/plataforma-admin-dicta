@@ -5,6 +5,7 @@ import { CURSO_PROVIDERS } from './curso.provider';
 import { CUSTOM_PARAMETROS_PROVIDER } from './parametro.provider';
 import { CUSTOM_LANDING_PROVIDER } from './landing.provider';
 import { CUSTOM_PLANETA_PROVIDER } from './planeta.provider';
+import { CUSTOM_IMAGEN_PROVIDER } from './imagen.provider';
 
 export const CUSTOM_PROVIDERS: Provider[] = [
   ...CUSTOM_CATEGORIAS_PROVIDER,
@@ -13,4 +14,5 @@ export const CUSTOM_PROVIDERS: Provider[] = [
   ...CUSTOM_PARAMETROS_PROVIDER,
   ...CUSTOM_LANDING_PROVIDER,
   ...CUSTOM_PLANETA_PROVIDER,
+  ...CUSTOM_IMAGEN_PROVIDER,
 ];

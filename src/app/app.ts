@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNG } from 'primeng/config';
 import { StyleClassModule } from 'primeng/styleclass';
-import { CUSTOM_PROVIDERS } from './core/providers/providers';
 import { ModalHostComponent } from './containers/host/app-modal-host.component';
 import { ModalService } from './containers/host/app-modal.service';
 import { AlertService } from './containers/alerts/app-alert.service';
@@ -21,7 +20,7 @@ import { MessageService } from 'primeng/api';
     ModalHostComponent,
     AlertHostComponent,
   ],
-  providers: [...CUSTOM_PROVIDERS, MessageService],
+  providers: [MessageService],
 })
 export class App implements OnInit, AfterViewInit {
   protected title = 'plataforma-admin-dicta';

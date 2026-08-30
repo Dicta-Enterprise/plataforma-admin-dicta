@@ -48,6 +48,11 @@ export const routes: Routes = [
           import('./pages/landing/landing.route').then((m) => m.LANDING_ROUTES),
       },
       {
+        path: 'imagenes',
+        loadChildren: () =>
+          import('./pages/imagenes/imagenes.route').then((m) => m.IMAGENES_ROUTES),
+      },
+      {
         path: 'planetas',
         loadChildren: () =>
           import('./pages/planetas/planetas.route').then(
