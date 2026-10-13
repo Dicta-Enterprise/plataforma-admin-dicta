@@ -19,16 +19,17 @@ export class CategoriaRepositoryImpl implements CategoriaRepository {
 
   listarCategoriasService(): Observable<Categoria[]> {
     const direccion = `${this.apiUrl}/categorias`;
+    const params = { limit: '1000', page: '1' };
 
     return this.http
-      .get<IGenericArrays<Categoria[]>>(direccion)
+      .get<IGenericArrays<Categoria[]>>(direccion, { params })
       .pipe(
         map((response: IGenericArrays<Categoria[]>) =>
           response.data._value.map((categoria) => Categoria.fromJson(categoria))
         )
       );
   }
-
+    
   obtenerCategoriaService(categoriaId: string): Observable<Categoria> {
     const direccion = `${this.apiUrl}/categorias`;
 
