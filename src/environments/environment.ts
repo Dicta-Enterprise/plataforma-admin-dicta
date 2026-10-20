@@ -6,7 +6,8 @@ export const environment = {
   production: false,
 
   URL_NEST_BACKEND: 'http://localhost:3000/api',
-  URL_NEST_AUTH: 'https://localhost:7262/api',
+  // back-auth-dicta corre en el puerto 3002.
+  URL_NEST_AUTH: 'http://localhost:3002/api',
 };
 
 /*

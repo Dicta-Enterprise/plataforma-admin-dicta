@@ -14,11 +14,11 @@
     <div class="hero-stats">
       <div class="stat-card">
         <span class="stat-label">Formatos</span>
-        <strong>JPG, PNG, WEBP</strong>
+        <strong>WEBP</strong>
       </div>
       <div class="stat-card">
         <span class="stat-label">Tamaño máximo</span>
-        <strong>5 MB</strong>
+        <strong>80 KB</strong>
       </div>
       <div class="stat-card">
         <span class="stat-label">Destino</span>
@@ -89,7 +89,7 @@
           </div>
         </div>
 
-        <small class="hint">Permitidos: {{ acceptedExtensions }}. Tamaño máximo: {{ maxFileSize / 1024 / 1024 }} MB.</small>
+        <small class="hint">Permitidos: {{ acceptedExtensions }}. Tamaño máximo: {{ maxFileSize / 1024 }} KB.</small>
       </div>
 
       @if (selectedFile) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 import { Curso } from '@class/cursos/Curso.class';
 import { environment } from '@environments/environment';
 import { CursoRepository, CursosResponse } from 'src/app/repositories/curso.repository';
@@ -39,6 +39,14 @@ const isResultWrapper = (
   return Array.isArray(inner._value);
 };
 
+type NombresApiResponse = { data?: { _value?: Record<string, unknown>[] } } | null;
+
+const nombresPorId = (
+  res: NombresApiResponse,
+  armarNombre: (item: Record<string, unknown>) => string
+): Map<string, string> =>
+  new Map((res?.data?._value ?? []).map((item) => [String(item['id']), armarNombre(item)]));
+
 @Injectable({ providedIn: 'root' })
 export class CursoRepositoryImpl implements CursoRepository {
   private readonly apiUrl = `${environment.URL_NEST_BACKEND}/cursos`;
@@ -49,8 +57,16 @@ export class CursoRepositoryImpl implements CursoRepository {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
     if (q) params = params.set('q', q);
 
-    return this.http.get<CursosApiResponse>(this.apiUrl, { params }).pipe(
-      map((res) => {
+    return forkJoin([
+      this.http.get<CursosApiResponse>(this.apiUrl, { params }),
+      this.http
+        .get<NombresApiResponse>(`${environment.URL_NEST_BACKEND}/categorias`)
+        .pipe(catchError(() => of(null))),
+      this.http
+        .get<NombresApiResponse>(`${environment.URL_NEST_BACKEND}/profesores`)
+        .pipe(catchError(() => of(null))),
+    ]).pipe(
+      map(([res, categorias, profesores]) => {
         let rawItems: unknown[] = [];
         let total = 0;
 
@@ -68,24 +84,34 @@ export class CursoRepositoryImpl implements CursoRepository {
           total = (res.data?.count as number | undefined) ?? rawItems.length;
         }
 
+        const categoriaNombres = nombresPorId(categorias, (c) => String(c['nombre'] ?? ''));
+        const profesorNombres = nombresPorId(profesores, (p) =>
+          [p['nombre'], p['apellido_paterno']].filter(Boolean).join(' ')
+        );
+
         return {
-          items: rawItems.map((curso) => Curso.fromJson(curso)),
+          items: rawItems.map((raw) => {
+            const curso = Curso.fromJson(raw);
+            curso.categoriaNombre ||= categoriaNombres.get(curso.categoriaId) ?? '';
+            curso.profesorNombre ||= profesorNombres.get(curso.profesorId) ?? '';
+            return curso;
+          }),
           total,
         };
       })
     );
   }
 
-  crearCursoService(payload: Partial<Curso>): Observable<Curso> {
+  crearCursoService(payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.http
-      .post<unknown>(this.apiUrl, payload)
-      .pipe(map((curso) => Curso.fromJson(curso)));
+      .post<{ data?: unknown }>(this.apiUrl, payload)
+      .pipe(map((res) => Curso.fromJson(res?.data ?? res)));
   }
 
-  actualizarCursoService(id: number | string, payload: Partial<Curso>): Observable<Curso> {
+  actualizarCursoService(id: number | string, payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.http
-      .patch<unknown>(`${this.apiUrl}/${id}`, payload)
-      .pipe(map((curso) => Curso.fromJson(curso)));
+      .patch<{ data?: { _value?: unknown } }>(`${this.apiUrl}/${id}`, payload)
+      .pipe(map((res) => Curso.fromJson(res?.data?._value ?? res?.data ?? res)));
   }
 
   eliminarCursoService(id: number | string): Observable<Curso> {

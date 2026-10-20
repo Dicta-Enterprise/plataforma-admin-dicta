@@ -74,6 +74,34 @@ export const routes: Routes = [
             (m) => m.PROFESOR_ROUTES
           ),
       },
+      {
+        path: 'progreso',
+        loadChildren: () =>
+          import('./pages/progreso/progreso.route').then(
+            (m) => m.PROGRESO_ROUTES
+          ),
+      },
+      {
+        path: 'usuarios',
+        loadChildren: () =>
+          import('./pages/usuarios/usuarios.route').then(
+            (m) => m.USUARIOS_ROUTES
+          ),
+      },
+      {
+        path: 'facturas',
+        loadChildren: () =>
+          import('./pages/facturas/facturas.route').then(
+            (m) => m.FACTURAS_ROUTES
+          ),
+      },
+      {
+        path: 'astronautas',
+        loadChildren: () =>
+          import('./pages/astronautas/astronautas.route').then(
+            (m) => m.ASTRONAUTAS_ROUTES
+          ),
+      },
     ],
   },
   {

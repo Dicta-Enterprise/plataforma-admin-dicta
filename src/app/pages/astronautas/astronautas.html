@@ -1,0 +1,52 @@
+<p-toast></p-toast>
+
+<div class="flex align-items-center mb-3">
+  <div class="text-900 font-bold text-3xl">ASTRONAUTAS (3D)</div>
+</div>
+<p class="text-600 text-xl">Los 4 modelos .glb que flotan en la intro de universo-3d-react — papá, mamá, hijo e hija.</p>
+<p-divider class="w-full"></p-divider>
+
+@if (errorConexion) {
+  <div class="border-2 border-red-300 bg-red-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-red-600 text-2xl mt-1"></i>
+    <div class="font-bold text-red-700">{{ errorConexion }}</div>
+  </div>
+}
+
+<input #fileInput type="file" accept=".glb" hidden (change)="archivoSeleccionado($event)" />
+
+<div class="grid">
+  @for (tarjeta of tarjetas; track tarjeta.tipo) {
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="border-1 border-300 border-round-lg p-4 h-full flex flex-column gap-3 surface-card">
+        <div class="flex align-items-center justify-content-between">
+          <span class="font-bold text-lg">{{ tarjeta.etiqueta }}</span>
+          @if (tarjeta.actual) {
+            <p-tag value="Subido" severity="success"></p-tag>
+          } @else {
+            <p-tag value="Sin subir" severity="secondary"></p-tag>
+          }
+        </div>
+
+        @if (tarjeta.actual) {
+          <div class="text-sm text-600 flex flex-column gap-1">
+            <span class="white-space-nowrap overflow-hidden text-overflow-ellipsis">{{ tarjeta.actual.nombreArchivo }}</span>
+            <span>{{ formatearPeso(tarjeta.actual.pesoBytes) }}</span>
+            <span>Actualizado: {{ tarjeta.actual.fechaActualizacion | date: 'd MMM y, h:mm a' }}</span>
+          </div>
+        } @else {
+          <div class="text-sm text-600">Todavía no se ha subido ningún archivo para este rol.</div>
+        }
+
+        <button
+          pButton
+          type="button"
+          [label]="tarjeta.actual ? 'Reemplazar' : 'Subir .glb'"
+          icon="pi pi-upload"
+          class="p-button-outlined mt-auto"
+          (click)="elegirArchivo(tarjeta.tipo)"
+        ></button>
+      </div>
+    </div>
+  }
+</div>

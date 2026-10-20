@@ -30,6 +30,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
+import { SubidaImagenComponent } from '@shared/components/subida-imagen/subida-imagen.component';
 
 @Component({
   selector: 'app-nueva-galaxia',
@@ -51,6 +52,7 @@ import { IGalaxiaDto } from '@interfaces/galaxias/Igalaxia.dto';
     ColorPicker,
     SelectModule,
     ConfirmDialogModule,
+    SubidaImagenComponent,
   ],
   providers: [CUSTOM_GALAXIA_PROVIDER, GalaxiaService, GalaxiaFacade, CategoriaService, ConfirmationService],  
   templateUrl: './nueva-galaxia.modal.html',

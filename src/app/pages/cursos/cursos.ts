@@ -161,7 +161,10 @@ export class Cursos implements OnInit, OnDestroy {
   }
 
   editarCurso(curso: Curso): void {
-    console.log('Editar curso', curso);
+    const ref = this.modalService.openByName(MODELS_ENUM.NUEVO_CURSO, { curso });
+    (ref.instance as NuevoCurso).creado.subscribe(() => {
+      this.cursoFacade.listarCursos();
+    });
   }
 
   eliminarCurso(curso: Curso): void {

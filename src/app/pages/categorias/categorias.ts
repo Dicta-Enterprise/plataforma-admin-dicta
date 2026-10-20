@@ -18,6 +18,7 @@ import { CategoriaService } from 'src/app/core/services/categorias/categoria.ser
 import { CategoriaFacade } from 'src/app/patterns/facade/categoria.facade';
 import { CategoriasFormPresenter } from './categorias-form.presenter';
 import { LocalStateService } from '@class/state/local-state.class';
+import { NuevaCategoria } from 'src/app/ui/modals/categoria/nueva-categoria.modal';
 
 @Component({
   selector: 'app-categorias',
@@ -68,9 +69,9 @@ export class Categorias implements OnInit, OnDestroy {
   }
 
   nuevaCategoria() {
-    this.modalService.openByName(MODELS_ENUM.NUEVA_CATEGORIA, {
-      title: 'Centralizado',
-      message: 'Vino desde el registry',
+    const ref = this.modalService.openByName(MODELS_ENUM.NUEVA_CATEGORIA);
+    (ref.instance as NuevaCategoria).creado.subscribe(() => {
+      this.categoriaFacade.listarCategorias();
     });
   }
 

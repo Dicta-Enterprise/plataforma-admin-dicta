@@ -1,0 +1,40 @@
+<div class="flex flex-column gap-1 w-full">
+  <label class="text-sm text-color-secondary">{{ label }} (WEBP, máx {{ maxSizeKB }} KB)</label>
+
+  <div class="flex align-items-center gap-2 flex-wrap">
+    <button
+      pButton
+      type="button"
+      [label]="url ? 'Cambiar' : 'Subir'"
+      icon="pi pi-upload"
+      [loading]="subiendo"
+      [disabled]="subiendo"
+      (click)="triggerFileInput()"
+    ></button>
+
+    @if (url && !subiendo) {
+      <a [href]="url" target="_blank" rel="noopener noreferrer" class="text-sm text-overflow-ellipsis overflow-hidden white-space-nowrap" style="max-width: 180px">
+        {{ url }}
+      </a>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        class="p-button-text p-button-danger p-button-sm"
+        (click)="quitar()"
+      ></button>
+    }
+  </div>
+
+  <input
+    #fileInput
+    type="file"
+    [accept]="acceptedExtensions"
+    class="hidden"
+    (change)="seleccionarArchivo($event)"
+  />
+
+  @if (error) {
+    <small class="p-error">{{ error }}</small>
+  }
+</div>

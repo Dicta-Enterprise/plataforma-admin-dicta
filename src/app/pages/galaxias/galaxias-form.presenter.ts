@@ -39,7 +39,7 @@ export class GalaxiasFormPresenter extends StepPresenter<Galaxia> {
       categoria: ['', Validators.required],
       tema: [''],
       url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-      textura: [''],
+      textura: ['', Validators.required],
 
       posicion: this.fb.group({
         x: [0],
