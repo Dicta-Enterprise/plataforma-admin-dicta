@@ -79,10 +79,12 @@
                               </p-floatLabel>
                             </div>
                             <div class="field col-12 md:col-6">
-                              <p-floatLabel>
-                                <input pInputText formControlName="textura" class="w-full" />
-                                <label>Textura</label>
-                              </p-floatLabel>
+                              <app-subida-imagen
+                                [control]="getPlaneta(i).get('datos')?.get('textura') ?? null"
+                                folder="planetas"
+                                label="Textura"
+                                [maxSizeKB]="50"
+                              ></app-subida-imagen>
                             </div>
                             <div class="field col-12 md:col-6">
                               <p-floatLabel>
@@ -91,10 +93,11 @@
                               </p-floatLabel>
                             </div>
                             <div class="field col-12 md:col-6">
-                              <p-floatLabel>
-                                <input pInputText formControlName="imagenResumen" class="w-full" />
-                                <label>URL de la Imagen</label> 
-                              </p-floatLabel>
+                              <app-subida-imagen
+                                [control]="getPlaneta(i).get('datos')?.get('imagenResumen') ?? null"
+                                folder="planetas"
+                                label="Imagen"
+                              ></app-subida-imagen>
                             </div>
                             <div class="field col-12">
                               <p-floatLabel>
@@ -296,10 +299,12 @@
                   </p-floatLabel>
                 </div>
                 <div class="field col-12 md:col-6">
-                  <p-floatLabel>
-                    <input pInputText formControlName="textura" class="w-full" />
-                    <label>Textura</label>
-                  </p-floatLabel>
+                  <app-subida-imagen
+                    [control]="formSimple.get('textura')"
+                    folder="planetas"
+                    label="Textura"
+                    [maxSizeKB]="50"
+                  ></app-subida-imagen>
                 </div>
                 <div class="field col-12 md:col-6">
                   <p-floatLabel>
@@ -308,10 +313,11 @@
                   </p-floatLabel>
                 </div>
                 <div class="field col-12 md:col-6">
-                  <p-floatLabel>
-                    <input pInputText formControlName="imagenResumen" class="w-full" />
-                    <label>URL de la Imagen</label>
-                  </p-floatLabel>
+                  <app-subida-imagen
+                    [control]="formSimple.get('imagenResumen')"
+                    folder="planetas"
+                    label="Imagen"
+                  ></app-subida-imagen>
                 </div>
                 <div class="field col-12">
                   <p-floatLabel>

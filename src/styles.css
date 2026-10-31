@@ -6,6 +6,17 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
+/* Botón "Buscar" resaltado (sin ícono, verde clarito) en Usuarios/Progreso/Facturas -- el
+   ícono de lupa quedaba encimado con el texto, así que se quitó y se le dio color propio. */
+.boton-buscar {
+  background-color: #d1fae5 !important;
+  border-color: #6ee7b7 !important;
+  color: #065f46 !important;
+}
+.boton-buscar:hover {
+  background-color: #a7f3d0 !important;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -71,7 +82,3 @@ body {
   background-color: #15b6cf !important; /* más oscuro */
 }
 
-.p-button .p-button-icon-left {
-  margin-right: -3rem !important;
-  margin-left: 2rem !important;
-}

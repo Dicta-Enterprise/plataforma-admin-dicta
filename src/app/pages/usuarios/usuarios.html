@@ -1,0 +1,205 @@
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">USUARIOS</div>
+    <p-badge
+      [value]="total"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+</div>
+<p class="text-600 text-xl">
+  Padres, niños y jóvenes registrados, con su código y su familia
+</p>
+<p-divider class="w-full"></p-divider>
+
+<!-- Filtros -->
+<div class="flex flex-wrap gap-3 align-items-center mb-4">
+  <p-iconField>
+    <p-inputIcon styleClass="pi pi-search" />
+    <input
+      pInputText
+      type="text"
+      class="w-20rem"
+      placeholder="Buscar nombre, correo o familia..."
+      [(ngModel)]="busqueda"
+      (keyup.enter)="buscar()"
+    />
+  </p-iconField>
+
+  <input
+    pInputText
+    type="text"
+    class="w-18rem"
+    placeholder="ID (USR-N-032, FAM-014...)"
+    [(ngModel)]="idBuscado"
+    (keyup.enter)="buscar()"
+  />
+
+  <p-select
+    [options]="rolOpciones"
+    [(ngModel)]="rolSeleccionado"
+    placeholder="Rol"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    class="w-10rem"
+    appendTo="body"
+    (onChange)="buscar()"
+  ></p-select>
+
+  <p-select
+    [options]="estadoOpciones"
+    [(ngModel)]="estadoSeleccionado"
+    placeholder="Estado"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    class="w-10rem"
+    appendTo="body"
+    (onChange)="buscar()"
+  ></p-select>
+
+  <p-select
+    [options]="comproOpciones"
+    [(ngModel)]="comproSeleccionado"
+    placeholder="Compra"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    class="w-10rem"
+    appendTo="body"
+    (onChange)="buscar()"
+  ></p-select>
+
+  <input
+    pInputText
+    type="date"
+    class="w-10rem"
+    title="Primera compra desde"
+    [(ngModel)]="compraDesde"
+    (change)="buscar()"
+  />
+
+  <input
+    pInputText
+    type="date"
+    class="w-10rem"
+    title="Primera compra hasta"
+    [(ngModel)]="compraHasta"
+    (change)="buscar()"
+  />
+
+  <button
+    type="button"
+    pButton
+    class="boton-buscar"
+    label="Buscar"
+    (click)="buscar()"
+  ></button>
+
+  <span
+    pRipple
+    tabindex="0"
+    class="cursor-pointer flex align-items-center text-900"
+    (click)="limpiarFiltros()"
+  >Limpiar Todo</span>
+</div>
+
+@if (!comprasDisponibles) {
+  <div class="border-2 border-yellow-300 bg-yellow-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-yellow-700 text-2xl mt-1"></i>
+    <div class="font-bold text-yellow-800">No se pudo conectar con back-transaction -- la columna "Compra" no está disponible ahorita, el resto de la tabla sigue funcionando.</div>
+  </div>
+}
+
+<!-- Aviso de conexion: se muestra tal cual lo que responde el backend, sin maquillarlo -->
+@if (errorConexion) {
+  <div class="border-2 border-red-300 bg-red-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-red-600 text-2xl mt-1"></i>
+    <div>
+      <div class="font-bold text-red-700">{{ errorConexion }}</div>
+      @if (detalleTecnico) {
+        <div class="text-red-600 text-sm mt-1">{{ detalleTecnico }}</div>
+      }
+    </div>
+  </div>
+}
+
+<p-table
+  [value]="usuarios"
+  dataKey="id"
+  [rows]="limit"
+  [totalRecords]="total"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="cargando"
+  [paginator]="true"
+  [lazy]="true"
+  (onPage)="cambiarPagina($event)"
+  [tableStyle]="{ 'min-width': '65rem' }"
+  showGridlines
+>
+  <ng-template #header>
+    <tr>
+      <th class="w-9rem">Código</th>
+      <th class="w-16rem">Nombre</th>
+      <th class="w-16rem">Email</th>
+      <th class="w-8rem">Rol</th>
+      <th class="w-9rem">Estado</th>
+      <th class="w-12rem">Familia</th>
+      <th class="w-9rem">Compra</th>
+      <th class="w-10rem">Registro</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-usuario>
+    <tr>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span class="font-bold">{{ usuario.codigo }}</span>
+          <span class="text-xs text-600" [title]="usuario.uuid">{{ usuario.uuid }}</span>
+        </div>
+      </td>
+      <td>{{ usuario.nombre }}</td>
+      <td>{{ usuario.email }}</td>
+      <td>{{ etiquetaRol(usuario.rol) }}</td>
+      <td>
+        <p-tag [value]="etiquetaEstado(usuario.estado)" [severity]="severidadEstado(usuario.estado)"></p-tag>
+      </td>
+      <td>
+        @if (usuario.familia) {
+          <span>{{ usuario.familia.nombre }} <span class="text-600">({{ usuario.familia.codigo }})</span></span>
+        } @else {
+          <span class="text-600">—</span>
+        }
+      </td>
+      <td>
+        @if (usuario.rol === 'PADRE' && usuario.compra?.compro) {
+          <div class="flex flex-column gap-1">
+            <span class="text-green-700 font-medium">Compró</span>
+            <span class="text-xs text-600">{{ usuario.compra.fechaPrimeraCompra | date: 'd MMM y' }}</span>
+          </div>
+        } @else {
+          <span class="text-600">{{ etiquetaCompra(usuario) }}</span>
+        }
+      </td>
+      <td>
+        @if (usuario.fechaRegistro) {
+          {{ usuario.fechaRegistro | date: 'd MMM y' }}
+        } @else {
+          <span class="text-600">—</span>
+        }
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="8" class="text-center text-600 py-5">
+        @if (!errorConexion && !cargando) {
+          Sin resultados para estos filtros.
+        }
+        @if (cargando) {
+          Buscando...
+        }
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

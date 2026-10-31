@@ -8,11 +8,13 @@
   [resizable]="false"
   styleClass="nueva-agencia-dialog"
 >
+  <p-toast></p-toast>
+
   <ng-template pTemplate="header">
     <div class="flex flex-column gap-1">
       <h1 class="m-0 text-900 font-semibold text-xl">NUEVA CATEGORIA</h1>
       <span class="text-600 text-sm">
-        Nota: Las imagenes solo se carga el link
+        Ingresar los datos de la nueva categoría
       </span>
     </div>
   </ng-template>
@@ -51,19 +53,16 @@
         </p-floatLabel>
       </div>
 
-      <!-- Imagen URL -->
+      <!-- Imagen: se sube el archivo y la URL queda guardada sola en el formulario. -->
       <div class="field mb-6 col-12 md:col-12 mt-3">
-        <p-floatLabel>
-          <input
-            pInputText
-            id="imagen"
-            autocomplete="off"
-            class="w-full"
-            dictaReactiveForm
-            formControlName="imagenUrl"
-          />
-          <label for="imagen">Imagen Url</label>
-        </p-floatLabel>
+        <app-subida-imagen
+          [control]="categoriasFormPresenter.Form.get('imagenUrl')"
+          folder="categorias"
+          label="Imagen de la categoría"
+        ></app-subida-imagen>
+        @if (categoriasFormPresenter.Form.get('imagenUrl')?.invalid && categoriasFormPresenter.Form.get('imagenUrl')?.touched) {
+          <small class="p-error block mt-1">La imagen es obligatoria.</small>
+        }
       </div>
     </div>
   </form>
@@ -83,9 +82,10 @@
         type="button"
         icon="pi pi-check"
         iconPos="right"
+        [loading]="guardando"
         (onClick)="guardarCategoria()"
         severity="success"
-        [disabled]="!categoriasFormPresenter.Form.valid"
+        [disabled]="!categoriasFormPresenter.Form.valid || guardando"
       />
     </div>
   </ng-template>

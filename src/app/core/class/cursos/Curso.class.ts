@@ -8,9 +8,12 @@ export class Curso {
   precio: number | null;
   estado: boolean;
   imagen: string;
+  resumenDescripcion: string;
+  valoracion: number | null;
   duracionSemanas: number | null;
   categoriaId: string;
   profesorId: string;
+  planetaId: string;
   categoriaNombre: string;
   profesorNombre: string;
   beneficios: { titulo: string; descripcion: string }[];
@@ -25,9 +28,12 @@ export class Curso {
     this.precio = curso.precio ?? null;
     this.estado = curso.estado ?? false;
     this.imagen = curso.imagen ?? '';
+    this.resumenDescripcion = curso.resumenDescripcion ?? '';
+    this.valoracion = curso.valoracion ?? null;
     this.duracionSemanas = curso.duracionSemanas ?? null;
     this.categoriaId = curso.categoriaId ?? '';
     this.profesorId = curso.profesorId ?? '';
+    this.planetaId = curso.planetaId ?? '';
     this.categoriaNombre = curso.categoriaNombre ?? '';
     this.profesorNombre = curso.profesorNombre ?? '';
     this.beneficios = Array.isArray(curso.beneficios)
@@ -56,9 +62,12 @@ export class Curso {
       precio: Curso.toNumber(data['precio']),
       estado: Curso.toBoolean(data['estado']),
       imagen: Curso.toString(data['imagen']),
+      resumenDescripcion: Curso.toString(data['resumenDescripcion']),
+      valoracion: Curso.toNumber(data['valoracion']),
       duracionSemanas: Curso.toNumber(data['duracionSemanas']),
       categoriaId: Curso.toString(data['categoriaId']),
       profesorId: Curso.toString(data['profesorId']),
+      planetaId: Curso.toString(data['planetaId']),
       categoriaNombre: Curso.toString(Curso.getRelacionNombre(data, 'categoria')),
       profesorNombre: Curso.toString(Curso.getRelacionNombre(data, 'profesor')),
       beneficios,
@@ -77,6 +86,7 @@ export class Curso {
       duracionSemanas: curso.duracionSemanas,
       categoriaId: curso.categoriaId,
       profesorId: curso.profesorId,
+      planetaId: curso.planetaId || undefined,
       beneficios: curso.beneficios,
     };
   }

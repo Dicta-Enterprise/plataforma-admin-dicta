@@ -15,11 +15,11 @@ export class CursoService {
     return this.cursoRepository.listarCursosService(page, size, q);
   }
 
-  crearCurso(payload: Partial<Curso>): Observable<Curso> {
+  crearCurso(payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.cursoRepository.crearCursoService(payload);
   }
 
-  actualizarCurso(id: number | string, payload: Partial<Curso>): Observable<Curso> {
+  actualizarCurso(id: number | string, payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.cursoRepository.actualizarCursoService(id, payload);
   }
 

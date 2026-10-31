@@ -109,7 +109,7 @@
               <div>
                 <dt>Inicio</dt>
                 <dd>
-                  {{ curso.fechaInicio ? (curso.fechaInicio | date : 'dd/MM/yyyy') : 'Sin definir' }}
+                  {{ curso.fechaInicio ? (curso.fechaInicio | date : 'dd/MM/yyyy' : 'UTC') : 'Sin definir' }}
                 </dd>
               </div>
               <div>
@@ -145,6 +145,7 @@
                 pButton
                 class="curso-card__eliminar-btn p-button-rounded p-button-text p-button-danger"
                 icon="pi pi-trash"
+                [disabled]="!curso.estado"
                 (click)="eliminarCurso(curso)"
                 [attr.aria-label]="'Eliminar curso ' + (curso.nombre || curso.id)"
               ></button>

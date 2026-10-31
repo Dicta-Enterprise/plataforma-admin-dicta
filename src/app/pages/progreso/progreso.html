@@ -1,0 +1,148 @@
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">PROGRESO (xAPI)</div>
+    <p-badge
+      [value]="filas.length"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+</div>
+<p class="text-600 text-xl">
+  Progreso de los estudiantes por familia, curso y módulo
+</p>
+<p-divider class="w-full"></p-divider>
+
+<!-- Filtros -->
+<div class="flex flex-wrap gap-3 align-items-center mb-4">
+  <p-iconField>
+    <p-inputIcon styleClass="pi pi-search" />
+    <input
+      pInputText
+      type="text"
+      class="w-20rem"
+      placeholder="Buscar familia o estudiante..."
+      [(ngModel)]="busqueda"
+      (keyup.enter)="buscar()"
+    />
+  </p-iconField>
+
+  <input
+    pInputText
+    type="text"
+    class="w-18rem"
+    placeholder="ID (USR-N-032, FAM-014...)"
+    [(ngModel)]="idBuscado"
+    (keyup.enter)="buscar()"
+  />
+
+  <p-select
+    [options]="categoriaOpciones"
+    [(ngModel)]="categoriaSeleccionada"
+    placeholder="Categoría"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    class="w-12rem"
+    appendTo="body"
+    (onChange)="buscar()"
+  ></p-select>
+
+  <p-select
+    [options]="estadoOpciones"
+    [(ngModel)]="estadoSeleccionado"
+    placeholder="Estado"
+    optionLabel="label"
+    optionValue="value"
+    [showClear]="true"
+    class="w-12rem"
+    appendTo="body"
+    (onChange)="buscar()"
+  ></p-select>
+
+  <button
+    type="button"
+    pButton
+    class="boton-buscar"
+    label="Buscar"
+    (click)="buscar()"
+  ></button>
+
+  <span
+    pRipple
+    tabindex="0"
+    class="cursor-pointer flex align-items-center text-900"
+    (click)="limpiarFiltros()"
+  >Limpiar Todo</span>
+</div>
+
+<!-- Aviso de conexion: se muestra tal cual lo que responde el backend, sin maquillarlo -->
+@if (errorConexion) {
+  <div class="border-2 border-red-300 bg-red-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-red-600 text-2xl mt-1"></i>
+    <div>
+      <div class="font-bold text-red-700">{{ errorConexion }}</div>
+      @if (detalleTecnico) {
+        <div class="text-red-600 text-sm mt-1">{{ detalleTecnico }}</div>
+      }
+    </div>
+  </div>
+}
+
+<p-table
+  [value]="filas"
+  dataKey="estudianteId"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="cargando"
+  [paginator]="true"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  showGridlines
+>
+  <ng-template #header>
+    <tr>
+      <th class="w-8rem">ID</th>
+      <th class="w-10rem">Familia</th>
+      <th class="w-9rem">Estudiante</th>
+      <th class="w-12rem">Curso</th>
+      <th class="w-12rem">Progreso del módulo</th>
+      <th class="w-8rem">Quiz</th>
+      <th class="w-5rem">Pistas</th>
+      <th class="w-9rem">Estado</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-fila>
+    <tr>
+      <td><span class="font-bold">{{ fila.estudianteCodigo }}</span></td>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span>{{ fila.familia }} <span class="text-600">({{ fila.familiaCodigo }})</span></span>
+          <span class="text-sm text-600">Padre/tutor: {{ fila.padreNombre }} ({{ fila.padreCodigo }})</span>
+        </div>
+      </td>
+      <td>{{ fila.estudiante }}</td>
+      <td>{{ fila.curso }}</td>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span class="text-sm text-600">Módulo {{ fila.moduloActualNum }} de {{ fila.moduloTotal }} · video {{ fila.videoPct }}%</span>
+        </div>
+      </td>
+      <td>{{ fila.quiz }}</td>
+      <td>{{ fila.pistas }}</td>
+      <td>
+        <p-tag [value]="etiquetaEstado(fila.estado)" [severity]="severidadEstado(fila.estado)"></p-tag>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="8" class="text-center text-600 py-5">
+        @if (!errorConexion && !cargando) {
+          Sin resultados para estos filtros.
+        }
+        @if (cargando) {
+          Buscando...
+        }
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

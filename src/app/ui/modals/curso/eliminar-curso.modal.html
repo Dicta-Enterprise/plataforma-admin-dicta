@@ -10,7 +10,7 @@
   <ng-template pTemplate="header">
     <div class="flex flex-column gap-1">
       <h1 class="m-0 text-900 font-semibold text-xl">Eliminar curso</h1>
-      <span class="text-600 text-sm">Esta acción no se puede deshacer</span>
+      <span class="text-600 text-sm">El curso se desactiva y deja de verse en Mundo Dictariano</span>
     </div>
   </ng-template>
 
@@ -19,6 +19,7 @@
     <p class="m-0 text-900">
       ¿Estás seguro de que deseas eliminar el curso
       <strong>{{ curso.nombre || curso.id }}</strong>?
+      Podrás reactivarlo con el interruptor de su tarjeta.
     </p>
   </div>
 

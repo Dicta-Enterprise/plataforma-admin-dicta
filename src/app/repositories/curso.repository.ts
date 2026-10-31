@@ -8,8 +8,8 @@ export interface CursosResponse {
 
 export interface CursoRepository {
   listarCursosService(page?: number, size?: number, q?: string): Observable<CursosResponse>;
-  crearCursoService(payload: Partial<Curso>): Observable<Curso>;
-  actualizarCursoService(id: number | string, payload: Partial<Curso>): Observable<Curso>;
+  crearCursoService(payload: Partial<Curso> | FormData): Observable<Curso>;
+  actualizarCursoService(id: number | string, payload: Partial<Curso> | FormData): Observable<Curso>;
   eliminarCursoService(id: number | string): Observable<Curso>;
 }
 

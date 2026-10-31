@@ -179,11 +179,11 @@ export class ImagenesPage implements OnDestroy {
     }
 
     if (file.size > this.maxFileSize) {
-      return `El archivo supera el tamaño máximo de ${this.formatBytes(this.maxFileSize)}.`;
+      return `El archivo pesa ${this.formatBytes(file.size)} y el máximo es ${this.formatBytes(this.maxFileSize)}. Comprímelo o reduce sus dimensiones.`;
     }
 
-    if (!file.type.startsWith('image/')) {
-      return 'Selecciona un archivo de imagen válido.';
+    if (file.type !== 'image/webp') {
+      return 'Selecciona un archivo de imagen WebP válido.';
     }
 
     return null;

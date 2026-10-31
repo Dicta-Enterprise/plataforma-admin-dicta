@@ -1,0 +1,263 @@
+<p-toast></p-toast>
+
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">FACTURAS</div>
+    <p-badge
+      [value]="total"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+</div>
+<p class="text-600 text-xl">
+  Historial de compras: busca por usuario y consulta el comprobante
+</p>
+<p-divider class="w-full"></p-divider>
+
+<!-- Filtros -->
+<div class="flex flex-wrap gap-3 align-items-center mb-4">
+  <input
+    pInputText
+    type="text"
+    class="w-14rem"
+    placeholder="ID de usuario"
+    [(ngModel)]="idUsuarioBuscado"
+    (keyup.enter)="buscar()"
+  />
+
+  <input pInputText type="date" class="w-10rem" title="Desde" [(ngModel)]="desde" (change)="buscar()" />
+  <input pInputText type="date" class="w-10rem" title="Hasta" [(ngModel)]="hasta" (change)="buscar()" />
+
+  <button
+    type="button"
+    pButton
+    class="boton-buscar"
+    label="Buscar"
+    (click)="buscar()"
+  ></button>
+
+  <span
+    pRipple
+    tabindex="0"
+    class="cursor-pointer flex align-items-center text-900"
+    (click)="limpiarFiltros()"
+  >Limpiar Todo</span>
+</div>
+
+@if (errorConexion) {
+  <div class="border-2 border-red-300 bg-red-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-red-600 text-2xl mt-1"></i>
+    <div>
+      <div class="font-bold text-red-700">{{ errorConexion }}</div>
+      @if (detalleTecnico) {
+        <div class="text-red-600 text-sm mt-1">{{ detalleTecnico }}</div>
+      }
+    </div>
+  </div>
+}
+
+<p-table
+  [value]="ordenes"
+  dataKey="id"
+  [rows]="limit"
+  [totalRecords]="total"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="cargando"
+  [paginator]="true"
+  [lazy]="true"
+  (onPage)="cambiarPagina($event)"
+  [tableStyle]="{ 'min-width': '65rem' }"
+  showGridlines
+>
+  <ng-template #header>
+    <tr>
+      <th class="w-6rem">Orden</th>
+      <th class="w-14rem">Quién pagó</th>
+      <th class="w-10rem">Cuándo</th>
+      <th class="w-16rem">Curso(s)</th>
+      <th class="w-8rem">Monto</th>
+      <th class="w-8rem">Estado</th>
+      <th class="w-7rem">Comprobante</th>
+      <th class="w-7rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-orden>
+    <tr>
+      <td><span class="font-bold">#{{ orden.id }}</span></td>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span>{{ orden.pagante?.nombre ?? '—' }}</span>
+          <span class="text-xs text-600">{{ orden.pagante?.email ?? '—' }}</span>
+        </div>
+      </td>
+      <td>{{ orden.fechacreacion | date: 'd MMM y, h:mm a' }}</td>
+      <td>
+        <span class="text-sm">{{ nombresCursos(orden) }}</span>
+      </td>
+      <td>{{ orden.monto ? ('$' + orden.monto) : '—' }}</td>
+      <td>
+        <p-tag [value]="orden.estado" [severity]="severidadEstado(orden.estado)"></p-tag>
+      </td>
+      <td>
+        @if (orden.factura) {
+          <p-tag value="Disponible" severity="success"></p-tag>
+        } @else {
+          <span class="text-600">No disponible</span>
+        }
+      </td>
+      <td>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-eye"
+          class="p-button-text p-button-sm"
+          label="Ver detalle"
+          (click)="verDetalle(orden)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="8" class="text-center text-600 py-5">
+        @if (!errorConexion && !cargando) {
+          Sin resultados para estos filtros.
+        }
+        @if (cargando) {
+          Buscando...
+        }
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Detalle de la orden -->
+<p-dialog
+  header="Detalle de la orden"
+  [(visible)]="detalleVisible"
+  [modal]="true"
+  [style]="{ width: '40rem' }"
+  [draggable]="false"
+>
+  @if (cargandoDetalle) {
+    <div class="text-600 py-3">Cargando...</div>
+  } @else if (ordenSeleccionada) {
+    <div class="flex flex-column gap-3">
+      <div>
+        <div class="font-bold text-xl">Orden #{{ ordenSeleccionada.id }}</div>
+        <div class="text-600">{{ ordenSeleccionada.fechacreacion | date: 'd MMM y, h:mm a' }}</div>
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <span class="font-medium">Comprador</span>
+        <span>{{ ordenSeleccionada.pagante?.nombre ?? '—' }} ({{ ordenSeleccionada.pagante?.email ?? '—' }})</span>
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <span class="font-medium">Cursos</span>
+        @for (c of ordenSeleccionada.cursos; track c.idcurso) {
+          <span>{{ c.nombrecurso ?? c.idcurso }} — ${{ c.precio }}</span>
+        }
+      </div>
+
+      <div class="flex gap-4">
+        <div class="flex flex-column gap-1">
+          <span class="font-medium">Monto total</span>
+          <span>{{ ordenSeleccionada.monto ? ('$' + ordenSeleccionada.monto) : '—' }}</span>
+        </div>
+        <div class="flex flex-column gap-1">
+          <span class="font-medium">Método de pago</span>
+          <span>{{ ordenSeleccionada.metodopago ?? '—' }}</span>
+        </div>
+        <div class="flex flex-column gap-1">
+          <span class="font-medium">Estado</span>
+          <p-tag [value]="ordenSeleccionada.estado" [severity]="severidadEstado(ordenSeleccionada.estado)"></p-tag>
+        </div>
+      </div>
+
+      @if (ordenSeleccionada.reclamos.length > 0) {
+        <div class="flex flex-column gap-1">
+          <span class="font-medium">Reclamos registrados</span>
+          @for (r of ordenSeleccionada.reclamos; track r.id) {
+            <div class="border-1 border-300 border-round p-2 text-sm">
+              <div>{{ r.descripcion }}</div>
+              <div class="text-600">{{ r.fechacreacion | date: 'd MMM y, h:mm a' }} · {{ r.estado }} @if (r.atendioPor) { · {{ r.atendioPor }} }</div>
+            </div>
+          }
+        </div>
+      }
+
+      <p-divider></p-divider>
+
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-download"
+          class="p-button-outlined"
+          label="Descargar PDF"
+          [disabled]="!ordenSeleccionada.factura?.url"
+          (click)="descargarPdf()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-send"
+          class="p-button-outlined"
+          label="Reenviar comprobante"
+          [loading]="reenviando"
+          [disabled]="!ordenSeleccionada.factura?.url"
+          (click)="reenviarComprobante()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-external-link"
+          class="p-button-outlined"
+          label="Ver en Mercado Pago"
+          (click)="abrirMercadoPago()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-flag"
+          class="p-button-outlined p-button-danger"
+          label="Registrar reclamo"
+          (click)="abrirReclamo()"
+        ></button>
+      </div>
+    </div>
+  }
+</p-dialog>
+
+<!-- Registrar reclamo -->
+<p-dialog
+  header="Registrar reclamo"
+  [(visible)]="reclamoVisible"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  [draggable]="false"
+>
+  @if (ordenSeleccionada) {
+    <div class="flex flex-column gap-3">
+      <div class="text-600">
+        Orden #{{ ordenSeleccionada.id }} — {{ ordenSeleccionada.pagante?.nombre ?? ordenSeleccionada.pagante?.email ?? '—' }}
+      </div>
+      <textarea
+        pTextarea
+        rows="5"
+        class="w-full"
+        placeholder="Describe lo que ocurrió..."
+        [(ngModel)]="descripcionReclamo"
+      ></textarea>
+      <button
+        type="button"
+        pButton
+        label="Guardar reclamo"
+        [loading]="registrandoReclamo"
+        [disabled]="!descripcionReclamo.trim()"
+        (click)="confirmarReclamo()"
+      ></button>
+    </div>
+  }
+</p-dialog>

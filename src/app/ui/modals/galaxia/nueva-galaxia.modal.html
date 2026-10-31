@@ -168,10 +168,12 @@
     </div>
 
     <div class="field mb-3 col-12 md:col-6">
-      <p-floatLabel>
-        <input pInputText formControlName="textura" class="w-full"/>
-        <label>Textura</label>
-      </p-floatLabel>
+      <app-subida-imagen
+        [control]="group.get('textura')"
+        folder="galaxias"
+        label="Textura"
+        [maxSizeKB]="50"
+      ></app-subida-imagen>
     </div>
 
     <div class="field mb-3 col-12 md:col-6">
@@ -200,10 +202,11 @@
     </div>
 
     <div class="field col-12 md:col-6">
-      <p-floatLabel>
-        <input pInputText formControlName="imagen" class="w-full"/>
-        <label>Imagen</label>
-      </p-floatLabel>
+      <app-subida-imagen
+        [control]="group.get('imagen')"
+        folder="galaxias"
+        label="Imagen"
+      ></app-subida-imagen>
     </div>
 
     <div class="field col-12">

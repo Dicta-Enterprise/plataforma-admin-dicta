@@ -31,6 +31,7 @@ import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { Landing } from '@class/landing/Landing.class';
 
 import { PlanetaEventosService } from 'src/app/core/services/planetas/planeta-eventos.service';
+import { SubidaImagenComponent } from '@shared/components/subida-imagen/subida-imagen.component';
 
 @Component({
   selector: 'app-nuevo-planeta',
@@ -50,6 +51,7 @@ import { PlanetaEventosService } from 'src/app/core/services/planetas/planeta-ev
     FieldsetModule,
     SelectModule,
     ConfirmDialogModule,
+    SubidaImagenComponent,
   ],
   providers: [CUSTOM_PLANETA_PROVIDER, PlanetaService, PlanetaFacade, PlanetaFormPresenter, GalaxiaService, CategoriaService, ConfirmationService],
   templateUrl: './nuevo-planeta.modal.html',

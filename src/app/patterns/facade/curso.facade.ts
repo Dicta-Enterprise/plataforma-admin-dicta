@@ -21,7 +21,7 @@ export class CursoFacade {
       });
   }
 
-  actualizarCurso(id: string, payload: Partial<Curso>): Observable<Curso> {
+  actualizarCurso(id: string, payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.cursoService.actualizarCurso(id, payload).pipe(
       tap((cursoActualizado) => {
         const cursos = this.cursos$.value.map((curso) =>
@@ -41,7 +41,7 @@ export class CursoFacade {
     );
   }
   
-  crearCurso(payload: Partial<Curso>): Observable<Curso> {
+  crearCurso(payload: Partial<Curso> | FormData): Observable<Curso> {
     return this.cursoService.crearCurso(payload).pipe(
       tap((cursoCreado) => {
         const cursos = [...this.cursos$.value, new Curso(cursoCreado)];

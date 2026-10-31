@@ -5,151 +5,296 @@
   <div class="flex flex-column h-full">
     <div
       class="flex align-items-center justify-content-center flex-shrink-0"
-      style="height: 200px"
+      style="height: 90px"
     >
       <img
-        src="https://dictacolombia.com/wp-content/uploads/2022/10/logo-yellow.webp"
-        alt="Image"
-        height="150"
+        src="assets/logos/mundo-dictariano-logo.svg"
+        alt="Mundo Dictariano"
+        height="60"
       />
     </div>
 
-    <div class="overflow-y-auto">
-      <ul class="list-none p-3 m-0 flex flex-wrap">
-        
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/dashboard"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-home text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Home</span>
-          </div>
-        </li>
+    <div class="overflow-y-auto px-3 pb-3 sidebar-scroll">
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/categorias"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-star-fill text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Categorias</span>
-          </div>
-        </li>
+      <!-- Tarjeta "Mundo Dictariano 3D": todo lo existente, incluye "Landings" (vuelve aquí: ya no
+        hay tarjeta aparte para esto). -->
+      <div class="border-2 border-gray-600 border-round-lg pt-2 pb-3 px-2 mb-3">
+        <div class="text-center text-gray-400 text-xs font-bold tracking-wide uppercase py-2">Mundo Dictariano 3D</div>
+        <ul class="list-none p-0 m-0 flex flex-wrap">
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/galaxias"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-users text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Galaxias</span>
-          </div>
-        </li>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/dashboard"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-home text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Home</span>
+            </div>
+          </li>
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/planetas"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-comments text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Planetas</span>
-          </div>
-        </li>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/categorias"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-star-fill text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Categorias</span>
+            </div>
+          </li>
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/cursos"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-cog text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Cursos</span>
-          </div>
-        </li>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/galaxias"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-users text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Galaxias</span>
+            </div>
+          </li>
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/landing"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-calendar text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Landings</span>
-          </div>
-        </li>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/planetas"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-comments text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Planetas</span>
+            </div>
+          </li>
 
-        <li class="w-6 text-center mt-3">
-          <div class="flex flex-column align-items-center justify-content-center">
-            <a
-              pRipple
-              routerLink="/parametros"
-              routerLinkActive="active-menu-item"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-              style="width: 60px; height: 60px; border-radius: 10px"
-            >
-              <i class="pi pi-sliders-h text-2xl"></i>
-            </a>
-            <span class="mt-2 text-gray-200 font-medium text-sm">Parámetros</span>
-          </div>
-        </li>
-        <li class="w-6 text-center mt-3" routerLink="/parametros">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-sliders-h text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Parámetros</div>
-        </li>
-        <li class="w-6 text-center mt-3" routerLink="/imagenes">
-          <a
-            pRipple
-            class="cursor-pointer inline-flex align-items-center justify-content-center border-2 border-gray-500 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
-            style="width: 60px; height: 60px; border-radius: 10px"
-          >
-            <i class="pi pi-image text-2xl"></i>
-          </a>
-          <div class="mt-2 text-gray-200 font-medium text-sm">Imágenes</div>
-        </li>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/cursos"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-cog text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Cursos</span>
+            </div>
+          </li>
 
-      </ul>
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/landing"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-calendar text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Landings</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/parametros"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-sliders-h text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Parámetros</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/imagenes"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-image text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Imágenes</span>
+            </div>
+          </li>
+
+          <!-- Astronautas: los 4 modelos .glb (papá, mamá, hijo, hija) que flotan en la intro de
+               universo-3d-react, gestionables desde acá en vez de archivos sueltos en el
+               repositorio del 3D. No hay un ícono de astronauta en PrimeIcons -- se usa "send"
+               (como un cohete) de reemplazo provisional. -->
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center">
+              <a
+                pRipple
+                routerLink="/astronautas"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-send text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Astronautas</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!--
+        Tarjeta "LMS": 6 iconos, concuerda con el Word "Version 2 estructura general" (Parte 7.3,
+        tarjeta LMS): Usuarios, Cursos, xAPI (la pestaña "Progreso" del Word), Permisos (la
+        pestaña "Permisos + Administradores" del Word: roles internos del equipo -- quien edita
+        que parte, Super Admin/Financiero/Operativo/Contenido), Certificaciones y Facturacion
+        (solo visual/historial, los pagos y devoluciones los maneja Mercado Pago aparte).
+        Usuarios, xAPI y Facturacion ya tienen pagina real -- Cursos, Permisos y Certificaciones
+        siguen deshabilitados (sin backend/pagina todavia).
+      -->
+      <div class="border-2 border-gray-600 border-round-lg pt-2 pb-3 px-2 mb-3">
+        <div class="text-center text-gray-400 text-xs font-bold tracking-wide uppercase py-2">LMS</div>
+        <ul class="list-none p-0 m-0 flex flex-wrap">
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Usuarios de la LMS -- pagina real, pendiente de que la rama del backend se suba a master">
+              <a
+                pRipple
+                routerLink="/usuarios"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-users text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Usuarios</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina (la esta armando el equipo de LMS)">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-book text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Cursos (LMS)</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Progreso de los estudiantes -- pagina real, pendiente de que el backend tenga el endpoint de lectura">
+              <a
+                pRipple
+                routerLink="/progreso"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-chart-line text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">xAPI</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina (la esta armando el equipo de LMS)">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-shield text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Permisos</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina (la esta armando el equipo de LMS)">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-check-circle text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Certificaciones</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Facturación administrativa -- pagina real, pendiente de que las ramas del backend se suban a master">
+              <a
+                pRipple
+                routerLink="/facturas"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
+              >
+                <i class="pi pi-receipt text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Facturación</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- Tarjeta "Sistema Admin": quienes administran el panel en si (no los usuarios de la LMS,
+        esos ya estan en la tarjeta LMS de arriba) -- Super Admin/Backend/Frontend o algo asi,
+        parece que van a ser unos 4 niveles. Solo el icono por ahora, deshabilitado, todavia no
+        hay pagina ni definicion final de los niveles. -->
+      <div class="border-2 border-gray-600 border-round-lg pt-2 pb-3 px-2 mb-3">
+        <div class="text-center text-gray-400 text-xs font-bold tracking-wide uppercase py-2">Sistema Admin</div>
+        <ul class="list-none p-0 m-0 flex flex-wrap">
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina ni los niveles definidos (Super Admin/Backend/Frontend o similar, ~4 niveles)">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-user-edit text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Usuarios (Admin)</span>
+            </div>
+          </li>
+
+        </ul>
+      </div>
     </div>
 
     <div
