@@ -96,6 +96,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'permisos',
+        loadChildren: () =>
+          import('./pages/permisos/permisos.route').then(
+            (m) => m.PERMISOS_ROUTES
+          ),
+      },
+      {
         path: 'astronautas',
         loadChildren: () =>
           import('./pages/astronautas/astronautas.route').then(

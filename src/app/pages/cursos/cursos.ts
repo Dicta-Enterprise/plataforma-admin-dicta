@@ -15,6 +15,7 @@ import { MODELS_ENUM } from 'src/app/core/enums/models.enum';
 import { EliminarCurso } from 'src/app/ui/modals/curso/eliminar-curso.modal';
 
 import { NuevoCurso } from 'src/app/ui/modals/curso/nuevo-curso.modal';
+import { ModulosCurso } from 'src/app/ui/modals/curso/modulos-curso.modal';
 
   interface FilterOption {
     label: string;
@@ -170,6 +171,13 @@ export class Cursos implements OnInit, OnDestroy {
   eliminarCurso(curso: Curso): void {
     const ref = this.modalService.openByName(MODELS_ENUM.ELIMINAR_CURSO, { curso });
     (ref.instance as EliminarCurso).eliminado.subscribe(() => {
+      this.cursoFacade.listarCursos();
+    });
+  }
+
+  gestionarModulos(curso: Curso): void {
+    const ref = this.modalService.openByName(MODELS_ENUM.MODULOS_CURSO, { curso });
+    (ref.instance as ModulosCurso).guardado.subscribe(() => {
       this.cursoFacade.listarCursos();
     });
   }

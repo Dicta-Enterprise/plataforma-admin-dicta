@@ -149,6 +149,16 @@
                 (click)="eliminarCurso(curso)"
                 [attr.aria-label]="'Eliminar curso ' + (curso.nombre || curso.id)"
               ></button>
+
+              <button
+                type="button"
+                pButton
+                class="curso-card__editar-btn p-button-rounded p-button-text p-button-plain"
+                icon="pi pi-list"
+                (click)="gestionarModulos(curso)"
+                [attr.aria-label]="'Módulos de ' + (curso.nombre || curso.id)"
+                title="Módulos"
+              ></button>
               
               <div class="curso-card__estado">
                 <label class="curso-card__estado-toggle">

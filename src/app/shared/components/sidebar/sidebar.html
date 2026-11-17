@@ -179,8 +179,10 @@
         pestaña "Permisos + Administradores" del Word: roles internos del equipo -- quien edita
         que parte, Super Admin/Financiero/Operativo/Contenido), Certificaciones y Facturacion
         (solo visual/historial, los pagos y devoluciones los maneja Mercado Pago aparte).
-        Usuarios, xAPI y Facturacion ya tienen pagina real -- Cursos, Permisos y Certificaciones
-        siguen deshabilitados (sin backend/pagina todavia).
+        Usuarios, xAPI, Facturacion y Permisos ya tienen pagina real (Permisos, a diferencia de
+        lo que decia el Word, termino siendo permisoCuenta/cuenta_asociada: lo que puede hacer un
+        niño/joven, no los roles internos del equipo) -- Cursos y Certificaciones siguen
+        deshabilitados (sin backend/pagina todavia).
       -->
       <div class="border-2 border-gray-600 border-round-lg pt-2 pb-3 px-2 mb-3">
         <div class="text-center text-gray-400 text-xs font-bold tracking-wide uppercase py-2">LMS</div>
@@ -203,14 +205,23 @@
           </li>
 
           <li class="w-6 text-center mt-3">
-            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina (la esta armando el equipo de LMS)">
+            <!-- Apunta a la misma pagina que "Cursos" en la tarjeta de arriba: ahi se gestiona
+              el catalogo (precio/imagen/categoria) Y los modulos del curso (nombre, orden,
+              Gratis) -- la estructura "3 gratis + pretest + modulo 1..6 + posttest" que describe
+              Carlos ya se arma con esa lista, poniendo cada item en su orden y marcando Gratis
+              los primeros 3; no hace falta una pagina aparte todavia. -->
+            <div class="flex flex-column align-items-center justify-content-center" title="Catálogo y módulos del curso (misma página que 'Cursos' arriba)">
               <a
-                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
-                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+                pRipple
+                routerLink="/cursos"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
               >
                 <i class="pi pi-book text-2xl"></i>
               </a>
-              <span class="mt-2 text-gray-500 font-medium text-sm">Cursos (LMS)</span>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Cursos (LMS)</span>
             </div>
           </li>
 
@@ -230,15 +241,23 @@
             </div>
           </li>
 
+          <!-- Permisos: aqui termino siendo la pantalla de permisoCuenta/cuenta_asociada (lo que
+               puede hacer un niño/joven: ver cursos, comprar, progreso, chat, descargas,
+               certificados, horario y tiempo maximo diario) -- no los roles internos del equipo
+               que originalmente planteaba el Word (eso sigue sin pagina). -->
           <li class="w-6 text-center mt-3">
-            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina (la esta armando el equipo de LMS)">
+            <div class="flex flex-column align-items-center justify-content-center" title="Permisos de las cuentas asociadas (niños/jóvenes): qué pueden ver, comprar y usar">
               <a
-                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
-                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+                pRipple
+                routerLink="/permisos"
+                routerLinkActive="active-menu-item"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="menu-item-btn cursor-pointer inline-flex align-items-center justify-content-center border-2 hover:bg-gray-700 active:bg-gray-400 text-gray-200 hover:text-gray-100 transition-colors transition-duration-150"
+                style="width: 60px; height: 60px; border-radius: 10px"
               >
                 <i class="pi pi-shield text-2xl"></i>
               </a>
-              <span class="mt-2 text-gray-500 font-medium text-sm">Permisos</span>
+              <span class="mt-2 text-gray-200 font-medium text-sm">Permisos</span>
             </div>
           </li>
 
@@ -251,6 +270,22 @@
                 <i class="pi pi-check-circle text-2xl"></i>
               </a>
               <span class="mt-2 text-gray-500 font-medium text-sm">Certificaciones</span>
+            </div>
+          </li>
+
+          <!-- Recursos Free: pedido de Andrea -- biblioteca de videos/contenido gratis suelto,
+               sin ligar a un curso (distinto del flag "Gratis" por modulo que ya existe en
+               Cursos). Solo el icono por ahora, marcador visual para la demo; la pagina real se
+               arma despues con el equipo. -->
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina -- biblioteca de videos y contenido gratis sin ligar a un curso">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-gift text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Recursos Free</span>
             </div>
           </li>
 
@@ -290,6 +325,30 @@
                 <i class="pi pi-user-edit text-2xl"></i>
               </a>
               <span class="mt-2 text-gray-500 font-medium text-sm">Usuarios (Admin)</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-bell text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Notificaciones</span>
+            </div>
+          </li>
+
+          <li class="w-6 text-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center" title="Pendiente: aun no existe la pagina">
+              <a
+                class="menu-item-btn inline-flex align-items-center justify-content-center border-2 border-gray-600 text-gray-500 opacity-60"
+                style="width: 60px; height: 60px; border-radius: 10px; cursor: not-allowed"
+              >
+                <i class="pi pi-exclamation-circle text-2xl"></i>
+              </a>
+              <span class="mt-2 text-gray-500 font-medium text-sm">Reclamaciones</span>
             </div>
           </li>
 

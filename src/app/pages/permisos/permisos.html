@@ -1,0 +1,177 @@
+<p-toast></p-toast>
+
+<div class="flex justify-content-between flex-wrap">
+  <div class="flex align-items-center mb-3 md:mb-0">
+    <div class="text-900 font-bold text-3xl">PERMISOS</div>
+    <p-badge
+      [value]="cuentas.length"
+      class="ml-3 bg-gray-200 text-gray-900 p-0 border-circle"
+    ></p-badge>
+  </div>
+  <button
+    type="button"
+    pButton
+    icon="pi pi-refresh"
+    label="Actualizar"
+    class="p-button-outlined"
+    [loading]="cargando"
+    (click)="cargar()"
+  ></button>
+</div>
+<p class="text-600 text-xl">
+  Qué puede hacer cada cuenta asociada (niño/joven) dentro de la plataforma
+</p>
+<p-divider class="w-full"></p-divider>
+
+@if (errorConexion) {
+  <div class="border-2 border-red-300 bg-red-50 border-round-lg p-3 mb-4 flex gap-3 align-items-start">
+    <i class="pi pi-exclamation-triangle text-red-600 text-2xl mt-1"></i>
+    <div>
+      <div class="font-bold text-red-700">{{ errorConexion }}</div>
+      @if (detalleTecnico) {
+        <div class="text-red-600 text-sm mt-1">{{ detalleTecnico }}</div>
+      }
+    </div>
+  </div>
+}
+
+<p-table
+  [value]="cuentas"
+  dataKey="id"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="cargando"
+  [paginator]="true"
+  [tableStyle]="{ 'min-width': '80rem' }"
+  showGridlines
+>
+  <ng-template #header>
+    <tr>
+      <th class="w-12rem">Cuenta</th>
+      <th class="w-6rem">Tipo</th>
+      <th class="w-14rem">Familia (padre/madre)</th>
+      <th class="w-6rem">Estado</th>
+      <th class="w-30rem">Permisos</th>
+      <th class="w-14rem">Horario / tiempo diario</th>
+      <th class="w-6rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-cuenta>
+    <tr>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span class="font-bold">{{ cuenta.alias ?? cuenta.usuario?.username ?? '(sin nombre)' }}</span>
+          <span class="text-xs text-600">{{ cuenta.usuario?.email ?? 'invitación pendiente' }}</span>
+        </div>
+      </td>
+      <td>
+        <p-tag [value]="cuenta.tipocuenta" [severity]="severidadTipo(cuenta.tipocuenta)"></p-tag>
+      </td>
+      <td>
+        <div class="flex flex-column gap-1">
+          <span>{{ cuenta.padre.username }}</span>
+          <span class="text-xs text-600">{{ cuenta.padre.email }}</span>
+        </div>
+      </td>
+      <td>
+        <p-tag [value]="cuenta.estado" [severity]="severidadEstado(cuenta.estado)"></p-tag>
+      </td>
+      <td>
+        <div class="flex flex-wrap gap-3">
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Ver cursos">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeVerCursos"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Ver cursos</span>
+          </div>
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Comprar cursos">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeComprarCursos"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Comprar</span>
+          </div>
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Ver su progreso">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeVerProgreso"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Progreso</span>
+          </div>
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Usar el chat">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeUsarChat"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Chat</span>
+          </div>
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Descargar material">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeDescargarMaterial"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Descargas</span>
+          </div>
+          <div class="flex flex-column align-items-center gap-1" pTooltip="Ver certificados">
+            <p-toggleswitch
+              [(ngModel)]="cuenta.permiso.puedeVerCertificados"
+              (onChange)="marcarModificada(cuenta.id)"
+            ></p-toggleswitch>
+            <span class="text-xs text-600">Certificados</span>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="flex flex-column gap-2">
+          <div class="flex align-items-center gap-2">
+            <input
+              pInputText
+              type="time"
+              class="w-7rem"
+              [(ngModel)]="cuenta.permiso.horarioInicio"
+              (change)="marcarModificada(cuenta.id)"
+            />
+            <span class="text-600">a</span>
+            <input
+              pInputText
+              type="time"
+              class="w-7rem"
+              [(ngModel)]="cuenta.permiso.horarioFin"
+              (change)="marcarModificada(cuenta.id)"
+            />
+          </div>
+          <p-inputnumber
+            [(ngModel)]="cuenta.permiso.tiempoMaximoDiario"
+            placeholder="Minutos/día"
+            suffix=" min"
+            [min]="0"
+            [max]="1440"
+            class="w-full"
+            (onInput)="marcarModificada(cuenta.id)"
+          ></p-inputnumber>
+        </div>
+      </td>
+      <td>
+        <button
+          type="button"
+          pButton
+          icon="pi pi-save"
+          [label]="modificadas.has(cuenta.id) ? 'Guardar' : 'Guardado'"
+          class="p-button-sm"
+          [class]="modificadas.has(cuenta.id) ? '' : 'p-button-outlined'"
+          [disabled]="!modificadas.has(cuenta.id)"
+          [loading]="guardando.has(cuenta.id)"
+          (click)="guardar(cuenta)"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="7" class="text-center text-600 py-4">
+        No hay cuentas asociadas (niños/jóvenes) registradas todavía.
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

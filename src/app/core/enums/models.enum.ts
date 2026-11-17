@@ -7,4 +7,5 @@ export enum MODELS_ENUM {
   EDITAR_GALAXIA = 'editarGalaxia',
   ELIMINAR_CURSO = 'eliminarCurso',
   NUEVO_CURSO = 'nuevoCurso',
+  MODULOS_CURSO = 'modulosCurso',
 }
