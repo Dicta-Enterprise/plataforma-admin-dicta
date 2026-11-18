@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
 
+  // Apunta al back-nest real (master), donde viven Cursos/Módulos y Astronautas. OJO: mientras
+  // esto apunte aqui, Usuarios/Progreso/Facturas (que solo existen en la rama de prueba, puerto
+  // 3005) van a dar error de conexion -- esas ramas todavía no se han mergeado a master.
   URL_NEST_BACKEND: 'http://localhost:3000/api',
   // back-auth-dicta corre en el puerto 3002.
   URL_NEST_AUTH: 'http://localhost:3002/api',

@@ -8,6 +8,7 @@ import { NuevaLanding } from 'src/app/ui/modals/landing/nueva-landing.modal';
 import { EditarGalaxia } from 'src/app/ui/modals/galaxia/editar-galaxia.modal';
 import { EliminarCurso } from 'src/app/ui/modals/curso/eliminar-curso.modal';
 import { NuevoCurso } from 'src/app/ui/modals/curso/nuevo-curso.modal';
+import { ModulosCurso } from 'src/app/ui/modals/curso/modulos-curso.modal';
 
 export const MODAL_REGISTRY: Record<string, Type<object>> = {
   user: UserModalComponent,
@@ -19,4 +20,5 @@ export const MODAL_REGISTRY: Record<string, Type<object>> = {
   editarGalaxia: EditarGalaxia,
   eliminarCurso: EliminarCurso,
   nuevoCurso: NuevoCurso,
+  modulosCurso: ModulosCurso,
 };
